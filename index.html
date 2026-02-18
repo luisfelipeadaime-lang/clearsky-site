@@ -477,11 +477,6 @@
             background: var(--deep-navy);
             color: var(--white);
         }
-        .team-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
         .team-card h3 {
             color: var(--deep-navy);
             font-size: 0.95rem;
@@ -541,14 +536,6 @@
             gap: 14px;
         }
         .contact-info li:last-child { border-bottom: none; }
-        .contact-photo {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-        }
         .contact-photo-placeholder {
             width: 40px;
             height: 40px;
@@ -969,23 +956,17 @@
                     <p>Partner</p>
                 </div>
                 <div class="team-card reveal reveal-delay-3">
-                    <div class="team-avatar">
-                        <img src="./assets/team/luis-adaime.png" alt="Luis Felipe Adaime">
-                    </div>
+                    <div class="team-avatar" style="background: var(--emerald);">LA</div>
                     <h3>Luis Felipe Adaime</h3>
                     <p>CCO, Spain Lead</p>
                 </div>
                 <div class="team-card reveal reveal-delay-4">
-                    <div class="team-avatar">
-                        <img src="./assets/team/ana-avramovic.png" alt="Ana Avramovic">
-                    </div>
+                    <div class="team-avatar" style="background: var(--steel-blue);">AA</div>
                     <h3>Ana Avramovic</h3>
                     <p>Head of Sales &amp; Trading</p>
                 </div>
                 <div class="team-card reveal reveal-delay-4">
-                    <div class="team-avatar">
-                        <img src="./assets/team/carolina-martinez.png" alt="Carolina Martinez">
-                    </div>
+                    <div class="team-avatar" style="background: var(--gold);">CM</div>
                     <h3>Carolina Martinez</h3>
                     <p>Sales &amp; Trading Associate</p>
                 </div>
@@ -1006,21 +987,21 @@
                     <p>Whether you're purchasing carbon credits, exploring climate investment opportunities, or need advisory on project development — we'd like to hear from you.</p>
                     <ul class="contact-info">
                         <li>
-                            <img src="./assets/team/luis-adaime.png" alt="Luis Felipe Adaime" class="contact-photo">
+                            <div class="contact-photo-placeholder">LA</div>
                             <div class="contact-info-text">
                                 <span class="contact-name">Luis Felipe Adaime</span>
                                 <span class="contact-detail"><a href="mailto:luis.adaime@clearskyltd.com">luis.adaime@clearskyltd.com</a> &middot; +34 659 70 02 80</span>
                             </div>
                         </li>
                         <li>
-                            <img src="./assets/team/ana-avramovic.png" alt="Ana Avramovic" class="contact-photo">
+                            <div class="contact-photo-placeholder">AA</div>
                             <div class="contact-info-text">
                                 <span class="contact-name">Ana Avramovic</span>
                                 <span class="contact-detail"><a href="mailto:ana.avramovic@clearskyltd.com">ana.avramovic@clearskyltd.com</a> &middot; +1 403 999 5757</span>
                             </div>
                         </li>
                         <li>
-                            <img src="./assets/team/carolina-martinez.png" alt="Carolina Martinez" class="contact-photo">
+                            <div class="contact-photo-placeholder">CM</div>
                             <div class="contact-info-text">
                                 <span class="contact-name">Carolina Martinez</span>
                                 <span class="contact-detail"><a href="mailto:Carolina.Martinez@clearskyltd.com">Carolina.Martinez@clearskyltd.com</a> &middot; +1 631 494 5327</span>
