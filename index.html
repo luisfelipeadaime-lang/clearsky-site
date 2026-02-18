@@ -7,762 +7,387 @@
     <meta name="description" content="ClearSky is an environmental merchant bank. We identify, operationalize, structure, and monetize environmental assets.">
     <meta property="og:title" content="ClearSky — Environmental Merchant Bank">
     <meta property="og:description" content="Scaling durable, high-integrity climate solutions. Carbon credits, project development, and climate investments.">
-    <meta property="og:image" content="./assets/backgrounds/forest-sunlight.jpg">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="./assets/backgrounds/forest-sunlight.jpg">
+    <meta name="twitter:card" content="summary">
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon.png">
     <link rel="shortcut icon" type="image/png" href="./assets/favicon.png">
     <link rel="apple-touch-icon" href="./assets/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* ===== RESET & BASE ===== */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: 'Roboto', Arial, Calibri, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             color: #0D1B3E;
             background: #FFFFFF;
             line-height: 1.4;
             -webkit-font-smoothing: antialiased;
         }
-
-        /* ===== COLOR VARIABLES ===== */
         :root {
-            --deep-navy: #0D1B3E;
-            --steel-blue: #5B9BD5;
+            --navy: #0D1B3E;
+            --blue: #5B9BD5;
             --gold: #D4A843;
             --midnight: #1B2A4A;
             --frost: #F5F7FA;
             --slate: #8A8F9A;
             --emerald: #1A8A6E;
             --white: #FFFFFF;
+            --teal: #0A3D5C;
         }
+        h1, h2, h3, h4 { font-weight: 700; line-height: 1.15; }
+        h2 { font-size: clamp(1.8rem, 3.5vw, 2.75rem); margin-bottom: 32px; }
+        p { line-height: 1.65; max-width: 680px; }
 
-        /* ===== TYPOGRAPHY ===== */
-        h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; }
-        h1 { font-size: clamp(2rem, 5vw, 3rem); }
-        h2 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
-        h3 { font-size: clamp(1.1rem, 2vw, 1.35rem); font-weight: 600; }
-        p { line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+        section { padding: 120px 0; }
 
-        /* ===== LAYOUT ===== */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        section { padding: 80px 0; }
-
-        /* ===== NAVIGATION ===== */
+        /* ===== NAV ===== */
         .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 16px 0;
-            transition: background 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 18px 0;
+            transition: background 0.3s, box-shadow 0.3s, padding 0.3s;
         }
         .nav.scrolled {
-            background: var(--deep-navy);
-            box-shadow: 0 2px 20px rgba(13, 27, 62, 0.3);
-            padding: 10px 0;
+            background: rgba(13, 27, 62, 0.97);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.04);
+            padding: 12px 0;
         }
-        .nav .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .nav-logo {
-            display: flex;
-            align-items: center;
-        }
-        .nav-logo img {
-            height: 32px;
-            width: auto;
-        }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            list-style: none;
-        }
+        .nav .container { display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { display: flex; align-items: center; }
+        .nav-logo img { height: 30px; width: auto; }
+        .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
         .nav-links a {
-            color: rgba(255, 255, 255, 0.85);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
+            color: rgba(255,255,255,0.7); text-decoration: none;
+            font-size: 0.82rem; font-weight: 500; letter-spacing: 0.02em;
             transition: color 0.2s;
         }
-        .nav-links a:hover { color: var(--gold); }
+        .nav-links a:hover { color: var(--white); }
         .nav-cta {
-            background: var(--gold);
-            color: var(--deep-navy);
-            padding: 10px 24px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: background 0.2s, transform 0.2s;
+            background: var(--gold); color: var(--navy);
+            padding: 9px 22px; border-radius: 3px;
+            font-weight: 600; font-size: 0.82rem; text-decoration: none;
+            transition: background 0.2s;
         }
-        .nav-cta:hover {
-            background: #C49A38;
-            transform: translateY(-1px);
-        }
+        .nav-cta:hover { background: #C49A38; }
         .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 4px;
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; background: none; border: none; padding: 4px;
         }
-        .hamburger span {
-            width: 24px;
-            height: 2px;
-            background: var(--white);
-            transition: transform 0.3s, opacity 0.3s;
-        }
+        .hamburger span { width: 22px; height: 1.5px; background: var(--white); }
 
         /* ===== HERO ===== */
         .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            background: var(--deep-navy);
-        }
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-        }
-        .hero-bg-image {
-            position: absolute;
-            inset: 0;
-            background: url('./assets/backgrounds/hero-bg.jpg') center/cover no-repeat;
-            opacity: 0.2;
-        }
-        .hero-strip-deco {
-            position: absolute;
-            right: -5%;
-            top: 10%;
-            height: 80%;
-            width: auto;
-            opacity: 0.15;
-            pointer-events: none;
-        }
-        .gradient-orbs {
-            position: absolute;
-            inset: 0;
+            position: relative; min-height: 100vh;
+            display: flex; align-items: center;
+            background: var(--navy);
             overflow: hidden;
         }
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.2;
+        .hero-gradient {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, #0D1B3E 0%, #0A3D5C 25%, #0D1B3E 50%, #1B2A4A 75%, #0A3D5C 100%);
+            background-size: 400% 400%;
+            animation: heroShift 20s ease infinite;
         }
-        .orb-1 {
-            width: 600px; height: 600px;
-            background: var(--steel-blue);
-            top: -20%; right: -10%;
-            animation: orbFloat1 12s ease-in-out infinite;
+        @keyframes heroShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
         }
-        .orb-2 {
-            width: 400px; height: 400px;
-            background: var(--gold);
-            bottom: -10%; left: 10%;
-            animation: orbFloat2 15s ease-in-out infinite;
+        .hero-noise {
+            position: absolute; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.4;
         }
-        .orb-3 {
-            width: 300px; height: 300px;
-            background: var(--emerald);
-            top: 40%; left: 50%;
-            animation: orbFloat3 18s ease-in-out infinite;
-        }
-        @keyframes orbFloat1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-40px, 30px) scale(1.05); }
-            66% { transform: translate(20px, -20px) scale(0.95); }
-        }
-        @keyframes orbFloat2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -40px) scale(1.08); }
-            66% { transform: translate(-20px, 20px) scale(0.92); }
-        }
-        @keyframes orbFloat3 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-60px, 30px) scale(1.1); }
-        }
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                135deg,
-                rgba(13, 27, 62, 0.93) 0%,
-                rgba(27, 42, 74, 0.88) 40%,
-                rgba(13, 27, 62, 0.92) 100%
-            );
-            z-index: 1;
-        }
-        .hero .container {
-            position: relative;
-            z-index: 2;
-            padding-top: 120px;
-            padding-bottom: 80px;
-        }
-        .hero-content { max-width: 740px; }
+        .hero .container { position: relative; z-index: 1; padding-top: 160px; padding-bottom: 120px; }
+        .hero-content { max-width: 800px; }
         .hero-label {
-            display: inline-block;
             color: var(--gold);
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            position: relative;
-            padding-left: 40px;
-        }
-        .hero-label::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 50%;
-            width: 28px; height: 1px;
-            background: var(--gold);
+            font-size: 0.75rem; font-weight: 300;
+            letter-spacing: 0.3em; text-transform: uppercase;
+            margin-bottom: 24px; display: block;
         }
         .hero h1 {
             color: var(--white);
-            font-size: clamp(2.2rem, 5vw, 3.4rem);
-            margin-bottom: 24px;
-            font-weight: 700;
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            font-weight: 700; line-height: 1.08;
+            margin-bottom: 28px;
         }
-        .hero-subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: clamp(1rem, 2vw, 1.15rem);
-            line-height: 1.7;
-            margin-bottom: 40px;
-            max-width: 620px;
+        .hero-sub {
+            color: rgba(255,255,255,0.6);
+            font-size: clamp(1rem, 1.5vw, 1.1rem);
+            line-height: 1.7; margin-bottom: 48px;
+            max-width: 560px;
         }
-        .hero-subtitle strong {
-            color: var(--white);
-            font-weight: 500;
+        .btn-primary {
+            display: inline-block; background: var(--gold); color: var(--navy);
+            padding: 14px 40px; font-size: 0.9rem; font-weight: 600;
+            border-radius: 3px; text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+            border: none; cursor: pointer;
         }
-        .hero-cta {
-            display: inline-block;
-            background: var(--gold);
-            color: var(--deep-navy);
-            padding: 14px 36px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: background 0.2s, transform 0.2s;
+        .btn-primary:hover { background: #C49A38; transform: translateY(-1px); }
+
+        /* ===== DATA STRIP (Bloomberg bar) ===== */
+        .data-strip {
+            background: var(--navy); border-top: 1px solid rgba(91,155,213,0.15);
+            border-bottom: 1px solid rgba(91,155,213,0.15);
+            padding: 0;
         }
-        .hero-cta:hover {
-            background: #C49A38;
-            transform: translateY(-2px);
+        .data-strip .container {
+            display: flex; justify-content: center;
         }
-        .scroll-indicator {
-            position: absolute;
-            bottom: 32px; left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
+        .data-strip-inner {
+            display: flex; width: 100%;
         }
-        .scroll-indicator span {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        .data-item {
+            flex: 1; padding: 28px 24px; text-align: center;
+            border-right: 1px solid rgba(91,155,213,0.12);
         }
-        .scroll-line {
-            width: 1px; height: 40px;
-            background: linear-gradient(to bottom, rgba(212, 168, 67, 0.6), transparent);
-            animation: scrollPulse 2s ease-in-out infinite;
+        .data-item:last-child { border-right: none; }
+        .data-number {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.8rem; font-weight: 500;
+            color: var(--white); display: block; margin-bottom: 4px;
         }
-        @keyframes scrollPulse {
-            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
-            50% { opacity: 1; transform: scaleY(1); }
+        .data-label {
+            font-size: 0.72rem; color: var(--slate);
+            text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
         }
 
         /* ===== ABOUT ===== */
         .about { background: var(--white); }
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: center;
-        }
-        .about-text h2 {
-            margin-bottom: 24px;
-            color: var(--deep-navy);
-        }
-        .about-text h2 span { color: var(--steel-blue); }
-        .about-text p {
-            color: var(--deep-navy);
-            margin-bottom: 16px;
-            font-size: 1.05rem;
-        }
-        .about-text .tagline {
-            color: var(--gold);
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-top: 24px;
-        }
-        .about-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-        .stat-card {
-            background: var(--frost);
-            border-radius: 8px;
-            padding: 28px 24px;
-            text-align: center;
-            border: 1px solid rgba(91, 155, 213, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(13, 27, 62, 0.08);
-        }
-        .stat-number {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--steel-blue);
-            display: block;
-            margin-bottom: 4px;
-        }
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--slate);
-            font-weight: 500;
+        .about .container { max-width: 800px; }
+        .about h2 span { color: var(--blue); }
+        .about p { color: var(--navy); font-size: 1.05rem; margin-bottom: 16px; }
+        .about .tagline {
+            color: var(--gold); font-weight: 600; font-size: 1.05rem;
+            margin-top: 28px; padding-top: 28px;
+            border-top: 1px solid rgba(13,27,62,0.08);
         }
 
         /* ===== BUSINESS LINES ===== */
-        .business-lines {
-            background: var(--deep-navy);
-            color: var(--white);
-        }
-        .section-header {
-            text-align: center;
-            margin-bottom: 56px;
-        }
-        .section-header h2 { margin-bottom: 16px; }
-        .section-header p {
-            color: var(--slate);
-            max-width: 600px;
-            margin: 0 auto;
-            font-size: 1.05rem;
-        }
-        .business-lines .section-header p {
-            color: rgba(255, 255, 255, 0.6);
-        }
-        .bl-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-        }
+        .business-lines { background: var(--navy); color: var(--white); }
+        .business-lines h2 { text-align: center; }
+        .bl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
         .bl-card {
-            background: var(--midnight);
-            border-radius: 8px;
-            padding: 40px 32px;
-            border: 1px solid rgba(91, 155, 213, 0.15);
-            transition: border-color 0.2s, transform 0.2s;
+            background: var(--midnight); border-radius: 6px;
+            padding: 40px 32px; border-left: 3px solid var(--gold);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .bl-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-3px);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.25);
         }
         .bl-number {
-            display: inline-block;
-            background: rgba(212, 168, 67, 0.15);
-            color: var(--gold);
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 20px;
+            font-family: 'Roboto Mono', monospace;
+            color: rgba(212,168,67,0.5); font-size: 0.8rem; font-weight: 500;
+            margin-bottom: 16px; display: block;
         }
-        .bl-card h3 {
-            color: var(--white);
-            margin-bottom: 16px;
-            font-size: 1.3rem;
-        }
-        .bl-card p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
+        .bl-card h3 { color: var(--white); margin-bottom: 14px; font-size: 1.2rem; }
+        .bl-card p { color: rgba(255,255,255,0.6); font-size: 0.92rem; line-height: 1.65; }
 
         /* ===== SOLUTIONS ===== */
         .solutions { background: var(--frost); }
-        .solutions-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
+        .solutions .section-header { text-align: center; margin-bottom: 56px; }
+        .solutions .section-header p {
+            color: var(--slate); max-width: 540px; margin: 0 auto; font-size: 1rem;
         }
+        .solutions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
         .sol-card {
-            background: var(--white);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(13, 27, 62, 0.06);
+            background: var(--white); border-radius: 6px;
+            padding: 32px 24px; text-align: left;
+            border: 1px solid rgba(13,27,62,0.05);
             transition: transform 0.2s, box-shadow 0.2s;
-            display: grid;
-            grid-template-columns: 160px 1fr;
+            display: flex; flex-direction: column;
         }
         .sol-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(13, 27, 62, 0.08);
+            box-shadow: 0 8px 32px rgba(13,27,62,0.07);
         }
-        .sol-image {
-            width: 100%;
-            height: 100%;
-            min-height: 180px;
-            object-fit: cover;
+        .sol-icon {
+            width: 44px; height: 44px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px;
         }
-        .sol-content {
-            padding: 28px 24px;
-        }
-        .sol-content h3 {
-            color: var(--deep-navy);
-            margin-bottom: 6px;
-            font-size: 1.1rem;
-        }
+        .sol-icon svg { width: 22px; height: 22px; }
+        .sol-icon.nbs { background: rgba(26,138,110,0.1); color: var(--emerald); }
+        .sol-icon.removals { background: rgba(91,155,213,0.1); color: var(--blue); }
+        .sol-icon.plastics { background: rgba(212,168,67,0.1); color: var(--gold); }
+        .sol-icon.compliance { background: rgba(13,27,62,0.06); color: var(--navy); }
+        .sol-card h3 { color: var(--navy); font-size: 1rem; margin-bottom: 6px; }
         .sol-tags {
-            font-size: 0.78rem;
-            color: var(--steel-blue);
-            font-weight: 500;
-            margin-bottom: 10px;
+            font-size: 0.72rem; color: var(--blue); font-weight: 500;
+            margin-bottom: 12px; letter-spacing: 0.01em;
         }
-        .sol-content p {
-            color: var(--slate);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
+        .sol-card p { color: var(--slate); font-size: 0.88rem; line-height: 1.6; flex: 1; }
 
         /* ===== TEAM ===== */
         .team { background: var(--white); }
+        .team h2 { text-align: center; }
         .team-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 12px; max-width: 900px; margin: 0 auto;
         }
         .team-card {
-            text-align: center;
-            padding: 28px 16px;
-            border-radius: 8px;
+            text-align: center; padding: 20px 12px; border-radius: 6px;
             transition: background 0.2s;
         }
         .team-card:hover { background: var(--frost); }
         .team-avatar {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin: 0 auto 16px;
-            overflow: hidden;
-            background: var(--deep-navy);
-            color: var(--white);
+            width: 56px; height: 56px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 0.9rem;
+            margin: 0 auto 12px;
+            background: var(--navy); color: var(--white);
         }
-        .team-card h3 {
-            color: var(--deep-navy);
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-        }
-        .team-card p {
-            color: var(--slate);
-            font-size: 0.8rem;
-        }
+        .team-card h3 { color: var(--navy); font-size: 0.88rem; margin-bottom: 3px; font-weight: 600; }
+        .team-card p { color: var(--slate); font-size: 0.75rem; margin: 0 auto; }
 
-        /* ===== CONTACT CTA ===== */
+        /* ===== CONTACT ===== */
         .contact {
-            position: relative;
+            background: linear-gradient(135deg, #0D1B3E 0%, #0A3D5C 50%, #1B2A4A 100%);
             color: var(--white);
-            overflow: hidden;
         }
-        .contact-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
+        .contact-inner { max-width: 700px; margin: 0 auto; text-align: center; }
+        .contact-inner h2 { color: var(--white); }
+        .contact-inner > p {
+            color: rgba(255,255,255,0.6); font-size: 1.05rem;
+            margin: 0 auto 48px; max-width: 520px;
         }
-        .contact-bg img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .contact-cards { display: flex; gap: 20px; justify-content: center; margin-bottom: 40px; }
+        .contact-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px; padding: 24px 20px; text-align: center;
+            flex: 1; max-width: 220px;
         }
-        .contact-bg-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(13, 27, 62, 0.92) 0%, rgba(27, 42, 74, 0.88) 100%);
+        .contact-card .cc-name {
+            color: var(--white); font-weight: 600; font-size: 0.9rem;
+            display: block; margin-bottom: 4px;
         }
-        .contact .container {
-            position: relative;
-            z-index: 1;
+        .contact-card .cc-role {
+            color: var(--slate); font-size: 0.72rem; display: block; margin-bottom: 12px;
         }
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: start;
+        .contact-card a {
+            color: var(--blue); text-decoration: none; font-size: 0.82rem;
+            transition: color 0.2s; display: block; margin-bottom: 4px;
         }
-        .contact-text h2 {
-            color: var(--white);
-            margin-bottom: 20px;
-        }
-        .contact-text p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.05rem;
-            margin-bottom: 32px;
-        }
-        .contact-info { list-style: none; }
-        .contact-info li {
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .contact-info li:last-child { border-bottom: none; }
-        .contact-photo-placeholder {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--midnight);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: 0.8rem;
-            font-weight: 600;
-            flex-shrink: 0;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-        }
-        .contact-info-text { flex: 1; }
-        .contact-name {
-            color: var(--white);
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .contact-detail {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
-        }
-        .contact-detail a {
-            color: var(--steel-blue);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .contact-detail a:hover { color: var(--gold); }
-        .contact-form {
-            background: rgba(27, 42, 74, 0.8);
-            backdrop-filter: blur(8px);
-            border-radius: 8px;
-            padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .contact-form h3 {
-            color: var(--white);
-            margin-bottom: 24px;
-            font-size: 1.15rem;
-        }
-        .form-group { margin-bottom: 16px; }
-        .form-group label {
-            display: block;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            padding: 12px 16px;
-            color: var(--white);
-            font-family: 'Roboto', sans-serif;
-            font-size: 0.9rem;
-            transition: border-color 0.2s;
-        }
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--steel-blue);
-        }
-        .form-group textarea { height: 100px; resize: vertical; }
-        .form-submit {
-            background: var(--gold);
-            color: var(--deep-navy);
-            border: none;
-            padding: 14px 36px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-            width: 100%;
-            margin-top: 8px;
-        }
-        .form-submit:hover {
-            background: #C49A38;
-            transform: translateY(-1px);
+        .contact-card a:hover { color: var(--gold); }
+        .contact-card .cc-phone { color: rgba(255,255,255,0.4); font-size: 0.78rem; }
+        .contact-address {
+            color: rgba(255,255,255,0.3); font-size: 0.78rem; margin-top: 32px;
         }
 
         /* ===== FOOTER ===== */
         .footer {
-            background: #070E1F;
-            color: rgba(255, 255, 255, 0.4);
-            padding: 48px 0 32px;
+            background: #060D1C; color: rgba(255,255,255,0.35);
+            padding: 48px 0 32px; position: relative; overflow: hidden;
+        }
+        .footer-watermark {
+            position: absolute; right: 32px; bottom: 20px;
+            font-size: 6rem; font-weight: 700; color: rgba(255,255,255,0.015);
+            pointer-events: none; user-select: none; letter-spacing: -4px;
         }
         .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 48px;
-            margin-bottom: 40px;
+            display: grid; grid-template-columns: 2fr 1fr 1fr;
+            gap: 48px; margin-bottom: 36px;
         }
-        .footer-logo {
-            height: 28px;
-            width: auto;
-            margin-bottom: 12px;
-            display: block;
-        }
-        .footer-brand p {
-            font-size: 0.85rem;
-            line-height: 1.6;
-            max-width: 320px;
-        }
+        .footer-logo { height: 24px; width: auto; margin-bottom: 12px; display: block; }
+        .footer-brand p { font-size: 0.8rem; line-height: 1.6; max-width: 300px; }
         .footer h4 {
-            color: var(--white);
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
+            color: rgba(255,255,255,0.6); font-size: 0.7rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px;
         }
         .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 10px; }
+        .footer-links li { margin-bottom: 8px; }
         .footer-links a {
-            color: rgba(255, 255, 255, 0.4);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: color 0.2s;
+            color: rgba(255,255,255,0.35); text-decoration: none;
+            font-size: 0.8rem; transition: color 0.2s;
         }
         .footer-links a:hover { color: var(--gold); }
         .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.78rem;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            padding-top: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.72rem;
         }
-        .footer-backer {
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 0.75rem;
-        }
+        .footer-backer { color: rgba(255,255,255,0.25); font-size: 0.68rem; }
 
-        /* ===== REVEAL ANIMATIONS ===== */
+        /* ===== REVEAL ===== */
         .reveal {
-            opacity: 0;
-            transform: translateY(24px);
+            opacity: 0; transform: translateY(20px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.1s; }
+        .reveal-d2 { transition-delay: 0.2s; }
+        .reveal-d3 { transition-delay: 0.3s; }
+        .reveal-d4 { transition-delay: 0.4s; }
 
         /* ===== MOBILE NAV ===== */
         .mobile-nav {
-            display: none;
-            position: fixed;
-            top: 0; right: -100%;
+            display: none; position: fixed; top: 0; right: -100%;
             width: 280px; height: 100vh;
-            background: var(--deep-navy);
-            z-index: 1001;
+            background: var(--navy); z-index: 1001;
             padding: 80px 32px 32px;
             transition: right 0.3s ease;
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 1px solid rgba(255,255,255,0.06);
         }
         .mobile-nav.open { right: 0; }
         .mobile-nav a {
-            display: block;
-            color: rgba(255, 255, 255, 0.85);
-            text-decoration: none;
-            font-size: 1.1rem;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: block; color: rgba(255,255,255,0.8); text-decoration: none;
+            font-size: 1rem; padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .mobile-nav a:hover { color: var(--gold); }
         .mobile-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(13, 27, 62, 0.6);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s;
+            display: none; position: fixed; inset: 0;
+            background: rgba(13,27,62,0.6); z-index: 1000;
+            opacity: 0; transition: opacity 0.3s;
         }
         .mobile-overlay.open { opacity: 1; }
         .mobile-close {
-            position: absolute;
-            top: 20px; right: 20px;
-            background: none; border: none;
-            color: var(--white);
-            font-size: 1.5rem;
-            cursor: pointer;
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: none; color: var(--white);
+            font-size: 1.4rem; cursor: pointer;
         }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
-            .solutions-grid { grid-template-columns: 1fr; }
-            .sol-card { grid-template-columns: 140px 1fr; }
+            .solutions-grid { grid-template-columns: repeat(2, 1fr); }
             .team-grid { grid-template-columns: repeat(2, 1fr); }
-            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+            .contact-cards { flex-wrap: wrap; }
+            .footer-grid { grid-template-columns: 1fr; gap: 28px; }
         }
         @media (max-width: 768px) {
-            section { padding: 56px 0; }
+            section { padding: 64px 0; }
+            h2 { font-size: clamp(1.5rem, 5vw, 2rem); margin-bottom: 24px; }
             .nav-links { display: none; }
             .hamburger { display: flex; }
             .mobile-nav { display: block; }
-            .about-grid { grid-template-columns: 1fr; gap: 40px; }
+            .hero h1 { font-size: clamp(2rem, 7vw, 2.8rem); }
+            .hero .container { padding-top: 120px; padding-bottom: 80px; }
+            .data-strip-inner { flex-wrap: wrap; }
+            .data-item { flex: 1 1 50%; border-bottom: 1px solid rgba(91,155,213,0.08); }
+            .data-item:nth-child(2) { border-right: none; }
             .bl-grid { grid-template-columns: 1fr; }
-            .sol-card { grid-template-columns: 1fr; }
-            .sol-image { min-height: 160px; }
-            .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-            .hero h1 { font-size: clamp(1.8rem, 6vw, 2.4rem); }
-            .hero .container { padding-top: 100px; }
-            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+            .solutions-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .contact-cards { flex-direction: column; align-items: center; }
+            .contact-card { max-width: 100%; width: 100%; }
+            .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
         }
         @media (max-width: 375px) {
             .container { padding: 0 16px; }
-            .team-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVIGATION -->
+    <!-- NAV -->
     <nav class="nav" id="nav">
         <div class="container">
             <a href="#" class="nav-logo">
@@ -784,7 +409,7 @@
     <!-- MOBILE NAV -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
-        <button class="mobile-close" id="mobileClose" aria-label="Close menu">&times;</button>
+        <button class="mobile-close" id="mobileClose" aria-label="Close">&times;</button>
         <a href="#about">About</a>
         <a href="#business-lines">Business Lines</a>
         <a href="#solutions">Solutions</a>
@@ -794,60 +419,50 @@
 
     <!-- HERO -->
     <section class="hero" id="hero">
-        <div class="hero-bg">
-            <div class="hero-bg-image"></div>
-            <div class="gradient-orbs">
-                <div class="orb orb-1"></div>
-                <div class="orb orb-2"></div>
-                <div class="orb orb-3"></div>
-            </div>
-            <img src="./assets/backgrounds/hero-strip.png" alt="" class="hero-strip-deco">
-        </div>
-        <div class="hero-overlay"></div>
+        <div class="hero-gradient"></div>
+        <div class="hero-noise"></div>
         <div class="container">
             <div class="hero-content">
-                <div class="hero-label">Environmental Merchant Bank</div>
-                <h1>Scaling Durable, High-Integrity Climate Solutions</h1>
-                <p class="hero-subtitle">
-                    ClearSky is an <strong>environmental merchant bank</strong>. We identify, operationalize, structure, and monetize environmental assets — advising clients, facilitating transactions, and executing principally.
-                </p>
-                <a href="#contact" class="hero-cta">Talk to Us</a>
+                <span class="hero-label">Environmental Merchant Bank</span>
+                <h1>Scaling Durable,<br>High-Integrity<br>Climate Solutions</h1>
+                <p class="hero-sub">We identify, operationalize, structure, and monetize environmental assets — advising clients, facilitating transactions, and executing principally.</p>
+                <a href="#contact" class="btn-primary">Talk to Us</a>
             </div>
         </div>
-        <div class="scroll-indicator">
-            <span>Scroll</span>
-            <div class="scroll-line"></div>
-        </div>
     </section>
+
+    <!-- DATA STRIP -->
+    <div class="data-strip">
+        <div class="container">
+            <div class="data-strip-inner">
+                <div class="data-item">
+                    <span class="data-number">30+</span>
+                    <span class="data-label">Projects Structured</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-number">8+</span>
+                    <span class="data-label">Project Types</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-number">4</span>
+                    <span class="data-label">Registries</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-number">20+</span>
+                    <span class="data-label">Years Experience</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ABOUT -->
     <section class="about" id="about">
         <div class="container">
-            <div class="about-grid">
-                <div class="about-text reveal">
-                    <h2>Combining Commodity-Market Discipline with <span>Carbon Innovation</span></h2>
-                    <p>ClearSky Limited is a global climate solutions firm backed by MKS PAMP, delivering durable, high-integrity carbon projects across nature-based solutions, permanent removals, plastics, and compliance markets.</p>
-                    <p>We help corporates and investors meet the next generation of climate, compliance, and credibility challenges — capitalizing on inefficiencies in voluntary and compliance markets to deliver superior risk-adjusted returns.</p>
-                    <p class="tagline">Science-backed, CFO-ready climate solutions that endure.</p>
-                </div>
-                <div class="about-stats reveal reveal-delay-2">
-                    <div class="stat-card">
-                        <span class="stat-number">30+</span>
-                        <span class="stat-label">Carbon projects developed, advised, or structured</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">8+</span>
-                        <span class="stat-label">Project types in portfolio</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">4</span>
-                        <span class="stat-label">Registries (Verra, Puro.earth, Isometric, MITECO)</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">20+</span>
-                        <span class="stat-label">Years combined carbon market experience</span>
-                    </div>
-                </div>
+            <div class="reveal">
+                <h2>Commodity-Market Discipline.<br><span>Carbon Innovation.</span></h2>
+                <p>ClearSky is a global climate solutions firm backed by MKS PAMP. We deliver durable, high-integrity carbon projects across nature-based solutions, permanent removals, plastics, and compliance markets.</p>
+                <p>We capitalize on inefficiencies in voluntary and compliance markets to deliver superior risk-adjusted returns — helping corporates and investors meet the next generation of climate and credibility challenges.</p>
+                <p class="tagline">Science-backed, CFO-ready climate solutions that endure.</p>
             </div>
         </div>
     </section>
@@ -855,25 +470,22 @@
     <!-- BUSINESS LINES -->
     <section class="business-lines" id="business-lines">
         <div class="container">
-            <div class="section-header reveal">
-                <h2>Three Integrated Business Lines</h2>
-                <p>Whether by advising clients, facilitating transactions, or executing principally</p>
-            </div>
+            <h2 class="reveal">Three Integrated Business Lines</h2>
             <div class="bl-grid">
-                <div class="bl-card reveal reveal-delay-1">
+                <div class="bl-card reveal reveal-d1">
                     <span class="bl-number">01</span>
                     <h3>Sales &amp; Trading</h3>
-                    <p>Own commercial strategy and revenue delivery across environmental credit markets. Spot, offtake, prepay, and options structures. Interface with demand, execute go-to-market, and drive pipeline to close.</p>
+                    <p>Commercial strategy and revenue delivery across environmental credit markets. Spot, offtake, prepay, and options structures.</p>
                 </div>
-                <div class="bl-card reveal reveal-delay-2">
+                <div class="bl-card reveal reveal-d2">
                     <span class="bl-number">02</span>
                     <h3>Developments &amp; Advisory</h3>
-                    <p>Originate, evaluate, and shepherd projects through pipeline to commercial readiness. Strategic advice, due diligence, and structuring to make projects shovel-ready for offtake or investment.</p>
+                    <p>Originate, evaluate, and shepherd projects to commercial readiness. Due diligence and structuring across registries and methodologies.</p>
                 </div>
-                <div class="bl-card reveal reveal-delay-3">
+                <div class="bl-card reveal reveal-d3">
                     <span class="bl-number">03</span>
                     <h3>Investments</h3>
-                    <p>Principal and third-party capital management. Originate investable projects, structure vehicles, deploy capital for principal and investor returns. Celsius Carbon LP and co-investment vehicles.</p>
+                    <p>Principal and third-party capital management. Structure vehicles, deploy capital, deliver returns. Celsius Carbon LP and co-investment vehicles.</p>
                 </div>
             </div>
         </div>
@@ -883,41 +495,41 @@
     <section class="solutions" id="solutions">
         <div class="container">
             <div class="section-header reveal">
-                <h2>Environmental Asset Categories</h2>
+                <h2>What We Structure and Trade</h2>
                 <p>At our core, we identify, operationalize, structure, and monetize environmental assets</p>
             </div>
             <div class="solutions-grid">
-                <div class="sol-card reveal reveal-delay-1">
-                    <img src="./assets/backgrounds/mangrove.png" alt="Mangrove ecosystem" class="sol-image">
-                    <div class="sol-content">
-                        <h3>Nature-Based Solutions</h3>
-                        <div class="sol-tags">ARR &middot; IFM &middot; REDD+ &middot; Blue Carbon</div>
-                        <p>Harnessing forests, mangroves, and natural ecosystems to sequester carbon while delivering biodiversity and community benefits.</p>
+                <div class="sol-card reveal reveal-d1">
+                    <div class="sol-icon nbs">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9c0-3.5-3-6.5-5-8-1 2-3 3-5 3S7 12 6 14c-.5 1-.5 2 0 3a9 9 0 0 0 6 4z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 21V12"/></svg>
                     </div>
+                    <h3>Nature-Based Solutions</h3>
+                    <div class="sol-tags">ARR &middot; IFM &middot; REDD+ &middot; Blue Carbon</div>
+                    <p>Forests, mangroves, and natural ecosystems sequestering carbon with biodiversity and community co-benefits.</p>
                 </div>
-                <div class="sol-card reveal reveal-delay-2">
-                    <img src="./assets/backgrounds/mountain-range.jpg" alt="Mountain landscape" class="sol-image">
-                    <div class="sol-content">
-                        <h3>Permanent Removals</h3>
-                        <div class="sol-tags">DSB &middot; Biochar &middot; DAC</div>
-                        <p>Permanent carbon removal solutions storing CO&#8322; for 100+ years. Puro.Earth and Isometric registered.</p>
+                <div class="sol-card reveal reveal-d2">
+                    <div class="sol-icon removals">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v6m0 0l3-3m-3 3L9 5"/><circle cx="12" cy="16" r="6" stroke-linecap="round"/><path stroke-linecap="round" d="M12 13v6"/></svg>
                     </div>
+                    <h3>Permanent Removals</h3>
+                    <div class="sol-tags">DSB &middot; Biochar &middot; DAC</div>
+                    <p>Carbon removal storing CO&#8322; for 100+ years. Puro.Earth and Isometric registered.</p>
                 </div>
-                <div class="sol-card reveal reveal-delay-3">
-                    <img src="./assets/backgrounds/ocean-plastic.jpg" alt="Ocean plastic pollution" class="sol-image">
-                    <div class="sol-content">
-                        <h3>Plastics</h3>
-                        <div class="sol-tags">Verra PWRP</div>
-                        <p>Diverting plastic from landfills and oceans, converting waste into verified environmental credits through collection and recycling.</p>
+                <div class="sol-card reveal reveal-d3">
+                    <div class="sol-icon plastics">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
                     </div>
+                    <h3>Plastics</h3>
+                    <div class="sol-tags">Verra PWRP</div>
+                    <p>Verified environmental credits from plastic collection and recycling, diverting waste from landfills and oceans.</p>
                 </div>
-                <div class="sol-card reveal reveal-delay-4">
-                    <img src="./assets/backgrounds/hero-bg.jpg" alt="Green landscape" class="sol-image">
-                    <div class="sol-content">
-                        <h3>Compliance Markets</h3>
-                        <div class="sol-tags">CFR &middot; BC LCFS &middot; BC OBPS &middot; AB TIER &middot; White Credits</div>
-                        <p>Carbon compliance instruments across regulated markets, delivering structured solutions for mandatory reporting and reduction obligations.</p>
+                <div class="sol-card reveal reveal-d4">
+                    <div class="sol-icon compliance">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
+                    <h3>Compliance Markets</h3>
+                    <div class="sol-tags">CFR &middot; BC LCFS &middot; BC OBPS &middot; AB TIER</div>
+                    <p>Carbon compliance instruments across regulated markets for mandatory reporting and reduction obligations.</p>
                 </div>
             </div>
         </div>
@@ -926,49 +538,47 @@
     <!-- TEAM -->
     <section class="team" id="team">
         <div class="container">
-            <div class="section-header reveal">
-                <h2>Our Team</h2>
-            </div>
+            <h2 class="reveal">Our Team</h2>
             <div class="team-grid">
-                <div class="team-card reveal reveal-delay-1">
-                    <div class="team-avatar" style="background: var(--deep-navy);">BK</div>
+                <div class="team-card reveal reveal-d1">
+                    <div class="team-avatar">BK</div>
                     <h3>Brian Katz</h3>
                     <p>Founder &amp; CEO</p>
                 </div>
-                <div class="team-card reveal reveal-delay-1">
-                    <div class="team-avatar" style="background: var(--midnight);">TS</div>
+                <div class="team-card reveal reveal-d1">
+                    <div class="team-avatar">TS</div>
                     <h3>Tarek Shakarchi</h3>
                     <p>Co-Founder</p>
                 </div>
-                <div class="team-card reveal reveal-delay-2">
-                    <div class="team-avatar" style="background: var(--steel-blue);">KD</div>
+                <div class="team-card reveal reveal-d2">
+                    <div class="team-avatar">KD</div>
                     <h3>Keith Driver</h3>
-                    <p>Managing Partner &amp; Head, DSB Coalition</p>
+                    <p>Managing Partner</p>
                 </div>
-                <div class="team-card reveal reveal-delay-2">
-                    <div class="team-avatar" style="background: var(--midnight);">BS</div>
+                <div class="team-card reveal reveal-d2">
+                    <div class="team-avatar">BS</div>
                     <h3>Bart Simmons</h3>
                     <p>Partner</p>
                 </div>
-                <div class="team-card reveal reveal-delay-3">
-                    <div class="team-avatar" style="background: var(--deep-navy);">BA</div>
+                <div class="team-card reveal reveal-d3">
+                    <div class="team-avatar">BA</div>
                     <h3>Bobbie Armstrong</h3>
                     <p>Partner</p>
                 </div>
-                <div class="team-card reveal reveal-delay-3">
-                    <div class="team-avatar" style="background: var(--emerald);">LA</div>
+                <div class="team-card reveal reveal-d3">
+                    <div class="team-avatar">LA</div>
                     <h3>Luis Felipe Adaime</h3>
                     <p>CCO, Spain Lead</p>
                 </div>
-                <div class="team-card reveal reveal-delay-4">
-                    <div class="team-avatar" style="background: var(--steel-blue);">AA</div>
+                <div class="team-card reveal reveal-d4">
+                    <div class="team-avatar">AA</div>
                     <h3>Ana Avramovic</h3>
                     <p>Head of Sales &amp; Trading</p>
                 </div>
-                <div class="team-card reveal reveal-delay-4">
-                    <div class="team-avatar" style="background: var(--gold);">CM</div>
+                <div class="team-card reveal reveal-d4">
+                    <div class="team-avatar">CM</div>
                     <h3>Carolina Martinez</h3>
-                    <p>Sales &amp; Trading Associate</p>
+                    <p>Sales &amp; Trading</p>
                 </div>
             </div>
         </div>
@@ -976,66 +586,44 @@
 
     <!-- CONTACT -->
     <section class="contact" id="contact">
-        <div class="contact-bg">
-            <img src="./assets/backgrounds/mountain-range.jpg" alt="">
-            <div class="contact-bg-overlay"></div>
-        </div>
         <div class="container">
-            <div class="contact-grid">
-                <div class="contact-text reveal">
-                    <h2>Let's Build Something That Endures</h2>
-                    <p>Whether you're purchasing carbon credits, exploring climate investment opportunities, or need advisory on project development — we'd like to hear from you.</p>
-                    <ul class="contact-info">
-                        <li>
-                            <div class="contact-photo-placeholder">LA</div>
-                            <div class="contact-info-text">
-                                <span class="contact-name">Luis Felipe Adaime</span>
-                                <span class="contact-detail"><a href="mailto:luis.adaime@clearskyltd.com">luis.adaime@clearskyltd.com</a> &middot; +34 659 70 02 80</span>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="contact-photo-placeholder">AA</div>
-                            <div class="contact-info-text">
-                                <span class="contact-name">Ana Avramovic</span>
-                                <span class="contact-detail"><a href="mailto:ana.avramovic@clearskyltd.com">ana.avramovic@clearskyltd.com</a> &middot; +1 403 999 5757</span>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="contact-photo-placeholder">CM</div>
-                            <div class="contact-info-text">
-                                <span class="contact-name">Carolina Martinez</span>
-                                <span class="contact-detail"><a href="mailto:Carolina.Martinez@clearskyltd.com">Carolina.Martinez@clearskyltd.com</a> &middot; +1 631 494 5327</span>
-                            </div>
-                        </li>
-                    </ul>
+            <div class="contact-inner reveal">
+                <h2>Let's Build Something That Endures</h2>
+                <p>Purchasing carbon credits, exploring climate investments, or need advisory on project development — we'd like to hear from you.</p>
+                <div class="contact-cards">
+                    <div class="contact-card">
+                        <span class="cc-name">Luis Felipe Adaime</span>
+                        <span class="cc-role">CCO, Spain Lead</span>
+                        <a href="mailto:luis.adaime@clearskyltd.com">luis.adaime@clearskyltd.com</a>
+                        <span class="cc-phone">+34 659 70 02 80</span>
+                    </div>
+                    <div class="contact-card">
+                        <span class="cc-name">Ana Avramovic</span>
+                        <span class="cc-role">Head of Sales &amp; Trading</span>
+                        <a href="mailto:ana.avramovic@clearskyltd.com">ana.avramovic@clearskyltd.com</a>
+                        <span class="cc-phone">+1 403 999 5757</span>
+                    </div>
+                    <div class="contact-card">
+                        <span class="cc-name">Carolina Martinez</span>
+                        <span class="cc-role">Sales &amp; Trading</span>
+                        <a href="mailto:Carolina.Martinez@clearskyltd.com">Carolina.Martinez@clearskyltd.com</a>
+                        <span class="cc-phone">+1 631 494 5327</span>
+                    </div>
                 </div>
-                <div class="contact-form reveal reveal-delay-2">
-                    <h3>Send a Message</h3>
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" placeholder="Your name">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="your@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" placeholder="How can we help?"></textarea>
-                    </div>
-                    <button class="form-submit" type="button">Talk to Us</button>
-                </div>
+                <a href="mailto:luis.adaime@clearskyltd.com" class="btn-primary">Email Us</a>
+                <div class="contact-address">ClearSky Limited &middot; 103 Cannon Street &middot; London, EC4N 5AG</div>
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer class="footer">
+        <div class="footer-watermark">//</div>
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
                     <img src="./assets/logos/logo-white.png" alt="ClearSky" class="footer-logo">
-                    <p>Scaling nature's carbon solutions. An environmental merchant bank combining commodity-market discipline with carbon innovation.</p>
+                    <p>An environmental merchant bank combining commodity-market discipline with carbon innovation.</p>
                 </div>
                 <div>
                     <h4>Navigate</h4>
@@ -1065,49 +653,17 @@
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
-
-        // Nav scroll effect
         const nav = document.getElementById('nav');
         const hero = document.getElementById('hero');
-        const observer = new IntersectionObserver(
-            ([entry]) => { nav.classList.toggle('scrolled', !entry.isIntersecting); },
-            { threshold: 0.1 }
-        );
-        observer.observe(hero);
-
-        // Reveal on scroll
-        const reveals = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('visible');
-                });
-            },
-            { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-        );
-        reveals.forEach(el => revealObserver.observe(el));
-
-        // Mobile nav
-        const hamburger = document.getElementById('hamburger');
-        const mobileNav = document.getElementById('mobileNav');
-        const mobileOverlay = document.getElementById('mobileOverlay');
-        const mobileClose = document.getElementById('mobileClose');
-
-        function openMenu() {
-            mobileNav.classList.add('open');
-            mobileOverlay.style.display = 'block';
-            requestAnimationFrame(() => mobileOverlay.classList.add('open'));
-        }
-        function closeMenu() {
-            mobileNav.classList.remove('open');
-            mobileOverlay.classList.remove('open');
-            setTimeout(() => { mobileOverlay.style.display = 'none'; }, 300);
-        }
-        hamburger.addEventListener('click', openMenu);
-        mobileClose.addEventListener('click', closeMenu);
-        mobileOverlay.addEventListener('click', closeMenu);
-        mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+        new IntersectionObserver(([e]) => { nav.classList.toggle('scrolled', !e.isIntersecting); }, { threshold: 0.05 }).observe(hero);
+        document.querySelectorAll('.reveal').forEach(el => {
+            new IntersectionObserver(([e]) => { if (e.isIntersecting) e.target.classList.add('visible'); }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' }).observe(el);
+        });
+        const hb = document.getElementById('hamburger'), mn = document.getElementById('mobileNav'), mo = document.getElementById('mobileOverlay'), mc = document.getElementById('mobileClose');
+        function openM() { mn.classList.add('open'); mo.style.display = 'block'; requestAnimationFrame(() => mo.classList.add('open')); }
+        function closeM() { mn.classList.remove('open'); mo.classList.remove('open'); setTimeout(() => mo.style.display = 'none', 300); }
+        hb.addEventListener('click', openM); mc.addEventListener('click', closeM); mo.addEventListener('click', closeM);
+        mn.querySelectorAll('a').forEach(l => l.addEventListener('click', closeM));
     </script>
-
 </body>
 </html>
