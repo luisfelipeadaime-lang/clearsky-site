@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClearSky — Scaling Nature's Carbon Solutions</title>
     <meta name="description" content="ClearSky is an environmental merchant bank. We identify, operationalize, structure, and monetize environmental assets.">
+    <meta property="og:title" content="ClearSky — Environmental Merchant Bank">
+    <meta property="og:description" content="Scaling durable, high-integrity climate solutions. Carbon credits, project development, and climate investments.">
+    <meta property="og:image" content="./assets/backgrounds/forest-sunlight.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="./assets/backgrounds/forest-sunlight.jpg">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="./assets/favicon.png">
+    <link rel="apple-touch-icon" href="./assets/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -30,7 +38,6 @@
             --slate: #8A8F9A;
             --emerald: #1A8A6E;
             --white: #FFFFFF;
-            --alert-red: #C0392B;
         }
 
         /* ===== TYPOGRAPHY ===== */
@@ -69,13 +76,13 @@
             justify-content: space-between;
         }
         .nav-logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--white);
-            text-decoration: none;
-            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
         }
-        .nav-logo span { color: var(--gold); }
+        .nav-logo img {
+            height: 32px;
+            width: auto;
+        }
         .nav-links {
             display: flex;
             align-items: center;
@@ -134,18 +141,72 @@
             inset: 0;
             z-index: 0;
         }
-        .hero-bg canvas {
-            width: 100%;
-            height: 100%;
+        .hero-bg-image {
+            position: absolute;
+            inset: 0;
+            background: url('./assets/backgrounds/hero-bg.jpg') center/cover no-repeat;
+            opacity: 0.2;
+        }
+        .hero-strip-deco {
+            position: absolute;
+            right: -5%;
+            top: 10%;
+            height: 80%;
+            width: auto;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        .gradient-orbs {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.2;
+        }
+        .orb-1 {
+            width: 600px; height: 600px;
+            background: var(--steel-blue);
+            top: -20%; right: -10%;
+            animation: orbFloat1 12s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 400px; height: 400px;
+            background: var(--gold);
+            bottom: -10%; left: 10%;
+            animation: orbFloat2 15s ease-in-out infinite;
+        }
+        .orb-3 {
+            width: 300px; height: 300px;
+            background: var(--emerald);
+            top: 40%; left: 50%;
+            animation: orbFloat3 18s ease-in-out infinite;
+        }
+        @keyframes orbFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-40px, 30px) scale(1.05); }
+            66% { transform: translate(20px, -20px) scale(0.95); }
+        }
+        @keyframes orbFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -40px) scale(1.08); }
+            66% { transform: translate(-20px, 20px) scale(0.92); }
+        }
+        @keyframes orbFloat3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-60px, 30px) scale(1.1); }
         }
         .hero-overlay {
             position: absolute;
             inset: 0;
             background: linear-gradient(
                 135deg,
-                rgba(13, 27, 62, 0.92) 0%,
-                rgba(27, 42, 74, 0.85) 40%,
-                rgba(13, 27, 62, 0.90) 100%
+                rgba(13, 27, 62, 0.93) 0%,
+                rgba(27, 42, 74, 0.88) 40%,
+                rgba(13, 27, 62, 0.92) 100%
             );
             z-index: 1;
         }
@@ -170,10 +231,8 @@
         .hero-label::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 50%;
-            width: 28px;
-            height: 1px;
+            left: 0; top: 50%;
+            width: 28px; height: 1px;
             background: var(--gold);
         }
         .hero h1 {
@@ -210,8 +269,7 @@
         }
         .scroll-indicator {
             position: absolute;
-            bottom: 32px;
-            left: 50%;
+            bottom: 32px; left: 50%;
             transform: translateX(-50%);
             z-index: 2;
             display: flex;
@@ -226,8 +284,7 @@
             text-transform: uppercase;
         }
         .scroll-line {
-            width: 1px;
-            height: 40px;
+            width: 1px; height: 40px;
             background: linear-gradient(to bottom, rgba(212, 168, 67, 0.6), transparent);
             animation: scrollPulse 2s ease-in-out infinite;
         }
@@ -237,9 +294,7 @@
         }
 
         /* ===== ABOUT ===== */
-        .about {
-            background: var(--white);
-        }
+        .about { background: var(--white); }
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -301,9 +356,7 @@
             text-align: center;
             margin-bottom: 56px;
         }
-        .section-header h2 {
-            margin-bottom: 16px;
-        }
+        .section-header h2 { margin-bottom: 16px; }
         .section-header p {
             color: var(--slate);
             max-width: 600px;
@@ -351,60 +404,53 @@
         }
 
         /* ===== SOLUTIONS ===== */
-        .solutions {
-            background: var(--frost);
-        }
+        .solutions { background: var(--frost); }
         .solutions-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 24px;
         }
         .sol-card {
             background: var(--white);
             border-radius: 8px;
-            padding: 32px 24px;
+            overflow: hidden;
             border: 1px solid rgba(13, 27, 62, 0.06);
             transition: transform 0.2s, box-shadow 0.2s;
+            display: grid;
+            grid-template-columns: 160px 1fr;
         }
         .sol-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 32px rgba(13, 27, 62, 0.08);
         }
-        .sol-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 1.4rem;
+        .sol-image {
+            width: 100%;
+            height: 100%;
+            min-height: 180px;
+            object-fit: cover;
         }
-        .sol-icon.nbs { background: rgba(26, 138, 110, 0.12); color: var(--emerald); }
-        .sol-icon.removals { background: rgba(91, 155, 213, 0.12); color: var(--steel-blue); }
-        .sol-icon.plastics { background: rgba(212, 168, 67, 0.12); color: var(--gold); }
-        .sol-icon.compliance { background: rgba(13, 27, 62, 0.08); color: var(--deep-navy); }
-        .sol-card h3 {
+        .sol-content {
+            padding: 28px 24px;
+        }
+        .sol-content h3 {
             color: var(--deep-navy);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-size: 1.1rem;
         }
         .sol-tags {
             font-size: 0.78rem;
             color: var(--steel-blue);
             font-weight: 500;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
-        .sol-card p {
+        .sol-content p {
             color: var(--slate);
             font-size: 0.9rem;
             line-height: 1.6;
         }
 
         /* ===== TEAM ===== */
-        .team {
-            background: var(--white);
-        }
+        .team { background: var(--white); }
         .team-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -416,21 +462,25 @@
             border-radius: 8px;
             transition: background 0.2s;
         }
-        .team-card:hover {
-            background: var(--frost);
-        }
+        .team-card:hover { background: var(--frost); }
         .team-avatar {
-            width: 56px;
-            height: 56px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
-            background: var(--deep-navy);
-            color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 1.1rem;
             margin: 0 auto 16px;
+            overflow: hidden;
+            background: var(--deep-navy);
+            color: var(--white);
+        }
+        .team-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .team-card h3 {
             color: var(--deep-navy);
@@ -444,8 +494,28 @@
 
         /* ===== CONTACT CTA ===== */
         .contact {
-            background: var(--deep-navy);
+            position: relative;
             color: var(--white);
+            overflow: hidden;
+        }
+        .contact-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .contact-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .contact-bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(13, 27, 62, 0.92) 0%, rgba(27, 42, 74, 0.88) 100%);
+        }
+        .contact .container {
+            position: relative;
+            z-index: 1;
         }
         .contact-grid {
             display: grid;
@@ -466,8 +536,34 @@
         .contact-info li {
             padding: 16px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
         .contact-info li:last-child { border-bottom: none; }
+        .contact-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
+        .contact-photo-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--midnight);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
+        .contact-info-text { flex: 1; }
         .contact-name {
             color: var(--white);
             font-weight: 600;
@@ -486,18 +582,18 @@
         }
         .contact-detail a:hover { color: var(--gold); }
         .contact-form {
-            background: var(--midnight);
+            background: rgba(27, 42, 74, 0.8);
+            backdrop-filter: blur(8px);
             border-radius: 8px;
             padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
         .contact-form h3 {
             color: var(--white);
             margin-bottom: 24px;
             font-size: 1.15rem;
         }
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 16px; }
         .form-group label {
             display: block;
             color: rgba(255, 255, 255, 0.6);
@@ -553,10 +649,11 @@
             gap: 48px;
             margin-bottom: 40px;
         }
-        .footer-brand .nav-logo {
-            font-size: 1.2rem;
-            display: inline-block;
+        .footer-logo {
+            height: 28px;
+            width: auto;
             margin-bottom: 12px;
+            display: block;
         }
         .footer-brand p {
             font-size: 0.85rem;
@@ -571,9 +668,7 @@
             letter-spacing: 1px;
             margin-bottom: 16px;
         }
-        .footer-links {
-            list-style: none;
-        }
+        .footer-links { list-style: none; }
         .footer-links li { margin-bottom: 10px; }
         .footer-links a {
             color: rgba(255, 255, 255, 0.4);
@@ -610,65 +705,12 @@
         .reveal-delay-3 { transition-delay: 0.3s; }
         .reveal-delay-4 { transition-delay: 0.4s; }
 
-        /* ===== GRADIENT MESH ANIMATION ===== */
-        .gradient-orbs {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-        }
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.25;
-        }
-        .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: var(--steel-blue);
-            top: -20%;
-            right: -10%;
-            animation: orbFloat1 12s ease-in-out infinite;
-        }
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            background: var(--gold);
-            bottom: -10%;
-            left: 10%;
-            animation: orbFloat2 15s ease-in-out infinite;
-        }
-        .orb-3 {
-            width: 300px;
-            height: 300px;
-            background: var(--emerald);
-            top: 40%;
-            left: 50%;
-            animation: orbFloat3 18s ease-in-out infinite;
-        }
-        @keyframes orbFloat1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-40px, 30px) scale(1.05); }
-            66% { transform: translate(20px, -20px) scale(0.95); }
-        }
-        @keyframes orbFloat2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -40px) scale(1.08); }
-            66% { transform: translate(-20px, 20px) scale(0.92); }
-        }
-        @keyframes orbFloat3 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-60px, 30px) scale(1.1); }
-        }
-
-        /* ===== MOBILE ===== */
+        /* ===== MOBILE NAV ===== */
         .mobile-nav {
             display: none;
             position: fixed;
-            top: 0;
-            right: -100%;
-            width: 280px;
-            height: 100vh;
+            top: 0; right: -100%;
+            width: 280px; height: 100vh;
             background: var(--deep-navy);
             z-index: 1001;
             padding: 80px 32px 32px;
@@ -697,21 +739,20 @@
         .mobile-overlay.open { opacity: 1; }
         .mobile-close {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
+            top: 20px; right: 20px;
+            background: none; border: none;
             color: var(--white);
             font-size: 1.5rem;
             cursor: pointer;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
-            .solutions-grid { grid-template-columns: repeat(2, 1fr); }
+            .solutions-grid { grid-template-columns: 1fr; }
+            .sol-card { grid-template-columns: 140px 1fr; }
             .team-grid { grid-template-columns: repeat(2, 1fr); }
             .footer-grid { grid-template-columns: 1fr; gap: 32px; }
         }
-
         @media (max-width: 768px) {
             section { padding: 56px 0; }
             .nav-links { display: none; }
@@ -719,13 +760,13 @@
             .mobile-nav { display: block; }
             .about-grid { grid-template-columns: 1fr; gap: 40px; }
             .bl-grid { grid-template-columns: 1fr; }
-            .solutions-grid { grid-template-columns: 1fr; }
+            .sol-card { grid-template-columns: 1fr; }
+            .sol-image { min-height: 160px; }
             .contact-grid { grid-template-columns: 1fr; gap: 40px; }
             .hero h1 { font-size: clamp(1.8rem, 6vw, 2.4rem); }
             .hero .container { padding-top: 100px; }
             .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
         }
-
         @media (max-width: 375px) {
             .container { padding: 0 16px; }
             .team-grid { grid-template-columns: 1fr; }
@@ -737,7 +778,9 @@
     <!-- NAVIGATION -->
     <nav class="nav" id="nav">
         <div class="container">
-            <a href="#" class="nav-logo">Clear<span>Sky</span></a>
+            <a href="#" class="nav-logo">
+                <img src="./assets/logos/logo-white.png" alt="ClearSky">
+            </a>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#business-lines">Business Lines</a></li>
@@ -765,11 +808,13 @@
     <!-- HERO -->
     <section class="hero" id="hero">
         <div class="hero-bg">
+            <div class="hero-bg-image"></div>
             <div class="gradient-orbs">
                 <div class="orb orb-1"></div>
                 <div class="orb orb-2"></div>
                 <div class="orb orb-3"></div>
             </div>
+            <img src="./assets/backgrounds/hero-strip.png" alt="" class="hero-strip-deco">
         </div>
         <div class="hero-overlay"></div>
         <div class="container">
@@ -856,36 +901,36 @@
             </div>
             <div class="solutions-grid">
                 <div class="sol-card reveal reveal-delay-1">
-                    <div class="sol-icon nbs">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 8c.7 0 1.4.2 2 .5M12 2a9.96 9.96 0 0 0-7.07 2.93"/><path d="M12 2c3.5 0 6.64 1.8 8.47 4.54"/><path d="M12 2v10"/><path d="M2 10c0 4.42 2.87 8.17 6.84 9.5"/><path d="M22 10c0 4.42-2.87 8.17-6.84 9.5"/><path d="M12 22v-6"/><path d="M8 22h8"/></svg>
+                    <img src="./assets/backgrounds/mangrove.png" alt="Mangrove ecosystem" class="sol-image">
+                    <div class="sol-content">
+                        <h3>Nature-Based Solutions</h3>
+                        <div class="sol-tags">ARR &middot; IFM &middot; REDD+ &middot; Blue Carbon</div>
+                        <p>Harnessing forests, mangroves, and natural ecosystems to sequester carbon while delivering biodiversity and community benefits.</p>
                     </div>
-                    <h3>Nature-Based Solutions</h3>
-                    <div class="sol-tags">ARR &middot; IFM &middot; REDD+ &middot; Blue Carbon</div>
-                    <p>Harnessing forests, mangroves, and natural ecosystems to sequester carbon while delivering biodiversity and community benefits.</p>
                 </div>
                 <div class="sol-card reveal reveal-delay-2">
-                    <div class="sol-icon removals">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                    <img src="./assets/backgrounds/mountain-range.jpg" alt="Mountain landscape" class="sol-image">
+                    <div class="sol-content">
+                        <h3>Permanent Removals</h3>
+                        <div class="sol-tags">DSB &middot; Biochar &middot; DAC</div>
+                        <p>Permanent carbon removal solutions storing CO&#8322; for 100+ years. Puro.Earth and Isometric registered.</p>
                     </div>
-                    <h3>Permanent Removals</h3>
-                    <div class="sol-tags">DSB &middot; Biochar &middot; DAC</div>
-                    <p>Permanent carbon removal solutions storing CO&#8322; for 100+ years. Puro.Earth and Isometric registered.</p>
                 </div>
                 <div class="sol-card reveal reveal-delay-3">
-                    <div class="sol-icon plastics">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                    <img src="./assets/backgrounds/ocean-plastic.jpg" alt="Ocean plastic pollution" class="sol-image">
+                    <div class="sol-content">
+                        <h3>Plastics</h3>
+                        <div class="sol-tags">Verra PWRP</div>
+                        <p>Diverting plastic from landfills and oceans, converting waste into verified environmental credits through collection and recycling.</p>
                     </div>
-                    <h3>Plastics</h3>
-                    <div class="sol-tags">Verra PWRP</div>
-                    <p>Diverting plastic from landfills and oceans, converting waste into verified environmental credits through collection and recycling.</p>
                 </div>
                 <div class="sol-card reveal reveal-delay-4">
-                    <div class="sol-icon compliance">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <img src="./assets/backgrounds/hero-bg.jpg" alt="Green landscape" class="sol-image">
+                    <div class="sol-content">
+                        <h3>Compliance Markets</h3>
+                        <div class="sol-tags">CFR &middot; BC LCFS &middot; BC OBPS &middot; AB TIER &middot; White Credits</div>
+                        <p>Carbon compliance instruments across regulated markets, delivering structured solutions for mandatory reporting and reduction obligations.</p>
                     </div>
-                    <h3>Compliance Markets</h3>
-                    <div class="sol-tags">CFR &middot; BC LCFS &middot; BC OBPS &middot; AB TIER &middot; White Credits</div>
-                    <p>Carbon compliance instruments across regulated markets, delivering structured solutions for mandatory reporting and reduction obligations.</p>
                 </div>
             </div>
         </div>
@@ -924,17 +969,23 @@
                     <p>Partner</p>
                 </div>
                 <div class="team-card reveal reveal-delay-3">
-                    <div class="team-avatar" style="background: var(--emerald);">LA</div>
+                    <div class="team-avatar">
+                        <img src="./assets/team/luis-adaime.png" alt="Luis Felipe Adaime">
+                    </div>
                     <h3>Luis Felipe Adaime</h3>
                     <p>CCO, Spain Lead</p>
                 </div>
                 <div class="team-card reveal reveal-delay-4">
-                    <div class="team-avatar" style="background: var(--steel-blue);">AA</div>
+                    <div class="team-avatar">
+                        <img src="./assets/team/ana-avramovic.png" alt="Ana Avramovic">
+                    </div>
                     <h3>Ana Avramovic</h3>
                     <p>Head of Sales &amp; Trading</p>
                 </div>
                 <div class="team-card reveal reveal-delay-4">
-                    <div class="team-avatar" style="background: var(--gold);">CM</div>
+                    <div class="team-avatar">
+                        <img src="./assets/team/carolina-martinez.png" alt="Carolina Martinez">
+                    </div>
                     <h3>Carolina Martinez</h3>
                     <p>Sales &amp; Trading Associate</p>
                 </div>
@@ -944,6 +995,10 @@
 
     <!-- CONTACT -->
     <section class="contact" id="contact">
+        <div class="contact-bg">
+            <img src="./assets/backgrounds/mountain-range.jpg" alt="">
+            <div class="contact-bg-overlay"></div>
+        </div>
         <div class="container">
             <div class="contact-grid">
                 <div class="contact-text reveal">
@@ -951,16 +1006,25 @@
                     <p>Whether you're purchasing carbon credits, exploring climate investment opportunities, or need advisory on project development — we'd like to hear from you.</p>
                     <ul class="contact-info">
                         <li>
-                            <span class="contact-name">Luis Felipe Adaime</span>
-                            <span class="contact-detail"><a href="mailto:luis.adaime@clearskyltd.com">luis.adaime@clearskyltd.com</a> &middot; +34 659 70 02 80</span>
+                            <img src="./assets/team/luis-adaime.png" alt="Luis Felipe Adaime" class="contact-photo">
+                            <div class="contact-info-text">
+                                <span class="contact-name">Luis Felipe Adaime</span>
+                                <span class="contact-detail"><a href="mailto:luis.adaime@clearskyltd.com">luis.adaime@clearskyltd.com</a> &middot; +34 659 70 02 80</span>
+                            </div>
                         </li>
                         <li>
-                            <span class="contact-name">Ana Avramovic</span>
-                            <span class="contact-detail"><a href="mailto:ana.avramovic@clearskyltd.com">ana.avramovic@clearskyltd.com</a> &middot; +1 403 999 5757</span>
+                            <img src="./assets/team/ana-avramovic.png" alt="Ana Avramovic" class="contact-photo">
+                            <div class="contact-info-text">
+                                <span class="contact-name">Ana Avramovic</span>
+                                <span class="contact-detail"><a href="mailto:ana.avramovic@clearskyltd.com">ana.avramovic@clearskyltd.com</a> &middot; +1 403 999 5757</span>
+                            </div>
                         </li>
                         <li>
-                            <span class="contact-name">Carolina Martinez</span>
-                            <span class="contact-detail"><a href="mailto:Carolina.Martinez@clearskyltd.com">Carolina.Martinez@clearskyltd.com</a> &middot; +1 631 494 5327</span>
+                            <img src="./assets/team/carolina-martinez.png" alt="Carolina Martinez" class="contact-photo">
+                            <div class="contact-info-text">
+                                <span class="contact-name">Carolina Martinez</span>
+                                <span class="contact-detail"><a href="mailto:Carolina.Martinez@clearskyltd.com">Carolina.Martinez@clearskyltd.com</a> &middot; +1 631 494 5327</span>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -989,7 +1053,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <a href="#" class="nav-logo">Clear<span>Sky</span></a>
+                    <img src="./assets/logos/logo-white.png" alt="ClearSky" class="footer-logo">
                     <p>Scaling nature's carbon solutions. An environmental merchant bank combining commodity-market discipline with carbon innovation.</p>
                 </div>
                 <div>
@@ -1019,16 +1083,13 @@
     </footer>
 
     <script>
-        // Dynamic copyright year
         document.getElementById('year').textContent = new Date().getFullYear();
 
         // Nav scroll effect
         const nav = document.getElementById('nav');
         const hero = document.getElementById('hero');
         const observer = new IntersectionObserver(
-            ([entry]) => {
-                nav.classList.toggle('scrolled', !entry.isIntersecting);
-            },
+            ([entry]) => { nav.classList.toggle('scrolled', !entry.isIntersecting); },
             { threshold: 0.1 }
         );
         observer.observe(hero);
@@ -1038,9 +1099,7 @@
         const revealObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
                 });
             },
             { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
@@ -1066,9 +1125,7 @@
         hamburger.addEventListener('click', openMenu);
         mobileClose.addEventListener('click', closeMenu);
         mobileOverlay.addEventListener('click', closeMenu);
-        mobileNav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', closeMenu);
-        });
+        mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
     </script>
 
 </body>
