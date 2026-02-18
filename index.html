@@ -1,669 +1,1035 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClearSky — Scaling Nature's Carbon Solutions</title>
-    <meta name="description" content="ClearSky is an environmental merchant bank. We identify, operationalize, structure, and monetize environmental assets.">
-    <meta property="og:title" content="ClearSky — Environmental Merchant Bank">
-    <meta property="og:description" content="Scaling durable, high-integrity climate solutions. Carbon credits, project development, and climate investments.">
-    <meta name="twitter:card" content="summary">
-    <link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon.png">
-    <link rel="shortcut icon" type="image/png" href="./assets/favicon.png">
-    <link rel="apple-touch-icon" href="./assets/favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            color: #0D1B3E;
-            background: #FFFFFF;
-            line-height: 1.4;
-            -webkit-font-smoothing: antialiased;
-        }
-        :root {
-            --navy: #0D1B3E;
-            --blue: #5B9BD5;
-            --gold: #D4A843;
-            --midnight: #1B2A4A;
-            --frost: #F5F7FA;
-            --slate: #8A8F9A;
-            --emerald: #1A8A6E;
-            --white: #FFFFFF;
-            --teal: #0A3D5C;
-        }
-        h1, h2, h3, h4 { font-weight: 700; line-height: 1.15; }
-        h2 { font-size: clamp(1.8rem, 3.5vw, 2.75rem); margin-bottom: 32px; }
-        p { line-height: 1.65; max-width: 680px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClearSky — Environmental Merchant Bank</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & VARIABLES ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
-        section { padding: 120px 0; }
+    :root {
+      --navy: #0D1B3E;
+      --steel: #5B9BD5;
+      --gold: #D4A843;
+      --midnight: #1B2A4A;
+      --frost: #F5F7FA;
+      --slate: #8A8F9A;
+      --emerald: #1A8A6E;
+      --hero-dark: #0a1628;
+      --hero-teal: #0d3b4f;
+      --initial-bg: #0B2545;
+      --white: #FFFFFF;
+      --section-pad: 120px;
+      --section-pad-mobile: 64px;
+    }
 
-        /* ===== NAV ===== */
-        .nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            padding: 18px 0;
-            transition: background 0.3s, box-shadow 0.3s, padding 0.3s;
-        }
-        .nav.scrolled {
-            background: rgba(13, 27, 62, 0.97);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.04);
-            padding: 12px 0;
-        }
-        .nav .container { display: flex; align-items: center; justify-content: space-between; }
-        .nav-logo { display: flex; align-items: center; }
-        .nav-logo img { height: 30px; width: auto; }
-        .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
-        .nav-links a {
-            color: rgba(255,255,255,0.7); text-decoration: none;
-            font-size: 0.82rem; font-weight: 500; letter-spacing: 0.02em;
-            transition: color 0.2s;
-        }
-        .nav-links a:hover { color: var(--white); }
-        .nav-cta {
-            background: var(--gold); color: var(--navy);
-            padding: 9px 22px; border-radius: 3px;
-            font-weight: 600; font-size: 0.82rem; text-decoration: none;
-            transition: background 0.2s;
-        }
-        .nav-cta:hover { background: #C49A38; }
-        .hamburger {
-            display: none; flex-direction: column; gap: 5px;
-            cursor: pointer; background: none; border: none; padding: 4px;
-        }
-        .hamburger span { width: 22px; height: 1.5px; background: var(--white); }
+    html { scroll-behavior: smooth; }
 
-        /* ===== HERO ===== */
-        .hero {
-            position: relative; min-height: 100vh;
-            display: flex; align-items: center;
-            background: var(--navy);
-            overflow: hidden;
-        }
-        .hero-gradient {
-            position: absolute; inset: 0;
-            background: linear-gradient(135deg, #0D1B3E 0%, #0A3D5C 25%, #0D1B3E 50%, #1B2A4A 75%, #0A3D5C 100%);
-            background-size: 400% 400%;
-            animation: heroShift 20s ease infinite;
-        }
-        @keyframes heroShift {
-            0% { background-position: 0% 50%; }
-            25% { background-position: 100% 0%; }
-            50% { background-position: 100% 100%; }
-            75% { background-position: 0% 100%; }
-            100% { background-position: 0% 50%; }
-        }
-        .hero-noise {
-            position: absolute; inset: 0;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-            opacity: 0.4;
-        }
-        .hero .container { position: relative; z-index: 1; padding-top: 160px; padding-bottom: 120px; }
-        .hero-content { max-width: 800px; }
-        .hero-label {
-            color: var(--gold);
-            font-size: 0.75rem; font-weight: 300;
-            letter-spacing: 0.3em; text-transform: uppercase;
-            margin-bottom: 24px; display: block;
-        }
-        .hero h1 {
-            color: var(--white);
-            font-size: clamp(2.8rem, 6vw, 4.5rem);
-            font-weight: 700; line-height: 1.08;
-            margin-bottom: 28px;
-        }
-        .hero-sub {
-            color: rgba(255,255,255,0.6);
-            font-size: clamp(1rem, 1.5vw, 1.1rem);
-            line-height: 1.7; margin-bottom: 48px;
-            max-width: 560px;
-        }
-        .btn-primary {
-            display: inline-block; background: var(--gold); color: var(--navy);
-            padding: 14px 40px; font-size: 0.9rem; font-weight: 600;
-            border-radius: 3px; text-decoration: none;
-            transition: background 0.2s, transform 0.15s;
-            border: none; cursor: pointer;
-        }
-        .btn-primary:hover { background: #C49A38; transform: translateY(-1px); }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      color: var(--navy);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        /* ===== DATA STRIP (Bloomberg bar) ===== */
-        .data-strip {
-            background: var(--navy); border-top: 1px solid rgba(91,155,213,0.15);
-            border-bottom: 1px solid rgba(91,155,213,0.15);
-            padding: 0;
-        }
-        .data-strip .container {
-            display: flex; justify-content: center;
-        }
-        .data-strip-inner {
-            display: flex; width: 100%;
-        }
-        .data-item {
-            flex: 1; padding: 28px 24px; text-align: center;
-            border-right: 1px solid rgba(91,155,213,0.12);
-        }
-        .data-item:last-child { border-right: none; }
-        .data-number {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.8rem; font-weight: 500;
-            color: var(--white); display: block; margin-bottom: 4px;
-        }
-        .data-label {
-            font-size: 0.72rem; color: var(--slate);
-            text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
-        }
+    p { max-width: 680px; }
 
-        /* ===== ABOUT ===== */
-        .about { background: var(--white); }
-        .about .container { max-width: 800px; }
-        .about h2 span { color: var(--blue); }
-        .about p { color: var(--navy); font-size: 1.05rem; margin-bottom: 16px; }
-        .about .tagline {
-            color: var(--gold); font-weight: 600; font-size: 1.05rem;
-            margin-top: 28px; padding-top: 28px;
-            border-top: 1px solid rgba(13,27,62,0.08);
-        }
+    a { color: inherit; text-decoration: none; }
 
-        /* ===== BUSINESS LINES ===== */
-        .business-lines { background: var(--navy); color: var(--white); }
-        .business-lines h2 { text-align: center; }
-        .bl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .bl-card {
-            background: var(--midnight); border-radius: 6px;
-            padding: 40px 32px; border-left: 3px solid var(--gold);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .bl-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 16px 48px rgba(0,0,0,0.25);
-        }
-        .bl-number {
-            font-family: 'Roboto Mono', monospace;
-            color: rgba(212,168,67,0.5); font-size: 0.8rem; font-weight: 500;
-            margin-bottom: 16px; display: block;
-        }
-        .bl-card h3 { color: var(--white); margin-bottom: 14px; font-size: 1.2rem; }
-        .bl-card p { color: rgba(255,255,255,0.6); font-size: 0.92rem; line-height: 1.65; }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
 
-        /* ===== SOLUTIONS ===== */
-        .solutions { background: var(--frost); }
-        .solutions .section-header { text-align: center; margin-bottom: 56px; }
-        .solutions .section-header p {
-            color: var(--slate); max-width: 540px; margin: 0 auto; font-size: 1rem;
-        }
-        .solutions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-        .sol-card {
-            background: var(--white); border-radius: 6px;
-            padding: 32px 24px; text-align: left;
-            border: 1px solid rgba(13,27,62,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex; flex-direction: column;
-        }
-        .sol-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 32px rgba(13,27,62,0.07);
-        }
-        .sol-icon {
-            width: 44px; height: 44px; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px;
-        }
-        .sol-icon svg { width: 22px; height: 22px; }
-        .sol-icon.nbs { background: rgba(26,138,110,0.1); color: var(--emerald); }
-        .sol-icon.removals { background: rgba(91,155,213,0.1); color: var(--blue); }
-        .sol-icon.plastics { background: rgba(212,168,67,0.1); color: var(--gold); }
-        .sol-icon.compliance { background: rgba(13,27,62,0.06); color: var(--navy); }
-        .sol-card h3 { color: var(--navy); font-size: 1rem; margin-bottom: 6px; }
-        .sol-tags {
-            font-size: 0.72rem; color: var(--blue); font-weight: 500;
-            margin-bottom: 12px; letter-spacing: 0.01em;
-        }
-        .sol-card p { color: var(--slate); font-size: 0.88rem; line-height: 1.6; flex: 1; }
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 20px 0;
+      transition: background 0.4s ease, padding 0.3s ease, box-shadow 0.3s ease;
+    }
 
-        /* ===== TEAM ===== */
-        .team { background: var(--white); }
-        .team h2 { text-align: center; }
-        .team-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 12px; max-width: 900px; margin: 0 auto;
-        }
-        .team-card {
-            text-align: center; padding: 20px 12px; border-radius: 6px;
-            transition: background 0.2s;
-        }
-        .team-card:hover { background: var(--frost); }
-        .team-avatar {
-            width: 56px; height: 56px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 600; font-size: 0.9rem;
-            margin: 0 auto 12px;
-            background: var(--navy); color: var(--white);
-        }
-        .team-card h3 { color: var(--navy); font-size: 0.88rem; margin-bottom: 3px; font-weight: 600; }
-        .team-card p { color: var(--slate); font-size: 0.75rem; margin: 0 auto; }
+    .nav.scrolled {
+      background: rgba(13, 27, 62, 0.97);
+      padding: 12px 0;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+      backdrop-filter: blur(12px);
+    }
 
-        /* ===== CONTACT ===== */
-        .contact {
-            background: linear-gradient(135deg, #0D1B3E 0%, #0A3D5C 50%, #1B2A4A 100%);
-            color: var(--white);
-        }
-        .contact-inner { max-width: 700px; margin: 0 auto; text-align: center; }
-        .contact-inner h2 { color: var(--white); }
-        .contact-inner > p {
-            color: rgba(255,255,255,0.6); font-size: 1.05rem;
-            margin: 0 auto 48px; max-width: 520px;
-        }
-        .contact-cards { display: flex; gap: 20px; justify-content: center; margin-bottom: 40px; }
-        .contact-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 6px; padding: 24px 20px; text-align: center;
-            flex: 1; max-width: 220px;
-        }
-        .contact-card .cc-name {
-            color: var(--white); font-weight: 600; font-size: 0.9rem;
-            display: block; margin-bottom: 4px;
-        }
-        .contact-card .cc-role {
-            color: var(--slate); font-size: 0.72rem; display: block; margin-bottom: 12px;
-        }
-        .contact-card a {
-            color: var(--blue); text-decoration: none; font-size: 0.82rem;
-            transition: color 0.2s; display: block; margin-bottom: 4px;
-        }
-        .contact-card a:hover { color: var(--gold); }
-        .contact-card .cc-phone { color: rgba(255,255,255,0.4); font-size: 0.78rem; }
-        .contact-address {
-            color: rgba(255,255,255,0.3); font-size: 0.78rem; margin-top: 32px;
-        }
+    .nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-        /* ===== FOOTER ===== */
-        .footer {
-            background: #060D1C; color: rgba(255,255,255,0.35);
-            padding: 48px 0 32px; position: relative; overflow: hidden;
-        }
-        .footer-watermark {
-            position: absolute; right: 32px; bottom: 20px;
-            font-size: 6rem; font-weight: 700; color: rgba(255,255,255,0.015);
-            pointer-events: none; user-select: none; letter-spacing: -4px;
-        }
-        .footer-grid {
-            display: grid; grid-template-columns: 2fr 1fr 1fr;
-            gap: 48px; margin-bottom: 36px;
-        }
-        .footer-logo { height: 24px; width: auto; margin-bottom: 12px; display: block; }
-        .footer-brand p { font-size: 0.8rem; line-height: 1.6; max-width: 300px; }
-        .footer h4 {
-            color: rgba(255,255,255,0.6); font-size: 0.7rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px;
-        }
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 8px; }
-        .footer-links a {
-            color: rgba(255,255,255,0.35); text-decoration: none;
-            font-size: 0.8rem; transition: color 0.2s;
-        }
-        .footer-links a:hover { color: var(--gold); }
-        .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.04);
-            padding-top: 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 0.72rem;
-        }
-        .footer-backer { color: rgba(255,255,255,0.25); font-size: 0.68rem; }
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+    }
 
-        /* ===== REVEAL ===== */
-        .reveal {
-            opacity: 0; transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-        .reveal-d1 { transition-delay: 0.1s; }
-        .reveal-d2 { transition-delay: 0.2s; }
-        .reveal-d3 { transition-delay: 0.3s; }
-        .reveal-d4 { transition-delay: 0.4s; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
 
-        /* ===== MOBILE NAV ===== */
-        .mobile-nav {
-            display: none; position: fixed; top: 0; right: -100%;
-            width: 280px; height: 100vh;
-            background: var(--navy); z-index: 1001;
-            padding: 80px 32px 32px;
-            transition: right 0.3s ease;
-            border-left: 1px solid rgba(255,255,255,0.06);
-        }
-        .mobile-nav.open { right: 0; }
-        .mobile-nav a {
-            display: block; color: rgba(255,255,255,0.8); text-decoration: none;
-            font-size: 1rem; padding: 14px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .mobile-nav a:hover { color: var(--gold); }
-        .mobile-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(13,27,62,0.6); z-index: 1000;
-            opacity: 0; transition: opacity 0.3s;
-        }
-        .mobile-overlay.open { opacity: 1; }
-        .mobile-close {
-            position: absolute; top: 20px; right: 20px;
-            background: none; border: none; color: var(--white);
-            font-size: 1.4rem; cursor: pointer;
-        }
+    .nav-links a {
+      color: var(--white);
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .solutions-grid { grid-template-columns: repeat(2, 1fr); }
-            .team-grid { grid-template-columns: repeat(2, 1fr); }
-            .contact-cards { flex-wrap: wrap; }
-            .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-        }
-        @media (max-width: 768px) {
-            section { padding: 64px 0; }
-            h2 { font-size: clamp(1.5rem, 5vw, 2rem); margin-bottom: 24px; }
-            .nav-links { display: none; }
-            .hamburger { display: flex; }
-            .mobile-nav { display: block; }
-            .hero h1 { font-size: clamp(2rem, 7vw, 2.8rem); }
-            .hero .container { padding-top: 120px; padding-bottom: 80px; }
-            .data-strip-inner { flex-wrap: wrap; }
-            .data-item { flex: 1 1 50%; border-bottom: 1px solid rgba(91,155,213,0.08); }
-            .data-item:nth-child(2) { border-right: none; }
-            .bl-grid { grid-template-columns: 1fr; }
-            .solutions-grid { grid-template-columns: 1fr; }
-            .team-grid { grid-template-columns: repeat(2, 1fr); }
-            .contact-cards { flex-direction: column; align-items: center; }
-            .contact-card { max-width: 100%; width: 100%; }
-            .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
-        }
-        @media (max-width: 375px) {
-            .container { padding: 0 16px; }
-        }
-    </style>
+    .nav-links a:hover { opacity: 1; }
+
+    .nav-cta {
+      color: var(--white) !important;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 24px;
+      border-radius: 2px;
+      opacity: 1 !important;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    /* Mobile menu */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      margin: 5px 0;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(135deg,
+        var(--hero-dark) 0%,
+        var(--hero-teal) 25%,
+        var(--hero-dark) 50%,
+        #0b2d3d 75%,
+        var(--hero-dark) 100%
+      );
+      background-size: 400% 400%;
+      animation: heroGradient 18s ease infinite;
+    }
+
+    @keyframes heroGradient {
+      0% { background-position: 0% 50%; }
+      25% { background-position: 100% 25%; }
+      50% { background-position: 100% 50%; }
+      75% { background-position: 0% 75%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Noise texture overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 40px;
+      max-width: 900px;
+    }
+
+    .hero-label {
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.5s forwards;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+      color: rgba(255,255,255,0.75);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 640px;
+      margin: 0 auto 40px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.7s forwards;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 14px 40px;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all 0.3s;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.9s forwards;
+    }
+
+    .hero-cta:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.6);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== ABOUT ===== */
+    .about {
+      padding: var(--section-pad) 0;
+      background: var(--white);
+    }
+
+    .about .container {
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 32px;
+      line-height: 1.15;
+    }
+
+    .about-text {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--navy);
+      margin: 0 auto 16px;
+      max-width: 720px;
+      opacity: 0.85;
+    }
+
+    .about-tagline {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--navy);
+      margin: 32px auto 0;
+      max-width: 600px;
+    }
+
+    /* ===== STATS BAR (Bloomberg style) ===== */
+    .stats-bar {
+      background: var(--hero-dark);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .stats-bar-inner {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      flex: 1;
+      text-align: center;
+      padding: 40px 24px;
+      position: relative;
+    }
+
+    .stat-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 40px;
+      width: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .stat-number {
+      font-family: 'Roboto Mono', monospace;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 6px;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ===== BUSINESS LINES ===== */
+    .business-lines {
+      padding: var(--section-pad) 0;
+      background: var(--frost);
+    }
+
+    .business-lines .container { text-align: center; }
+
+    .bl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 56px;
+      text-align: left;
+    }
+
+    .bl-card {
+      background: var(--white);
+      padding: 40px 32px;
+      border-left: 3px solid var(--gold);
+      border-radius: 2px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .bl-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(13, 27, 62, 0.08);
+    }
+
+    .bl-card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+
+    .bl-card p {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--slate);
+    }
+
+    /* ===== SOLUTIONS ===== */
+    .solutions {
+      padding: var(--section-pad) 0;
+      background: var(--white);
+    }
+
+    .solutions .container { text-align: center; }
+
+    .sol-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+      text-align: left;
+    }
+
+    .sol-card {
+      background: var(--frost);
+      padding: 36px 28px;
+      border-radius: 2px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sol-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(13, 27, 62, 0.07);
+    }
+
+    .sol-icon {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 20px;
+      color: var(--steel);
+    }
+
+    .sol-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .sol-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .sol-card .sol-tags {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .sol-card p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--slate);
+      flex: 1;
+    }
+
+    /* ===== TEAM ===== */
+    .team {
+      padding: var(--section-pad) 0;
+      background: var(--frost);
+    }
+
+    .team .container { text-align: center; }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .team-member {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .team-initial {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--initial-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+
+    .team-member h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 3px;
+    }
+
+    .team-member .team-title {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+
+    .team-member .team-bio {
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: var(--slate);
+      max-width: 240px;
+    }
+
+    .team-linkedin {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      color: var(--steel);
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .team-linkedin:hover { opacity: 1; }
+
+    .team-linkedin svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      padding: var(--section-pad) 0;
+      background: linear-gradient(135deg, var(--hero-dark) 0%, var(--hero-teal) 50%, var(--hero-dark) 100%);
+      background-size: 300% 300%;
+      animation: heroGradient 18s ease infinite;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px;
+      pointer-events: none;
+    }
+
+    .cta .container { position: relative; z-index: 1; }
+
+    .cta .section-title {
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .cta-body {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+      margin: 0 auto 40px;
+      max-width: 580px;
+      font-weight: 300;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 16px 48px;
+      background: var(--gold);
+      color: var(--hero-dark);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .cta-button:hover {
+      background: #c49a38;
+      transform: translateY(-2px);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--hero-dark);
+      padding: 48px 0 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-watermark {
+      position: absolute;
+      bottom: -10px;
+      right: 40px;
+      font-size: 6rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.015);
+      pointer-events: none;
+      user-select: none;
+      line-height: 1;
+    }
+
+    .footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-logo img {
+      height: 28px;
+      width: auto;
+      opacity: 0.9;
+    }
+
+    .footer-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .footer-backer {
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 400;
+    }
+
+    .footer-right {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+    .reveal-delay-7 { transition-delay: 0.7s; }
+    .reveal-delay-8 { transition-delay: 0.8s; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .sol-grid { grid-template-columns: repeat(2, 1fr); }
+      .team-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --section-pad: var(--section-pad-mobile);
+      }
+
+      .container { padding: 0 24px; }
+
+      .nav-links { display: none; }
+      .nav-toggle { display: block; }
+
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(10, 22, 40, 0.98);
+        justify-content: center;
+        align-items: center;
+        gap: 28px;
+        z-index: 999;
+      }
+
+      .nav-links.open a {
+        font-size: 1.1rem;
+        opacity: 1;
+      }
+
+      .hero h1 { font-size: clamp(2rem, 7vw, 3rem); }
+
+      .stats-bar-inner {
+        flex-wrap: wrap;
+      }
+
+      .stat-item {
+        flex: 0 0 50%;
+        padding: 28px 16px;
+      }
+
+      .stat-item:nth-child(2)::after { display: none; }
+
+      .bl-grid { grid-template-columns: 1fr; }
+      .sol-grid { grid-template-columns: 1fr; }
+
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+
+      .footer .container {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .footer-left { justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .team-grid { grid-template-columns: 1fr; }
+      .stat-item { flex: 0 0 50%; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- NAV -->
-    <nav class="nav" id="nav">
-        <div class="container">
-            <a href="#" class="nav-logo">
-                <img src="./assets/logos/logo-white.png" alt="ClearSky">
-            </a>
-            <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#business-lines">Business Lines</a></li>
-                <li><a href="#solutions">Solutions</a></li>
-                <li><a href="#team">Team</a></li>
-                <li><a href="#contact" class="nav-cta">Talk to Us</a></li>
-            </ul>
-            <button class="hamburger" id="hamburger" aria-label="Menu">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- MOBILE NAV -->
-    <div class="mobile-overlay" id="mobileOverlay"></div>
-    <div class="mobile-nav" id="mobileNav">
-        <button class="mobile-close" id="mobileClose" aria-label="Close">&times;</button>
-        <a href="#about">About</a>
-        <a href="#business-lines">Business Lines</a>
-        <a href="#solutions">Solutions</a>
-        <a href="#team">Team</a>
-        <a href="#contact">Talk to Us</a>
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <img src="./assets/logos/logo-white.png" alt="ClearSky">
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#business-lines">Business Lines</a></li>
+        <li><a href="#solutions">Solutions</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
+  </nav>
 
-    <!-- HERO -->
-    <section class="hero" id="hero">
-        <div class="hero-gradient"></div>
-        <div class="hero-noise"></div>
-        <div class="container">
-            <div class="hero-content">
-                <span class="hero-label">Environmental Merchant Bank</span>
-                <h1>Scaling Durable,<br>High-Integrity<br>Climate Solutions</h1>
-                <p class="hero-sub">We identify, operationalize, structure, and monetize environmental assets — advising clients, facilitating transactions, and executing principally.</p>
-                <a href="#contact" class="btn-primary">Talk to Us</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- DATA STRIP -->
-    <div class="data-strip">
-        <div class="container">
-            <div class="data-strip-inner">
-                <div class="data-item">
-                    <span class="data-number">30+</span>
-                    <span class="data-label">Projects Structured</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-number">8+</span>
-                    <span class="data-label">Project Types</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-number">4</span>
-                    <span class="data-label">Registries</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-number">20+</span>
-                    <span class="data-label">Years Experience</span>
-                </div>
-            </div>
-        </div>
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-label">Environmental Merchant Bank</div>
+      <h1>Scaling Durable, High&#8209;Integrity Climate Solutions</h1>
+      <p class="hero-sub">We identify, operationalize, structure, and monetize environmental assets — advising clients, facilitating transactions, and executing principally.</p>
+      <a href="#contact" class="hero-cta">Talk to Us</a>
     </div>
+  </section>
 
-    <!-- ABOUT -->
-    <section class="about" id="about">
-        <div class="container">
-            <div class="reveal">
-                <h2>Commodity-Market Discipline.<br><span>Carbon Innovation.</span></h2>
-                <p>ClearSky is a global climate solutions firm backed by MKS PAMP. We deliver durable, high-integrity carbon projects across nature-based solutions, permanent removals, plastics, and compliance markets.</p>
-                <p>We capitalize on inefficiencies in voluntary and compliance markets to deliver superior risk-adjusted returns — helping corporates and investors meet the next generation of climate and credibility challenges.</p>
-                <p class="tagline">Science-backed, CFO-ready climate solutions that endure.</p>
-            </div>
+  <!-- ===== ABOUT ===== -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="section-label reveal">Who We Are</div>
+      <h2 class="section-title reveal">Commodity-Market Discipline Meets<br>Carbon Innovation</h2>
+      <p class="about-text reveal">ClearSky is a global climate solutions firm backed by MKS PAMP. We deliver durable, high-integrity carbon projects across nature-based solutions, permanent removals, plastics, and compliance markets — helping corporates and investors navigate the next generation of climate and credibility challenges.</p>
+      <p class="about-tagline reveal">Science-backed, CFO-ready climate solutions that endure.</p>
+    </div>
+  </section>
+
+  <!-- ===== STATS BAR ===== -->
+  <div class="stats-bar">
+    <div class="stats-bar-inner">
+      <div class="stat-item reveal">
+        <div class="stat-number">30+</div>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-number">8+</div>
+        <div class="stat-label">Project Types</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-number">4</div>
+        <div class="stat-label">Registries</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-number">20+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BUSINESS LINES ===== -->
+  <section class="business-lines" id="business-lines">
+    <div class="container">
+      <div class="section-label reveal">What We Do</div>
+      <h2 class="section-title reveal">Three Business Lines</h2>
+      <div class="bl-grid">
+        <div class="bl-card reveal reveal-delay-1">
+          <h3>Sales &amp; Trading</h3>
+          <p>Own commercial strategy and revenue delivery across environmental credit markets. Spot, offtake, prepay, and options structures. Interface with demand, execute go-to-market, and drive pipeline to close.</p>
         </div>
-    </section>
-
-    <!-- BUSINESS LINES -->
-    <section class="business-lines" id="business-lines">
-        <div class="container">
-            <h2 class="reveal">Three Integrated Business Lines</h2>
-            <div class="bl-grid">
-                <div class="bl-card reveal reveal-d1">
-                    <span class="bl-number">01</span>
-                    <h3>Sales &amp; Trading</h3>
-                    <p>Commercial strategy and revenue delivery across environmental credit markets. Spot, offtake, prepay, and options structures.</p>
-                </div>
-                <div class="bl-card reveal reveal-d2">
-                    <span class="bl-number">02</span>
-                    <h3>Developments &amp; Advisory</h3>
-                    <p>Originate, evaluate, and shepherd projects to commercial readiness. Due diligence and structuring across registries and methodologies.</p>
-                </div>
-                <div class="bl-card reveal reveal-d3">
-                    <span class="bl-number">03</span>
-                    <h3>Investments</h3>
-                    <p>Principal and third-party capital management. Structure vehicles, deploy capital, deliver returns. Celsius Carbon LP and co-investment vehicles.</p>
-                </div>
-            </div>
+        <div class="bl-card reveal reveal-delay-2">
+          <h3>Developments &amp; Advisory</h3>
+          <p>Originate, evaluate, and shepherd projects through pipeline to commercial readiness. Strategic advice, due diligence, and structuring to make projects shovel-ready for offtake or investment.</p>
         </div>
-    </section>
-
-    <!-- SOLUTIONS -->
-    <section class="solutions" id="solutions">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>What We Structure and Trade</h2>
-                <p>At our core, we identify, operationalize, structure, and monetize environmental assets</p>
-            </div>
-            <div class="solutions-grid">
-                <div class="sol-card reveal reveal-d1">
-                    <div class="sol-icon nbs">
-                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9c0-3.5-3-6.5-5-8-1 2-3 3-5 3S7 12 6 14c-.5 1-.5 2 0 3a9 9 0 0 0 6 4z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 21V12"/></svg>
-                    </div>
-                    <h3>Nature-Based Solutions</h3>
-                    <div class="sol-tags">ARR &middot; IFM &middot; REDD+ &middot; Blue Carbon</div>
-                    <p>Forests, mangroves, and natural ecosystems sequestering carbon with biodiversity and community co-benefits.</p>
-                </div>
-                <div class="sol-card reveal reveal-d2">
-                    <div class="sol-icon removals">
-                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v6m0 0l3-3m-3 3L9 5"/><circle cx="12" cy="16" r="6" stroke-linecap="round"/><path stroke-linecap="round" d="M12 13v6"/></svg>
-                    </div>
-                    <h3>Permanent Removals</h3>
-                    <div class="sol-tags">DSB &middot; Biochar &middot; DAC</div>
-                    <p>Carbon removal storing CO&#8322; for 100+ years. Puro.Earth and Isometric registered.</p>
-                </div>
-                <div class="sol-card reveal reveal-d3">
-                    <div class="sol-icon plastics">
-                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
-                    </div>
-                    <h3>Plastics</h3>
-                    <div class="sol-tags">Verra PWRP</div>
-                    <p>Verified environmental credits from plastic collection and recycling, diverting waste from landfills and oceans.</p>
-                </div>
-                <div class="sol-card reveal reveal-d4">
-                    <div class="sol-icon compliance">
-                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    </div>
-                    <h3>Compliance Markets</h3>
-                    <div class="sol-tags">CFR &middot; BC LCFS &middot; BC OBPS &middot; AB TIER</div>
-                    <p>Carbon compliance instruments across regulated markets for mandatory reporting and reduction obligations.</p>
-                </div>
-            </div>
+        <div class="bl-card reveal reveal-delay-3">
+          <h3>Investments</h3>
+          <p>Principal and third-party capital management. Originate investable projects, structure vehicles, deploy capital for principal and investor returns. Celsius Carbon LP and co-investment vehicles.</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- TEAM -->
-    <section class="team" id="team">
-        <div class="container">
-            <h2 class="reveal">Our Team</h2>
-            <div class="team-grid">
-                <div class="team-card reveal reveal-d1">
-                    <div class="team-avatar">BK</div>
-                    <h3>Brian Katz</h3>
-                    <p>Founder &amp; CEO</p>
-                </div>
-                <div class="team-card reveal reveal-d1">
-                    <div class="team-avatar">TS</div>
-                    <h3>Tarek Shakarchi</h3>
-                    <p>Co-Founder</p>
-                </div>
-                <div class="team-card reveal reveal-d2">
-                    <div class="team-avatar">KD</div>
-                    <h3>Keith Driver</h3>
-                    <p>Managing Partner</p>
-                </div>
-                <div class="team-card reveal reveal-d2">
-                    <div class="team-avatar">BS</div>
-                    <h3>Bart Simmons</h3>
-                    <p>Partner</p>
-                </div>
-                <div class="team-card reveal reveal-d3">
-                    <div class="team-avatar">BA</div>
-                    <h3>Bobbie Armstrong</h3>
-                    <p>Partner</p>
-                </div>
-                <div class="team-card reveal reveal-d3">
-                    <div class="team-avatar">LA</div>
-                    <h3>Luis Felipe Adaime</h3>
-                    <p>CCO, Spain Lead</p>
-                </div>
-                <div class="team-card reveal reveal-d4">
-                    <div class="team-avatar">AA</div>
-                    <h3>Ana Avramovic</h3>
-                    <p>Head of Sales &amp; Trading</p>
-                </div>
-                <div class="team-card reveal reveal-d4">
-                    <div class="team-avatar">CM</div>
-                    <h3>Carolina Martinez</h3>
-                    <p>Sales &amp; Trading</p>
-                </div>
-            </div>
+  <!-- ===== SOLUTIONS ===== -->
+  <section class="solutions" id="solutions">
+    <div class="container">
+      <div class="section-label reveal">Our Expertise</div>
+      <h2 class="section-title reveal">What We Structure and Trade</h2>
+      <div class="sol-grid">
+        <!-- Nature-Based Solutions -->
+        <div class="sol-card reveal reveal-delay-1">
+          <div class="sol-icon">
+            <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 4C22 4 8 14 8 26c0 7.732 6.268 14 14 14s14-6.268 14-14C36 14 22 4 22 4z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M22 40V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M22 28c-4-3-6-6-6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M22 24c3-2.5 5-5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="sol-tags">ARR &middot; IFM &middot; REDD+ &middot; Blue Carbon</div>
+          <h3>Nature-Based Solutions</h3>
+          <p>Bridging asset owners and buyers across forest, mangrove, and ecosystem projects that sequester carbon while delivering biodiversity and community co-benefits.</p>
         </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="contact-inner reveal">
-                <h2>Let's Build Something That Endures</h2>
-                <p>Purchasing carbon credits, exploring climate investments, or need advisory on project development — we'd like to hear from you.</p>
-                <div class="contact-cards">
-                    <div class="contact-card">
-                        <span class="cc-name">Luis Felipe Adaime</span>
-                        <span class="cc-role">CCO, Spain Lead</span>
-                        <a href="mailto:luis.adaime@clearskyltd.com">luis.adaime@clearskyltd.com</a>
-                        <span class="cc-phone">+34 659 70 02 80</span>
-                    </div>
-                    <div class="contact-card">
-                        <span class="cc-name">Ana Avramovic</span>
-                        <span class="cc-role">Head of Sales &amp; Trading</span>
-                        <a href="mailto:ana.avramovic@clearskyltd.com">ana.avramovic@clearskyltd.com</a>
-                        <span class="cc-phone">+1 403 999 5757</span>
-                    </div>
-                    <div class="contact-card">
-                        <span class="cc-name">Carolina Martinez</span>
-                        <span class="cc-role">Sales &amp; Trading</span>
-                        <a href="mailto:Carolina.Martinez@clearskyltd.com">Carolina.Martinez@clearskyltd.com</a>
-                        <span class="cc-phone">+1 631 494 5327</span>
-                    </div>
-                </div>
-                <a href="mailto:luis.adaime@clearskyltd.com" class="btn-primary">Email Us</a>
-                <div class="contact-address">ClearSky Limited &middot; 103 Cannon Street &middot; London, EC4N 5AG</div>
-            </div>
+        <!-- Permanent Removals -->
+        <div class="sol-card reveal reveal-delay-2">
+          <div class="sol-icon">
+            <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="22" cy="22" r="16" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M22 6v8m0 16v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M6 22h8m16 0h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="22" cy="22" r="6" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M18 22h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="sol-tags">DSB &middot; Biochar &middot; DAC</div>
+          <h3>Permanent Removals</h3>
+          <p>Structuring transactions for 100+ year carbon removal through engineered and natural processes. Puro.Earth and Isometric registered, partnering with technology developers worldwide.</p>
         </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-watermark">//</div>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <img src="./assets/logos/logo-white.png" alt="ClearSky" class="footer-logo">
-                    <p>An environmental merchant bank combining commodity-market discipline with carbon innovation.</p>
-                </div>
-                <div>
-                    <h4>Navigate</h4>
-                    <ul class="footer-links">
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#business-lines">Business Lines</a></li>
-                        <li><a href="#solutions">Solutions</a></li>
-                        <li><a href="#team">Team</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>Office</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">ClearSky Limited</a></li>
-                        <li><a href="#">103 Cannon Street</a></li>
-                        <li><a href="#">London, EC4N 5AG</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <span>&copy; <span id="year"></span> ClearSky Limited. All rights reserved.</span>
-                <span class="footer-backer">Backed by MKS PAMP</span>
-            </div>
+        <!-- Plastics -->
+        <div class="sol-card reveal reveal-delay-3">
+          <div class="sol-icon">
+            <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14 8h16l4 28H10L14 8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18 8V6a4 4 0 018 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M16 18l12 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M15 26l14 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="sol-tags">Verra PWRP</div>
+          <h3>Plastics</h3>
+          <p>Monetizing verified plastic waste recovery credits. Connecting collection and recycling operations with demand, converting waste diversion into environmental credit supply.</p>
         </div>
-    </footer>
+        <!-- Compliance -->
+        <div class="sol-card reveal reveal-delay-4">
+          <div class="sol-icon">
+            <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="10" width="32" height="24" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M6 18h32" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M22 18v16" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M6 26h32" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="1.5" fill="currentColor"/>
+              <circle cx="30" cy="14" r="1.5" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="sol-tags">CFR &middot; BC LCFS &middot; BC OBPS &middot; AB TIER</div>
+          <h3>Compliance Markets</h3>
+          <p>Structuring compliance instrument supply and demand across regulated carbon markets. Advisory and execution for obligated parties navigating evolving regulatory frameworks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        const nav = document.getElementById('nav');
-        const hero = document.getElementById('hero');
-        new IntersectionObserver(([e]) => { nav.classList.toggle('scrolled', !e.isIntersecting); }, { threshold: 0.05 }).observe(hero);
-        document.querySelectorAll('.reveal').forEach(el => {
-            new IntersectionObserver(([e]) => { if (e.isIntersecting) e.target.classList.add('visible'); }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' }).observe(el);
-        });
-        const hb = document.getElementById('hamburger'), mn = document.getElementById('mobileNav'), mo = document.getElementById('mobileOverlay'), mc = document.getElementById('mobileClose');
-        function openM() { mn.classList.add('open'); mo.style.display = 'block'; requestAnimationFrame(() => mo.classList.add('open')); }
-        function closeM() { mn.classList.remove('open'); mo.classList.remove('open'); setTimeout(() => mo.style.display = 'none', 300); }
-        hb.addEventListener('click', openM); mc.addEventListener('click', closeM); mo.addEventListener('click', closeM);
-        mn.querySelectorAll('a').forEach(l => l.addEventListener('click', closeM));
-    </script>
+  <!-- ===== TEAM ===== -->
+  <section class="team" id="team">
+    <div class="container">
+      <div class="section-label reveal">Our People</div>
+      <h2 class="section-title reveal">Leadership</h2>
+      <div class="team-grid">
+
+        <!-- Brian Katz -->
+        <div class="team-member reveal reveal-delay-1">
+          <div class="team-initial">BK</div>
+          <h3>Brian Katz</h3>
+          <div class="team-title">Founder &amp; CEO</div>
+          <p class="team-bio">Drives strategic vision and growth in carbon and environmental markets. Two decades in global commodities, overseeing origination and structuring of a 30+ project portfolio spanning REDD+, ARR, TSB, and DAC. Established key partnerships with Verra, Puro.earth, and Isometric.</p>
+          <a href="https://www.linkedin.com/in/brikatz/" target="_blank" rel="noopener" class="team-linkedin" aria-label="Brian Katz LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+
+        <!-- Keith Driver -->
+        <div class="team-member reveal reveal-delay-2">
+          <div class="team-initial">KD</div>
+          <h3>Keith Driver</h3>
+          <div class="team-title">Managing Partner &amp; Head, TSB Coalition</div>
+          <p class="team-bio">Accomplished entrepreneur and policy advisor in environmental markets. Engineering degree and MBA. Founded and scaled multiple clean-tech and ag-tech ventures. Leads the TSB Coalition developing methodologies and policy. Authored over 30 methodologies for carbon removal technologies.</p>
+          <a href="https://www.linkedin.com/in/keith-driver-002b201/" target="_blank" rel="noopener" class="team-linkedin" aria-label="Keith Driver LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+
+        <!-- Tarek Shakarchi -->
+        <div class="team-member reveal reveal-delay-3">
+          <div class="team-initial">TS</div>
+          <h3>Tarek Shakarchi</h3>
+          <div class="team-title">Co-Founder</div>
+          <p class="team-bio">Co-Founder of ClearSky and Head of Strategic Opportunities at MKS PAMP. Eight years across various commodities. Drives global M&amp;A and strategic projects with focus on responsible sourcing and supply chain resilience. B.S. Economics, Wharton School, University of Pennsylvania.</p>
+        </div>
+
+        <!-- Bart Simmons -->
+        <div class="team-member reveal reveal-delay-4">
+          <div class="team-initial">BS</div>
+          <h3>Bart Simmons</h3>
+          <div class="team-title">Partner</div>
+          <p class="team-bio">C-suite carbon executive and restoration leader with four decades of global experience. Founder &amp; President of Quillicum Environmental. Structured REDD+ projects including Mai Ndombe in DRC. Co-founded ERA Ecosystem Restoration Associates. Transacted over 2.5M tonnes of offset sales.</p>
+          <a href="https://ca.linkedin.com/in/bart-simmons-a9608b26" target="_blank" rel="noopener" class="team-linkedin" aria-label="Bart Simmons LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+
+        <!-- Bobbie Armstrong -->
+        <div class="team-member reveal reveal-delay-5">
+          <div class="team-initial">BA</div>
+          <h3>Bobbie Armstrong</h3>
+          <div class="team-title">Partner</div>
+          <p class="team-bio">Climate tech strategist with 12+ years of experience. Managed portfolios exceeding 3 million verified carbon credits. Directed corporate sustainability strategies across industrial decarbonization, renewable natural gas, and biochar. Technical expert for SBTi. Implemented various GHG/ISO frameworks.</p>
+        </div>
+
+        <!-- Luis Felipe Adaime -->
+        <div class="team-member reveal reveal-delay-6">
+          <div class="team-initial">LA</div>
+          <h3>Luis Felipe Adaime</h3>
+          <div class="team-title">CFA, CCO — Spain Lead</div>
+          <p class="team-bio">Prominent figure in voluntary carbon markets. Founded MOSS.Earth in 2020, scaling to global benchmark for carbon credit origination. Pioneered MCO2 token, world's first Verra-registered carbon credit-backed digital asset. Delivered Canada's first validated ISO 14064-2 projects. Pioneered ARR in British Columbia.</p>
+          <a href="https://www.linkedin.com/in/luisfelipeadaime/" target="_blank" rel="noopener" class="team-linkedin" aria-label="Luis Felipe Adaime LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+
+        <!-- Ana Avramovic -->
+        <div class="team-member reveal reveal-delay-7">
+          <div class="team-initial">AA</div>
+          <h3>Ana Avramovic</h3>
+          <div class="team-title">Head of Sales &amp; Trading</div>
+          <p class="team-bio">20 years in power, carbon, and clean fuel markets. Specializes in Canadian compliance carbon, Clean Fuel Regulations, and VCM. Structures solutions aligning project economics, regulatory requirements, and corporate climate goals across North America.</p>
+          <a href="https://www.linkedin.com/in/ana-avramovic-8a968128/" target="_blank" rel="noopener" class="team-linkedin" aria-label="Ana Avramovic LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+
+        <!-- Carolina Martinez -->
+        <div class="team-member reveal reveal-delay-8">
+          <div class="team-initial">CM</div>
+          <h3>Carolina Martinez</h3>
+          <div class="team-title">Sales &amp; Trading Associate</div>
+          <p class="team-bio">Carbon markets specialist with 4 years in VCM spanning trading, deal execution, and client-facing work. International market experience across multiple countries supporting high-integrity transactions. Analytical strength and commitment to reliable solutions.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta" id="contact">
+    <div class="container">
+      <h2 class="section-title reveal">Let's Build Something That Endures</h2>
+      <p class="cta-body reveal">Whether you are purchasing carbon credits, exploring climate investment opportunities, or need advisory on project development — we would like to hear from you.</p>
+      <a href="mailto:info@clearskyltd.com" class="cta-button reveal">Email Us</a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-watermark">//</div>
+    <div class="container">
+      <div class="footer-left">
+        <a href="#" class="footer-logo">
+          <img src="./assets/logos/logo-white.png" alt="ClearSky">
+        </a>
+        <div class="footer-divider"></div>
+        <span class="footer-backer">Backed by MKS PAMP</span>
+      </div>
+      <div class="footer-right">
+        &copy; <span id="footerYear"></span> ClearSky Limited. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Dynamic year
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    const hero = document.getElementById('hero');
+    const navObserver = new IntersectionObserver(([entry]) => {
+      nav.classList.toggle('scrolled', !entry.isIntersecting);
+    }, { threshold: 0.1 });
+    navObserver.observe(hero);
+
+    // Mobile menu toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('active');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navToggle.classList.remove('active');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // Scroll reveal
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
+
 </body>
 </html>
