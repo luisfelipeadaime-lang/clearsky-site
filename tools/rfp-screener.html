@@ -9,26 +9,27 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--navy:#0A1628;--dark:#0F2140;--gold:#C8A951;--green:#16A34A;--red:#DC2626;--amber:#F59E0B;--bg:#F8FAFC;--border:#E5E7EB;--text:#1A1A2E;--muted:#6B7280;--light:#F5F5F5}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.header{background:var(--navy);padding:16px 20px}
+.header{background:var(--navy);padding:16px 20px;position:sticky;top:0;z-index:100}
 .header-inner{max-width:540px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
 .brand{color:var(--gold);font-size:11px;letter-spacing:2px;text-transform:uppercase}
 .header h1{color:#fff;font-size:18px;margin-top:2px}
 .header .deadline{color:#94A3B8;font-size:11px;margin-top:4px}
 .header-btn{background:var(--gold);color:var(--navy);border:none;padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600}
 .container{max-width:540px;margin:0 auto;padding:16px}
-.btn{width:100%;padding:16px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;margin-bottom:10px}
+.btn{width:100%;padding:16px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;margin-bottom:10px;transition:opacity .2s}
+.btn:active{opacity:.8}
 .btn-primary{background:var(--dark);color:#fff}
 .btn-outline{background:#fff;color:var(--dark);border:2px solid var(--dark)}
 .btn-green{background:var(--green);color:#fff}
 .btn-amber{background:var(--amber);color:#fff}
 .btn-sm{width:auto;padding:8px 16px;font-size:12px;display:inline-block;margin-right:8px}
 .btn-red-sm{background:#FEF2F2;color:var(--red);border:1px solid var(--red)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .box{padding:16px;border-radius:10px;margin-bottom:12px}
 .box-red{background:#FEF2F2;border:1px solid var(--red)}
 .box-green{background:#F0FDF4;border:1px solid var(--green)}
-.box-amber{background:#FFFBEB;border:1px solid var(--amber)}
-.box-red .title{color:var(--red);font-weight:700;font-size:13px;margin-bottom:8px}
-.box-green .title{color:var(--green);font-weight:700;font-size:13px;margin-bottom:8px}
+.box-red .boxtitle{color:var(--red);font-weight:700;font-size:13px;margin-bottom:8px}
+.box-green .boxtitle{color:var(--green);font-weight:700;font-size:13px;margin-bottom:8px}
 .box-red p,.box-green p{font-size:12px;margin-bottom:3px}
 .box-red .x{color:var(--red)}
 .card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
@@ -37,6 +38,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .form-group label{display:block;font-size:11px;font-weight:600;color:var(--dark);margin-bottom:4px}
 .form-group label .req{color:var(--red)}
 .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit}
+.form-group input[type="file"]{padding:8px;font-size:12px}
 .form-group textarea{resize:vertical}
 .form-group .hint{font-size:11px;color:var(--muted);margin-top:3px}
 .row{display:grid;gap:10px}
@@ -63,17 +65,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .chip{font-size:10px;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center}
 .proj-actions{display:flex;gap:8px}
 .proj-actions button{flex:1}
-.copy-result{background:var(--light);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;margin:10px 0;max-height:200px;overflow-y:auto}
+.file-list{margin-top:8px}
+.file-item{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--light);border-radius:6px;margin-bottom:4px;font-size:12px}
+.file-item a{color:var(--dark);text-decoration:none;font-weight:600}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .6s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-size:13px;font-weight:600;z-index:200;opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
+.toast-ok{background:var(--green);color:#fff}
+.toast-err{background:var(--red);color:#fff}
+.loading-overlay{position:fixed;inset:0;background:rgba(10,22,40,.5);display:flex;align-items:center;justify-content:center;z-index:300}
+.loading-box{background:#fff;padding:24px 32px;border-radius:12px;text-align:center}
 .hidden{display:none}
 </style>
 </head>
 <body>
 
+<!-- ==================== CONFIGURATION ==================== -->
+<script>
+// IMPORTANT: Replace this URL with your actual Cloudflare Worker URL after deployment
+const API_BASE = 'https://clearsky-api.clearsky-tools.workers.dev';
+const TOOL_NAME = 'ey-rfp';
+</script>
+
+<div id="toast" class="toast"></div>
+
 <div class="header">
   <div class="header-inner">
     <div>
       <div class="brand">ClearSky Limited</div>
-      <h1 id="page-title">EY Abatable RFP Screener</h1>
+      <h1>EY Abatable RFP Screener</h1>
       <div class="deadline">Deadline: Fri 27 Feb 2026, 23:59 GMT</div>
     </div>
     <button class="header-btn" id="nav-btn" onclick="goHome()">Home</button>
@@ -83,13 +104,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <!-- HOME VIEW -->
 <div class="container" id="view-home">
   <div style="margin-bottom:16px;padding:14px;background:#fff;border-radius:10px;border:1px solid var(--border)">
-    <p style="font-size:13px;color:var(--text)"><strong>Hi Ana / Carolina</strong> — enter project details below. The tool instantly tells you if it qualifies for the EY RFPs. Send PDFs/decks to Luis on WhatsApp.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Hi Ana / Carolina</strong> — enter project details below. The tool instantly tells you if it qualifies for the EY RFPs. Fill in what you know, save, and upload any supporting docs.</p>
   </div>
   <button class="btn btn-primary" onclick="newProject()">+ Screen New Project</button>
   <button class="btn btn-outline" onclick="showDashboard()">View Saved Projects (<span id="proj-count">0</span>)</button>
 
   <div class="box box-red">
-    <div class="title">Does NOT qualify:</div>
+    <div class="boxtitle">Does NOT qualify:</div>
     <p class="x">✕ REDD+ / Avoided Deforestation</p>
     <p class="x">✕ TSB / WoodCache / Biomass Burial</p>
     <p class="x">✕ MITECO Spanish sovereign registry</p>
@@ -102,7 +123,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 
   <div class="box box-green">
-    <div class="title">Remember:</div>
+    <div class="boxtitle">Remember:</div>
     <p style="color:#166534">Only <strong>removal</strong> credits qualify. Projects under validation ARE eligible — this is a forward purchase. Not all years 2026-2030 need volume.</p>
   </div>
 </div>
@@ -170,10 +191,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 
   <div class="card">
-    <div class="card-title">Supporting Materials</div>
-    <div class="form-group"><label>Documents available</label><textarea id="f-docs" rows="2" placeholder="e.g. PDD available, project deck PDF, verification report pending"></textarea></div>
-    <div class="form-group"><label>Notes for Luis</label><textarea id="f-notes" rows="2" placeholder="Developer contact, commercial structure preferences, risks, etc."></textarea></div>
-    <p class="hint" style="color:var(--amber)">⚠ Send actual files (PDFs, decks) to Luis via WhatsApp tagged with project name.</p>
+    <div class="card-title">Supporting Documents</div>
+    <div class="form-group">
+      <label>Upload files (PDDs, decks, maps, verification reports)</label>
+      <input type="file" id="f-files" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.png,.jpg,.jpeg,.gif,.zip">
+      <p class="hint">Max 10MB per file. PDF, Word, PowerPoint, Excel, images accepted.</p>
+    </div>
+    <div id="uploaded-files" class="file-list"></div>
+    <div class="form-group" style="margin-top:8px"><label>Notes for Luis</label><textarea id="f-notes" rows="2" placeholder="Developer contact, commercial structure preferences, risks, etc."></textarea></div>
   </div>
 
   <button class="btn btn-green" id="btn-save" onclick="saveProject()">Save Project</button>
@@ -184,30 +209,112 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="container hidden" id="view-dashboard">
   <div id="dash-projects"></div>
   <button class="btn btn-primary" onclick="newProject()" style="margin-top:10px">+ Add Another Project</button>
-  <button class="btn btn-outline" onclick="exportAll()" style="margin-top:0">📋 Copy All to Clipboard (for Luis)</button>
-  <div id="export-area" class="hidden"><div class="copy-result" id="export-text"></div></div>
+</div>
+
+<!-- LOADING OVERLAY -->
+<div id="loading" class="loading-overlay hidden">
+  <div class="loading-box">
+    <div class="spinner" style="width:32px;height:32px;border-width:3px;margin:0 auto 12px"></div>
+    <p id="loading-text" style="font-size:14px;color:var(--navy)">Saving...</p>
+  </div>
 </div>
 
 <script>
-const ARR_METHS = ["VM0047","ISM Reforestation","ISM Agroforestry","PV Acorn","M001 (Equitable Earth)"];
-const BIO_METHS = ["VM0044","Puro Biochar","ISM Biochar Production and Storage"];
-const ARR_STDS = ["VCS (Verra)","Isometric","Plan Vivo (ex-post only)","Equitable Earth"];
-const BIO_STDS = ["VCS (Verra)","Puro Earth","Isometric"];
-const OFAC = ["cuba","iran","north korea","syria","crimea","donetsk","luhansk"];
+// ============ RFP RULES ============
+const ARR_METHS=["VM0047","ISM Reforestation","ISM Agroforestry","PV Acorn","M001 (Equitable Earth)"];
+const BIO_METHS=["VM0044","Puro Biochar","ISM Biochar Production and Storage"];
+const ARR_STDS=["VCS (Verra)","Isometric","Plan Vivo (ex-post only)","Equitable Earth"];
+const BIO_STDS=["VCS (Verra)","Puro Earth","Isometric"];
+const OFAC=["cuba","iran","north korea","syria","crimea","donetsk","luhansk"];
 
-let projects = JSON.parse(localStorage.getItem("cs-rfp-projects")||"[]");
-let editIdx = -1;
+// ============ STATE ============
+let projects=[];
+let editId=null;
+let uploadedFileIds=[];
 
+// ============ HELPERS ============
 function $(id){return document.getElementById(id)}
 function show(id){$(id).classList.remove("hidden")}
 function hide(id){$(id).classList.add("hidden")}
+function showLoading(msg){$("loading-text").textContent=msg||"Saving...";show("loading")}
+function hideLoading(){hide("loading")}
 
-function goHome(){hide("view-form");hide("view-dashboard");show("view-home");$("proj-count").textContent=projects.length;$("nav-btn").textContent="Home"}
-function showDashboard(){hide("view-home");hide("view-form");show("view-dashboard");renderDashboard();$("nav-btn").textContent="Home"}
+function toast(msg,ok=true){
+  const t=$("toast");t.textContent=msg;t.className="toast show "+(ok?"toast-ok":"toast-err");
+  setTimeout(()=>t.className="toast",3000);
+}
 
-function newProject(){editIdx=-1;clearForm();hide("view-home");hide("view-dashboard");show("view-form");$("nav-btn").textContent="Cancel";onRfpChange();runScreen()}
-function editProject(i){editIdx=i;loadForm(projects[i]);hide("view-home");hide("view-dashboard");show("view-form");$("nav-btn").textContent="Cancel";onRfpChange();runScreen()}
+// ============ API ============
+async function api(path,opts={}){
+  const url=API_BASE+path;
+  const res=await fetch(url,{...opts,headers:{"Content-Type":"application/json",...(opts.headers||{})}});
+  if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error||"API error "+res.status)}
+  return res.json();
+}
 
+async function loadProjects(){
+  try{
+    const res=await api(`/api/${TOOL_NAME}/projects`);
+    projects=res.projects||[];
+  }catch(e){
+    console.error("Load error:",e);
+    projects=[];
+    // Fallback to localStorage if API is not yet deployed
+    const local=localStorage.getItem("cs-rfp-projects");
+    if(local)projects=JSON.parse(local).map((p,i)=>({id:"local-"+i,tool:TOOL_NAME,data:p,submitted_by:p.submittedBy||"unknown",created_at:p.savedAt||new Date().toISOString()}));
+  }
+  $("proj-count").textContent=projects.length;
+}
+
+async function uploadFile(file,projectId){
+  const form=new FormData();
+  form.append("file",file);
+  form.append("tool",TOOL_NAME);
+  form.append("project_id",projectId);
+  form.append("uploaded_by",$("f-submittedBy").value||"unknown");
+  const res=await fetch(API_BASE+"/api/files/upload",{method:"POST",body:form});
+  if(!res.ok)throw new Error("Upload failed");
+  return res.json();
+}
+
+// ============ VIEWS ============
+async function goHome(){
+  hide("view-form");hide("view-dashboard");show("view-home");
+  await loadProjects();
+  $("nav-btn").textContent="Home";editId=null;uploadedFileIds=[];
+}
+
+async function showDashboard(){
+  hide("view-home");hide("view-form");show("view-dashboard");
+  showLoading("Loading projects...");
+  await loadProjects();
+  hideLoading();
+  renderDashboard();
+  $("nav-btn").textContent="Home";
+}
+
+function newProject(){
+  editId=null;uploadedFileIds=[];clearForm();
+  hide("view-home");hide("view-dashboard");show("view-form");
+  $("nav-btn").textContent="Cancel";$("uploaded-files").innerHTML="";
+  onRfpChange();runScreen();
+}
+
+async function editProject(id){
+  const proj=projects.find(p=>p.id===id);if(!proj)return;
+  editId=id;uploadedFileIds=[];
+  loadForm(proj.data);
+  hide("view-home");hide("view-dashboard");show("view-form");
+  $("nav-btn").textContent="Cancel";
+  // Load existing files
+  try{
+    const res=await api(`/api/files/${TOOL_NAME}/${id}`);
+    renderUploadedFiles(res.files||[]);
+  }catch(e){$("uploaded-files").innerHTML="";}
+  onRfpChange();runScreen();
+}
+
+// ============ FORM ============
 function onRfpChange(){
   const rfp=$("f-rfp").value;
   const meths=rfp==="ARR"?ARR_METHS:rfp==="Biochar"?BIO_METHS:[];
@@ -218,7 +325,7 @@ function onRfpChange(){
   stds.forEach(s=>{const o=document.createElement("option");o.value=s;o.textContent=s;sSel.appendChild(o)});
   $("fg-species").style.display=rfp==="ARR"?"block":"none";
   $("fg-feedstock").style.display=rfp==="Biochar"?"block":"none";
-  if(editIdx>=0){const p=projects[editIdx];$("f-methodology").value=p.methodology||"";$("f-standard").value=p.standard||""}
+  if(editId){const proj=projects.find(p=>p.id===editId);if(proj){$("f-methodology").value=proj.data.methodology||"";$("f-standard").value=proj.data.standard||""}}
   runScreen();
 }
 
@@ -229,21 +336,36 @@ function getFormData(){return{
   v2026:$("f-v2026").value,v2027:$("f-v2027").value,v2028:$("f-v2028").value,v2029:$("f-v2029").value,v2030:$("f-v2030").value,
   priceD:$("f-priceD").value,priceP:$("f-priceP").value,rating:$("f-rating").value,ratingAgency:$("f-ratingAgency").value,
   cobenefits:$("f-cobenefits").value,species:$("f-species").value,feedstock:$("f-feedstock").value,
-  docs:$("f-docs").value,notes:$("f-notes").value
+  notes:$("f-notes").value
 }}
 
-function clearForm(){["submittedBy","rfp","name","developer","country","methodology","standard","registryId","status","carbon"].forEach(f=>$("f-"+f).value="");
+function clearForm(){
+  ["submittedBy","rfp","name","developer","country","methodology","standard","registryId","status","carbon"].forEach(f=>$("f-"+f).value="");
   ["v2026","v2027","v2028","v2029","v2030","priceD","priceP","rating","ratingAgency"].forEach(f=>$("f-"+f).value="");
-  ["cobenefits","species","feedstock","docs","notes"].forEach(f=>$("f-"+f).value="")}
+  ["cobenefits","species","feedstock","notes"].forEach(f=>$("f-"+f).value="");
+  $("f-files").value="";
+}
 
-function loadForm(p){$("f-submittedBy").value=p.submittedBy||"";$("f-rfp").value=p.rfp||"";$("f-name").value=p.name||"";
-  $("f-developer").value=p.developer||"";$("f-country").value=p.country||"";$("f-registryId").value=p.registryId||"";
-  $("f-status").value=p.status||"";$("f-carbon").value=p.carbon||"";
-  $("f-v2026").value=p.v2026||"";$("f-v2027").value=p.v2027||"";$("f-v2028").value=p.v2028||"";$("f-v2029").value=p.v2029||"";$("f-v2030").value=p.v2030||"";
-  $("f-priceD").value=p.priceD||"";$("f-priceP").value=p.priceP||"";$("f-rating").value=p.rating||"";$("f-ratingAgency").value=p.ratingAgency||"";
-  $("f-cobenefits").value=p.cobenefits||"";$("f-species").value=p.species||"";$("f-feedstock").value=p.feedstock||"";
-  $("f-docs").value=p.docs||"";$("f-notes").value=p.notes||""}
+function loadForm(d){
+  $("f-submittedBy").value=d.submittedBy||"";$("f-rfp").value=d.rfp||"";$("f-name").value=d.name||"";
+  $("f-developer").value=d.developer||"";$("f-country").value=d.country||"";$("f-registryId").value=d.registryId||"";
+  $("f-status").value=d.status||"";$("f-carbon").value=d.carbon||"";
+  $("f-v2026").value=d.v2026||"";$("f-v2027").value=d.v2027||"";$("f-v2028").value=d.v2028||"";$("f-v2029").value=d.v2029||"";$("f-v2030").value=d.v2030||"";
+  $("f-priceD").value=d.priceD||"";$("f-priceP").value=d.priceP||"";$("f-rating").value=d.rating||"";$("f-ratingAgency").value=d.ratingAgency||"";
+  $("f-cobenefits").value=d.cobenefits||"";$("f-species").value=d.species||"";$("f-feedstock").value=d.feedstock||"";
+  $("f-notes").value=d.notes||"";
+}
 
+function renderUploadedFiles(files){
+  const el=$("uploaded-files");
+  if(!files.length){el.innerHTML="";return}
+  el.innerHTML=files.map(f=>`<div class="file-item">
+    <span>📎 ${f.original_name} <span style="color:var(--muted)">(${(f.size_bytes/1024).toFixed(0)}KB)</span></span>
+    <a href="${API_BASE}/api/files/download/${f.id}" target="_blank">Download</a>
+  </div>`).join("");
+}
+
+// ============ SCREENING ============
 function screen(p){
   const r=[];const rfp=p.rfp;
   if(!rfp)return[{l:"Select target RFP first",s:"gray"}];
@@ -253,7 +375,7 @@ function screen(p){
   r.push({l:"Carbon profile: Removals only",s:p.carbon==="Removal"?"green":p.carbon==="Avoidance"?"red":p.carbon?"amber":"gray"});
   r.push({l:"Methodology accepted",s:meths.includes(p.methodology)?"green":p.methodology?"red":"gray"});
   r.push({l:"Standard accepted",s:stds.includes(p.standard)?"green":p.standard?"red":"gray"});
-  const isOfac=OFAC.some(c=>p.country.toLowerCase().includes(c));
+  const isOfac=OFAC.some(c=>(p.country||"").toLowerCase().includes(c));
   r.push({l:"Geography: not OFAC",s:!p.country?"gray":isOfac?"red":"green"});
   const vols=[p.v2026,p.v2027,p.v2028,p.v2029,p.v2030].map(v=>parseInt(v)||0);
   const maxV=Math.max(...vols);const totV=vols.reduce((a,b)=>a+b,0);
@@ -272,83 +394,105 @@ function runScreen(){
   const fail=cr.filter(c=>c.s==="red").length;
   const panel=$("screen-panel");
   panel.className="screen-panel "+(fail>0?"fail":pass===cr.length?"pass":"partial");
-  $("screen-title").textContent=fail>0?fail+" criteria failed":pass===cr.length?"All criteria passed":pass+"/"+cr.length+" criteria met";
+  $("screen-title").textContent=fail>0?fail+" criteria failed":pass===cr.length?"All criteria passed!":pass+"/"+cr.length+" criteria met";
   $("screen-title").style.color=fail>0?"var(--red)":pass===cr.length?"var(--green)":"var(--amber)";
   let html="";cr.forEach(c=>{html+=`<div class="criterion"><span class="dot dot-${c.s}"></span>${c.l}</div>`});
   $("screen-criteria").innerHTML=html;
   const btn=$("btn-save");
   if(fail>0){btn.className="btn btn-amber";btn.textContent="Save Anyway (has failures)"}
-  else{btn.className="btn btn-green";btn.textContent=editIdx>=0?"Update Project":"Save Project"}
+  else{btn.className="btn btn-green";btn.textContent=editId?"Update Project":"Save Project"}
 }
 
-// Attach live screening to all inputs
 document.addEventListener("input",e=>{if(e.target.closest("#view-form"))runScreen()});
 document.addEventListener("change",e=>{if(e.target.closest("#view-form"))runScreen()});
 
-function saveProject(){
+// ============ SAVE ============
+async function saveProject(){
   const p=getFormData();
   if(!p.name||!p.rfp||!p.methodology){alert("Fill in at least: Project name, Target RFP, and Methodology");return}
-  p.savedAt=new Date().toISOString();
-  if(editIdx>=0){projects[editIdx]=p}else{projects.push(p)}
-  localStorage.setItem("cs-rfp-projects",JSON.stringify(projects));
-  showDashboard();
+
+  const btn=$("btn-save");btn.disabled=true;
+  showLoading("Saving project...");
+
+  try{
+    let projectId;
+    if(editId){
+      await api(`/api/${TOOL_NAME}/projects/${editId}`,{method:"PUT",body:JSON.stringify({data:p})});
+      projectId=editId;
+      toast("Project updated!");
+    }else{
+      const res=await api(`/api/${TOOL_NAME}/projects`,{method:"POST",body:JSON.stringify({data:p,submitted_by:p.submittedBy||"unknown"})});
+      projectId=res.id;
+      toast("Project saved!");
+    }
+
+    // Upload files if any
+    const fileInput=$("f-files");
+    if(fileInput.files.length>0){
+      showLoading(`Uploading ${fileInput.files.length} file(s)...`);
+      for(const file of fileInput.files){
+        if(file.size>10*1024*1024){toast(`${file.name} too large (max 10MB)`,false);continue}
+        try{await uploadFile(file,projectId)}catch(e){toast(`Failed: ${file.name}`,false)}
+      }
+    }
+
+    hideLoading();
+    showDashboard();
+  }catch(e){
+    hideLoading();
+    // Fallback: save to localStorage
+    console.error("Save error:",e);
+    const local=JSON.parse(localStorage.getItem("cs-rfp-projects")||"[]");
+    p.savedAt=new Date().toISOString();
+    local.push(p);
+    localStorage.setItem("cs-rfp-projects",JSON.stringify(local));
+    toast("Saved locally (API not available)",false);
+    goHome();
+  }
+  btn.disabled=false;
 }
 
-function deleteProject(i){if(confirm("Delete this project?")){projects.splice(i,1);localStorage.setItem("cs-rfp-projects",JSON.stringify(projects));renderDashboard()}}
+async function deleteProject(id){
+  if(!confirm("Delete this project?"))return;
+  try{
+    await api(`/api/${TOOL_NAME}/projects/${id}`,{method:"DELETE"});
+    toast("Deleted");
+    await showDashboard();
+  }catch(e){toast("Delete failed",false)}
+}
 
+// ============ DASHBOARD ============
 function renderDashboard(){
-  $("proj-count").textContent=projects.length;
   const el=$("dash-projects");
   if(projects.length===0){el.innerHTML='<div style="text-align:center;padding:40px 0"><p style="color:var(--muted);font-size:13px">No projects saved yet.</p></div>';return}
   let html="";
-  projects.forEach((p,i)=>{
+  projects.forEach((proj)=>{
+    const p=proj.data;const id=proj.id;
     const cr=screen(p);const pass=cr.filter(c=>c.s==="green").length;const fail=cr.filter(c=>c.s==="red").length;
     const badgeClass=fail>0?"badge-fail":pass===cr.length?"badge-ready":"badge-gap";
     const badgeText=fail>0?fail+" FAIL":pass===cr.length?"READY":(cr.length-pass)+" gaps";
     let chips="";cr.forEach(c=>{
       const bg=c.s==="green"?"#F0FDF4":c.s==="red"?"#FEF2F2":c.s==="amber"?"#FFFBEB":"#F3F4F6";
       const fg=c.s==="green"?"var(--green)":c.s==="red"?"var(--red)":c.s==="amber"?"var(--amber)":"var(--muted)";
-      chips+=`<span class="chip" style="background:${bg};color:${fg}"><span class="dot dot-${c.s}" style="margin-right:4px"></span>${c.l.split(":")[0]}</span>`
+      chips+=`<span class="chip" style="background:${bg};color:${fg}"><span class="dot dot-${c.s}" style="margin-right:4px"></span>${c.l.split(":")[0]}</span>`;
     });
+    const time=new Date(proj.created_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
     html+=`<div class="proj-card">
       <div class="proj-header"><div><div class="proj-name">${p.name||"Unnamed"}</div>
-        <div class="proj-meta">${p.rfp} | ${p.methodology} | ${p.country}</div>
-        ${p.submittedBy?`<div class="proj-meta">Added by: ${p.submittedBy}</div>`:""}</div>
+        <div class="proj-meta">${p.rfp||"?"} | ${p.methodology||"?"} | ${p.country||"?"}</div>
+        <div class="proj-meta">${p.submittedBy?`By: ${p.submittedBy} · `:""}${time}</div></div>
         <span class="badge ${badgeClass}">${badgeText}</span></div>
       <div class="chips">${chips}</div>
-      <div class="proj-actions"><button class="btn btn-sm btn-outline" onclick="editProject(${i})">Edit</button>
-        <button class="btn btn-sm btn-red-sm" onclick="deleteProject(${i})">Delete</button></div></div>`
+      <div class="proj-actions">
+        <button class="btn btn-sm btn-outline" onclick="editProject('${id}')">Edit</button>
+        <button class="btn btn-sm btn-red-sm" onclick="deleteProject('${id}')">Delete</button>
+      </div></div>`;
   });
   el.innerHTML=html;
-  hide("export-area");
 }
 
-function exportAll(){
-  if(projects.length===0){alert("No projects to export");return}
-  let txt="=== CLEARSKY EY RFP PROJECTS — "+new Date().toLocaleDateString()+" ===\n\n";
-  projects.forEach((p,i)=>{
-    const cr=screen(p);const fail=cr.filter(c=>c.s==="red").length;
-    txt+=`--- PROJECT ${i+1}: ${p.name} ---\n`;
-    txt+=`RFP: ${p.rfp}\nStatus: ${fail>0?fail+" CRITERIA FAILED":"PASSES"}\n`;
-    txt+=`Developer: ${p.developer}\nCountry: ${p.country}\n`;
-    txt+=`Methodology: ${p.methodology}\nStandard: ${p.standard}\nRegistry ID: ${p.registryId}\n`;
-    txt+=`Project status: ${p.status}\nCarbon profile: ${p.carbon}\n`;
-    txt+=`Volume — 2026:${p.v2026||0} | 2027:${p.v2027||0} | 2028:${p.v2028||0} | 2029:${p.v2029||0} | 2030:${p.v2030||0}\n`;
-    txt+=`Price (delivery): ${p.priceD||"?"}/t | Price (prepay): ${p.priceP||"?"}/t\n`;
-    txt+=`Rating: ${p.rating||"None"} (${p.ratingAgency||"N/A"})\n`;
-    txt+=`Co-benefits: ${p.cobenefits||"Not provided"}\n`;
-    if(p.rfp==="ARR")txt+=`Species: ${p.species||"Not provided"}\n`;
-    if(p.rfp==="Biochar")txt+=`Feedstock: ${p.feedstock||"Not provided"}\n`;
-    txt+=`Docs available: ${p.docs||"None listed"}\n`;
-    txt+=`Notes: ${p.notes||"None"}\n`;
-    txt+=`Added by: ${p.submittedBy||"Unknown"}\n\n`;
-  });
-  $("export-text").textContent=txt;
-  show("export-area");
-  navigator.clipboard.writeText(txt).then(()=>{alert("Copied to clipboard! Paste to Luis on WhatsApp or email.")}).catch(()=>{alert("Text shown below — select all and copy manually.")});
-}
-
-goHome();
+// ============ INIT ============
+loadProjects().then(()=>$("proj-count").textContent=projects.length);
 </script>
 </body>
 </html>
