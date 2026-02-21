@@ -84,7 +84,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <!-- ==================== CONFIGURATION ==================== -->
 <script>
 // IMPORTANT: Replace this URL with your actual Cloudflare Worker URL after deployment
-const API_BASE = 'https://clearsky-api.clearsky-tools.workers.dev';
+const API_BASE = 'REPLACE_WITH_WORKER_URL';
 const TOOL_NAME = 'ey-rfp';
 </script>
 
@@ -108,7 +108,7 @@ const TOOL_NAME = 'ey-rfp';
   </div>
   <button class="btn btn-primary" onclick="newProject()">+ Screen New Project</button>
   <button class="btn btn-outline" onclick="showDashboard()">View Saved Projects (<span id="proj-count">0</span>)</button>
-
+  
   <div class="box box-red">
     <div class="boxtitle">Does NOT qualify:</div>
     <p class="x">✕ REDD+ / Avoided Deforestation</p>
@@ -121,7 +121,7 @@ const TOOL_NAME = 'ey-rfp';
     <p class="x">✕ VM0033, VM0048, CAR Mexico</p>
     <p class="x">✕ OFAC-sanctioned countries</p>
   </div>
-
+  
   <div class="box box-green">
     <div class="boxtitle">Remember:</div>
     <p style="color:#166534">Only <strong>removal</strong> credits qualify. Projects under validation ARE eligible — this is a forward purchase. Not all years 2026-2030 need volume.</p>
@@ -130,7 +130,7 @@ const TOOL_NAME = 'ey-rfp';
 
 <!-- FORM VIEW -->
 <div class="container hidden" id="view-form">
-
+  
   <div class="screen-panel partial" id="screen-panel">
     <div class="screen-title" id="screen-title">Fill in fields to screen</div>
     <div id="screen-criteria"></div>
@@ -410,10 +410,10 @@ document.addEventListener("change",e=>{if(e.target.closest("#view-form"))runScre
 async function saveProject(){
   const p=getFormData();
   if(!p.name||!p.rfp||!p.methodology){alert("Fill in at least: Project name, Target RFP, and Methodology");return}
-
+  
   const btn=$("btn-save");btn.disabled=true;
   showLoading("Saving project...");
-
+  
   try{
     let projectId;
     if(editId){
@@ -425,7 +425,7 @@ async function saveProject(){
       projectId=res.id;
       toast("Project saved!");
     }
-
+    
     // Upload files if any
     const fileInput=$("f-files");
     if(fileInput.files.length>0){
@@ -435,7 +435,7 @@ async function saveProject(){
         try{await uploadFile(file,projectId)}catch(e){toast(`Failed: ${file.name}`,false)}
       }
     }
-
+    
     hideLoading();
     showDashboard();
   }catch(e){
