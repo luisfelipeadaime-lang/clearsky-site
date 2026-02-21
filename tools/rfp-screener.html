@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClearSky — EY RFP Screener</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0A1628;--dark:#0F2140;--gold:#C8A951;--green:#16A34A;--red:#DC2626;--amber:#F59E0B;--bg:#F8FAFC;--border:#E5E7EB;--text:#1A1A2E;--muted:#6B7280;--light:#F5F5F5}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:var(--navy);padding:16px 20px}
+.header-inner{max-width:540px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.brand{color:var(--gold);font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.header h1{color:#fff;font-size:18px;margin-top:2px}
+.header .deadline{color:#94A3B8;font-size:11px;margin-top:4px}
+.header-btn{background:var(--gold);color:var(--navy);border:none;padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600}
+.container{max-width:540px;margin:0 auto;padding:16px}
+.btn{width:100%;padding:16px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;margin-bottom:10px}
+.btn-primary{background:var(--dark);color:#fff}
+.btn-outline{background:#fff;color:var(--dark);border:2px solid var(--dark)}
+.btn-green{background:var(--green);color:#fff}
+.btn-amber{background:var(--amber);color:#fff}
+.btn-sm{width:auto;padding:8px 16px;font-size:12px;display:inline-block;margin-right:8px}
+.btn-red-sm{background:#FEF2F2;color:var(--red);border:1px solid var(--red)}
+.box{padding:16px;border-radius:10px;margin-bottom:12px}
+.box-red{background:#FEF2F2;border:1px solid var(--red)}
+.box-green{background:#F0FDF4;border:1px solid var(--green)}
+.box-amber{background:#FFFBEB;border:1px solid var(--amber)}
+.box-red .title{color:var(--red);font-weight:700;font-size:13px;margin-bottom:8px}
+.box-green .title{color:var(--green);font-weight:700;font-size:13px;margin-bottom:8px}
+.box-red p,.box-green p{font-size:12px;margin-bottom:3px}
+.box-red .x{color:var(--red)}
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.card-title{font-weight:700;font-size:13px;color:var(--navy);margin-bottom:10px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:11px;font-weight:600;color:var(--dark);margin-bottom:4px}
+.form-group label .req{color:var(--red)}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit}
+.form-group textarea{resize:vertical}
+.form-group .hint{font-size:11px;color:var(--muted);margin-top:3px}
+.row{display:grid;gap:10px}
+.row-2{grid-template-columns:1fr 1fr}
+.row-5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:500px){.row-5{grid-template-columns:repeat(3,1fr)}.row-2{grid-template-columns:1fr}}
+.screen-panel{padding:14px;border-radius:10px;margin-bottom:14px}
+.screen-panel.pass{background:#F0FDF4;border:1px solid var(--green)}
+.screen-panel.fail{background:#FEF2F2;border:1px solid var(--red)}
+.screen-panel.partial{background:#FFFBEB;border:1px solid var(--amber)}
+.screen-title{font-weight:700;font-size:13px;margin-bottom:8px}
+.criterion{display:flex;align-items:center;margin-bottom:4px;font-size:12px}
+.dot{width:9px;height:9px;border-radius:50%;margin-right:8px;flex-shrink:0}
+.dot-green{background:var(--green)}.dot-red{background:var(--red)}.dot-amber{background:var(--amber)}.dot-gray{background:#9CA3AF}
+.proj-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.proj-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.proj-name{font-weight:700;font-size:14px;color:var(--navy)}
+.proj-meta{font-size:11px;color:var(--muted)}
+.badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.badge-fail{background:#FEF2F2;color:var(--red)}
+.badge-ready{background:#F0FDF4;color:var(--green)}
+.badge-gap{background:#FFFBEB;color:var(--amber)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.chip{font-size:10px;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center}
+.proj-actions{display:flex;gap:8px}
+.proj-actions button{flex:1}
+.copy-result{background:var(--light);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;margin:10px 0;max-height:200px;overflow-y:auto}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="brand">ClearSky Limited</div>
+      <h1 id="page-title">EY Abatable RFP Screener</h1>
+      <div class="deadline">Deadline: Fri 27 Feb 2026, 23:59 GMT</div>
+    </div>
+    <button class="header-btn" id="nav-btn" onclick="goHome()">Home</button>
+  </div>
+</div>
+
+<!-- HOME VIEW -->
+<div class="container" id="view-home">
+  <div style="margin-bottom:16px;padding:14px;background:#fff;border-radius:10px;border:1px solid var(--border)">
+    <p style="font-size:13px;color:var(--text)"><strong>Hi Ana / Carolina</strong> — enter project details below. The tool instantly tells you if it qualifies for the EY RFPs. Send PDFs/decks to Luis on WhatsApp.</p>
+  </div>
+  <button class="btn btn-primary" onclick="newProject()">+ Screen New Project</button>
+  <button class="btn btn-outline" onclick="showDashboard()">View Saved Projects (<span id="proj-count">0</span>)</button>
+
+  <div class="box box-red">
+    <div class="title">Does NOT qualify:</div>
+    <p class="x">✕ REDD+ / Avoided Deforestation</p>
+    <p class="x">✕ TSB / WoodCache / Biomass Burial</p>
+    <p class="x">✕ MITECO Spanish sovereign registry</p>
+    <p class="x">✕ IFM (Improved Forest Management)</p>
+    <p class="x">✕ Blue Carbon / Mangroves (unless accepted methodology)</p>
+    <p class="x">✕ Plastic Credits (PWRP)</p>
+    <p class="x">✕ Gold Standard ARR</p>
+    <p class="x">✕ VM0033, VM0048, CAR Mexico</p>
+    <p class="x">✕ OFAC-sanctioned countries</p>
+  </div>
+
+  <div class="box box-green">
+    <div class="title">Remember:</div>
+    <p style="color:#166534">Only <strong>removal</strong> credits qualify. Projects under validation ARE eligible — this is a forward purchase. Not all years 2026-2030 need volume.</p>
+  </div>
+</div>
+
+<!-- FORM VIEW -->
+<div class="container hidden" id="view-form">
+
+  <div class="screen-panel partial" id="screen-panel">
+    <div class="screen-title" id="screen-title">Fill in fields to screen</div>
+    <div id="screen-criteria"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Basic Info</div>
+    <div class="form-group"><label>Your name</label><input id="f-submittedBy" placeholder="Ana / Carolina / Luis"></div>
+    <div class="form-group"><label>Target RFP <span class="req">*</span></label>
+      <select id="f-rfp" onchange="onRfpChange()"><option value="">Select...</option><option value="ARR">ARR (Reforestation)</option><option value="Biochar">Biochar</option></select></div>
+    <div class="form-group"><label>Project name <span class="req">*</span></label><input id="f-name" placeholder="e.g. West Fraser Biochar"></div>
+    <div class="form-group"><label>Developer / Company</label><input id="f-developer" placeholder="Company operating the project"></div>
+    <div class="form-group"><label>Country <span class="req">*</span></label><input id="f-country" placeholder="e.g. Brazil, Spain, Canada"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Technical</div>
+    <div class="form-group"><label>Methodology <span class="req">*</span></label><select id="f-methodology"><option value="">Select RFP first...</option></select></div>
+    <div class="form-group"><label>Standard / Registry <span class="req">*</span></label><select id="f-standard"><option value="">Select RFP first...</option></select></div>
+    <div class="form-group"><label>Registry ID</label><input id="f-registryId" placeholder="e.g. VCS-1234 or Puro ID"></div>
+    <div class="form-group"><label>Project status</label>
+      <select id="f-status"><option value="">Select...</option><option>Under validation</option><option>Registered</option><option>First issuance complete</option><option>Multiple issuances</option></select></div>
+    <div class="form-group"><label>Carbon profile <span class="req">*</span></label>
+      <select id="f-carbon"><option value="">Select...</option><option value="Removal">Removal</option><option value="Avoidance">Avoidance</option><option value="Mixed">Mixed</option></select></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Volume (tCO₂e per year)</div>
+    <div class="row row-5">
+      <div class="form-group"><label>2026</label><input id="f-v2026" type="number" placeholder="0"></div>
+      <div class="form-group"><label>2027</label><input id="f-v2027" type="number" placeholder="0"></div>
+      <div class="form-group"><label>2028</label><input id="f-v2028" type="number" placeholder="0"></div>
+      <div class="form-group"><label>2029</label><input id="f-v2029" type="number" placeholder="0"></div>
+      <div class="form-group"><label>2030</label><input id="f-v2030" type="number" placeholder="0"></div>
+    </div>
+    <p class="hint">Not all years needed. Projects starting 2028+ are OK.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Pricing (USD per tCO₂e)</div>
+    <div class="row row-2">
+      <div class="form-group"><label>Payment on delivery</label><input id="f-priceD" type="number" placeholder="e.g. 25"></div>
+      <div class="form-group"><label>With prepayment</label><input id="f-priceP" type="number" placeholder="e.g. 20"></div>
+    </div>
+    <p class="hint">Submit both offers. Prepay should be lower (discount for early payment).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Quality & Co-benefits</div>
+    <div class="row row-2">
+      <div class="form-group"><label>Rating (if any)</label><input id="f-rating" placeholder="e.g. BBB, B+"></div>
+      <div class="form-group"><label>Rating agency</label>
+        <select id="f-ratingAgency"><option value="">Select...</option><option>Sylvera</option><option>BeZero</option><option>Calyx Global</option><option>Not rated</option><option>Other</option></select></div>
+    </div>
+    <div class="form-group"><label>Co-benefits (be specific)</label><textarea id="f-cobenefits" rows="3" placeholder="e.g. 200 local jobs, native forest restoration, biodiversity corridor, SDG 1, 8, 13, 15"></textarea></div>
+    <div class="form-group" id="fg-species"><label>Species planted (ARR only)</label><textarea id="f-species" rows="2" placeholder="e.g. Native species: mixed broadleaf, Quercus robur"></textarea></div>
+    <div class="form-group" id="fg-feedstock"><label>Feedstock & certification (Biochar only)</label><textarea id="f-feedstock" rows="2" placeholder="e.g. FSC-certified forestry residues, rice husks"></textarea></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Supporting Materials</div>
+    <div class="form-group"><label>Documents available</label><textarea id="f-docs" rows="2" placeholder="e.g. PDD available, project deck PDF, verification report pending"></textarea></div>
+    <div class="form-group"><label>Notes for Luis</label><textarea id="f-notes" rows="2" placeholder="Developer contact, commercial structure preferences, risks, etc."></textarea></div>
+    <p class="hint" style="color:var(--amber)">⚠ Send actual files (PDFs, decks) to Luis via WhatsApp tagged with project name.</p>
+  </div>
+
+  <button class="btn btn-green" id="btn-save" onclick="saveProject()">Save Project</button>
+  <p style="text-align:center;font-size:11px;color:var(--muted);margin-bottom:20px">You can save projects with failures — Luis will review everything.</p>
+</div>
+
+<!-- DASHBOARD VIEW -->
+<div class="container hidden" id="view-dashboard">
+  <div id="dash-projects"></div>
+  <button class="btn btn-primary" onclick="newProject()" style="margin-top:10px">+ Add Another Project</button>
+  <button class="btn btn-outline" onclick="exportAll()" style="margin-top:0">📋 Copy All to Clipboard (for Luis)</button>
+  <div id="export-area" class="hidden"><div class="copy-result" id="export-text"></div></div>
+</div>
+
+<script>
+const ARR_METHS = ["VM0047","ISM Reforestation","ISM Agroforestry","PV Acorn","M001 (Equitable Earth)"];
+const BIO_METHS = ["VM0044","Puro Biochar","ISM Biochar Production and Storage"];
+const ARR_STDS = ["VCS (Verra)","Isometric","Plan Vivo (ex-post only)","Equitable Earth"];
+const BIO_STDS = ["VCS (Verra)","Puro Earth","Isometric"];
+const OFAC = ["cuba","iran","north korea","syria","crimea","donetsk","luhansk"];
+
+let projects = JSON.parse(localStorage.getItem("cs-rfp-projects")||"[]");
+let editIdx = -1;
+
+function $(id){return document.getElementById(id)}
+function show(id){$(id).classList.remove("hidden")}
+function hide(id){$(id).classList.add("hidden")}
+
+function goHome(){hide("view-form");hide("view-dashboard");show("view-home");$("proj-count").textContent=projects.length;$("nav-btn").textContent="Home"}
+function showDashboard(){hide("view-home");hide("view-form");show("view-dashboard");renderDashboard();$("nav-btn").textContent="Home"}
+
+function newProject(){editIdx=-1;clearForm();hide("view-home");hide("view-dashboard");show("view-form");$("nav-btn").textContent="Cancel";onRfpChange();runScreen()}
+function editProject(i){editIdx=i;loadForm(projects[i]);hide("view-home");hide("view-dashboard");show("view-form");$("nav-btn").textContent="Cancel";onRfpChange();runScreen()}
+
+function onRfpChange(){
+  const rfp=$("f-rfp").value;
+  const meths=rfp==="ARR"?ARR_METHS:rfp==="Biochar"?BIO_METHS:[];
+  const stds=rfp==="ARR"?ARR_STDS:rfp==="Biochar"?BIO_STDS:[];
+  const mSel=$("f-methodology");mSel.innerHTML='<option value="">Select...</option>';
+  meths.forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;mSel.appendChild(o)});
+  const sSel=$("f-standard");sSel.innerHTML='<option value="">Select...</option>';
+  stds.forEach(s=>{const o=document.createElement("option");o.value=s;o.textContent=s;sSel.appendChild(o)});
+  $("fg-species").style.display=rfp==="ARR"?"block":"none";
+  $("fg-feedstock").style.display=rfp==="Biochar"?"block":"none";
+  if(editIdx>=0){const p=projects[editIdx];$("f-methodology").value=p.methodology||"";$("f-standard").value=p.standard||""}
+  runScreen();
+}
+
+function getFormData(){return{
+  submittedBy:$("f-submittedBy").value,rfp:$("f-rfp").value,name:$("f-name").value,developer:$("f-developer").value,
+  country:$("f-country").value,methodology:$("f-methodology").value,standard:$("f-standard").value,
+  registryId:$("f-registryId").value,status:$("f-status").value,carbon:$("f-carbon").value,
+  v2026:$("f-v2026").value,v2027:$("f-v2027").value,v2028:$("f-v2028").value,v2029:$("f-v2029").value,v2030:$("f-v2030").value,
+  priceD:$("f-priceD").value,priceP:$("f-priceP").value,rating:$("f-rating").value,ratingAgency:$("f-ratingAgency").value,
+  cobenefits:$("f-cobenefits").value,species:$("f-species").value,feedstock:$("f-feedstock").value,
+  docs:$("f-docs").value,notes:$("f-notes").value
+}}
+
+function clearForm(){["submittedBy","rfp","name","developer","country","methodology","standard","registryId","status","carbon"].forEach(f=>$("f-"+f).value="");
+  ["v2026","v2027","v2028","v2029","v2030","priceD","priceP","rating","ratingAgency"].forEach(f=>$("f-"+f).value="");
+  ["cobenefits","species","feedstock","docs","notes"].forEach(f=>$("f-"+f).value="")}
+
+function loadForm(p){$("f-submittedBy").value=p.submittedBy||"";$("f-rfp").value=p.rfp||"";$("f-name").value=p.name||"";
+  $("f-developer").value=p.developer||"";$("f-country").value=p.country||"";$("f-registryId").value=p.registryId||"";
+  $("f-status").value=p.status||"";$("f-carbon").value=p.carbon||"";
+  $("f-v2026").value=p.v2026||"";$("f-v2027").value=p.v2027||"";$("f-v2028").value=p.v2028||"";$("f-v2029").value=p.v2029||"";$("f-v2030").value=p.v2030||"";
+  $("f-priceD").value=p.priceD||"";$("f-priceP").value=p.priceP||"";$("f-rating").value=p.rating||"";$("f-ratingAgency").value=p.ratingAgency||"";
+  $("f-cobenefits").value=p.cobenefits||"";$("f-species").value=p.species||"";$("f-feedstock").value=p.feedstock||"";
+  $("f-docs").value=p.docs||"";$("f-notes").value=p.notes||""}
+
+function screen(p){
+  const r=[];const rfp=p.rfp;
+  if(!rfp)return[{l:"Select target RFP first",s:"gray"}];
+  const meths=rfp==="ARR"?ARR_METHS:BIO_METHS;
+  const stds=rfp==="ARR"?ARR_STDS:BIO_STDS;
+  const vMin=rfp==="ARR"?10000:5000;const vMax=rfp==="ARR"?100000:20000;
+  r.push({l:"Carbon profile: Removals only",s:p.carbon==="Removal"?"green":p.carbon==="Avoidance"?"red":p.carbon?"amber":"gray"});
+  r.push({l:"Methodology accepted",s:meths.includes(p.methodology)?"green":p.methodology?"red":"gray"});
+  r.push({l:"Standard accepted",s:stds.includes(p.standard)?"green":p.standard?"red":"gray"});
+  const isOfac=OFAC.some(c=>p.country.toLowerCase().includes(c));
+  r.push({l:"Geography: not OFAC",s:!p.country?"gray":isOfac?"red":"green"});
+  const vols=[p.v2026,p.v2027,p.v2028,p.v2029,p.v2030].map(v=>parseInt(v)||0);
+  const maxV=Math.max(...vols);const totV=vols.reduce((a,b)=>a+b,0);
+  r.push({l:`Volume: ${vMin.toLocaleString()}-${vMax.toLocaleString()} t/yr`,s:totV===0?"gray":maxV>=vMin&&maxV<=vMax?"green":"amber"});
+  r.push({l:"Both pricing offers",s:p.priceD&&p.priceP?"green":p.priceD||p.priceP?"amber":"gray"});
+  r.push({l:"Co-benefits described",s:p.cobenefits&&p.cobenefits.length>10?"green":p.cobenefits?"amber":"gray"});
+  if(rfp==="ARR")r.push({l:"Species (native preferred)",s:!p.species?"gray":p.species.toLowerCase().includes("native")?"green":"amber"});
+  if(rfp==="Biochar")r.push({l:"Feedstock described",s:!p.feedstock?"gray":p.feedstock.length>5?"green":"amber"});
+  r.push({l:"Rating (expected, not required)",s:!p.rating?"amber":"green"});
+  return r;
+}
+
+function runScreen(){
+  const p=getFormData();const cr=screen(p);
+  const pass=cr.filter(c=>c.s==="green").length;
+  const fail=cr.filter(c=>c.s==="red").length;
+  const panel=$("screen-panel");
+  panel.className="screen-panel "+(fail>0?"fail":pass===cr.length?"pass":"partial");
+  $("screen-title").textContent=fail>0?fail+" criteria failed":pass===cr.length?"All criteria passed":pass+"/"+cr.length+" criteria met";
+  $("screen-title").style.color=fail>0?"var(--red)":pass===cr.length?"var(--green)":"var(--amber)";
+  let html="";cr.forEach(c=>{html+=`<div class="criterion"><span class="dot dot-${c.s}"></span>${c.l}</div>`});
+  $("screen-criteria").innerHTML=html;
+  const btn=$("btn-save");
+  if(fail>0){btn.className="btn btn-amber";btn.textContent="Save Anyway (has failures)"}
+  else{btn.className="btn btn-green";btn.textContent=editIdx>=0?"Update Project":"Save Project"}
+}
+
+// Attach live screening to all inputs
+document.addEventListener("input",e=>{if(e.target.closest("#view-form"))runScreen()});
+document.addEventListener("change",e=>{if(e.target.closest("#view-form"))runScreen()});
+
+function saveProject(){
+  const p=getFormData();
+  if(!p.name||!p.rfp||!p.methodology){alert("Fill in at least: Project name, Target RFP, and Methodology");return}
+  p.savedAt=new Date().toISOString();
+  if(editIdx>=0){projects[editIdx]=p}else{projects.push(p)}
+  localStorage.setItem("cs-rfp-projects",JSON.stringify(projects));
+  showDashboard();
+}
+
+function deleteProject(i){if(confirm("Delete this project?")){projects.splice(i,1);localStorage.setItem("cs-rfp-projects",JSON.stringify(projects));renderDashboard()}}
+
+function renderDashboard(){
+  $("proj-count").textContent=projects.length;
+  const el=$("dash-projects");
+  if(projects.length===0){el.innerHTML='<div style="text-align:center;padding:40px 0"><p style="color:var(--muted);font-size:13px">No projects saved yet.</p></div>';return}
+  let html="";
+  projects.forEach((p,i)=>{
+    const cr=screen(p);const pass=cr.filter(c=>c.s==="green").length;const fail=cr.filter(c=>c.s==="red").length;
+    const badgeClass=fail>0?"badge-fail":pass===cr.length?"badge-ready":"badge-gap";
+    const badgeText=fail>0?fail+" FAIL":pass===cr.length?"READY":(cr.length-pass)+" gaps";
+    let chips="";cr.forEach(c=>{
+      const bg=c.s==="green"?"#F0FDF4":c.s==="red"?"#FEF2F2":c.s==="amber"?"#FFFBEB":"#F3F4F6";
+      const fg=c.s==="green"?"var(--green)":c.s==="red"?"var(--red)":c.s==="amber"?"var(--amber)":"var(--muted)";
+      chips+=`<span class="chip" style="background:${bg};color:${fg}"><span class="dot dot-${c.s}" style="margin-right:4px"></span>${c.l.split(":")[0]}</span>`
+    });
+    html+=`<div class="proj-card">
+      <div class="proj-header"><div><div class="proj-name">${p.name||"Unnamed"}</div>
+        <div class="proj-meta">${p.rfp} | ${p.methodology} | ${p.country}</div>
+        ${p.submittedBy?`<div class="proj-meta">Added by: ${p.submittedBy}</div>`:""}</div>
+        <span class="badge ${badgeClass}">${badgeText}</span></div>
+      <div class="chips">${chips}</div>
+      <div class="proj-actions"><button class="btn btn-sm btn-outline" onclick="editProject(${i})">Edit</button>
+        <button class="btn btn-sm btn-red-sm" onclick="deleteProject(${i})">Delete</button></div></div>`
+  });
+  el.innerHTML=html;
+  hide("export-area");
+}
+
+function exportAll(){
+  if(projects.length===0){alert("No projects to export");return}
+  let txt="=== CLEARSKY EY RFP PROJECTS — "+new Date().toLocaleDateString()+" ===\n\n";
+  projects.forEach((p,i)=>{
+    const cr=screen(p);const fail=cr.filter(c=>c.s==="red").length;
+    txt+=`--- PROJECT ${i+1}: ${p.name} ---\n`;
+    txt+=`RFP: ${p.rfp}\nStatus: ${fail>0?fail+" CRITERIA FAILED":"PASSES"}\n`;
+    txt+=`Developer: ${p.developer}\nCountry: ${p.country}\n`;
+    txt+=`Methodology: ${p.methodology}\nStandard: ${p.standard}\nRegistry ID: ${p.registryId}\n`;
+    txt+=`Project status: ${p.status}\nCarbon profile: ${p.carbon}\n`;
+    txt+=`Volume — 2026:${p.v2026||0} | 2027:${p.v2027||0} | 2028:${p.v2028||0} | 2029:${p.v2029||0} | 2030:${p.v2030||0}\n`;
+    txt+=`Price (delivery): ${p.priceD||"?"}/t | Price (prepay): ${p.priceP||"?"}/t\n`;
+    txt+=`Rating: ${p.rating||"None"} (${p.ratingAgency||"N/A"})\n`;
+    txt+=`Co-benefits: ${p.cobenefits||"Not provided"}\n`;
+    if(p.rfp==="ARR")txt+=`Species: ${p.species||"Not provided"}\n`;
+    if(p.rfp==="Biochar")txt+=`Feedstock: ${p.feedstock||"Not provided"}\n`;
+    txt+=`Docs available: ${p.docs||"None listed"}\n`;
+    txt+=`Notes: ${p.notes||"None"}\n`;
+    txt+=`Added by: ${p.submittedBy||"Unknown"}\n\n`;
+  });
+  $("export-text").textContent=txt;
+  show("export-area");
+  navigator.clipboard.writeText(txt).then(()=>{alert("Copied to clipboard! Paste to Luis on WhatsApp or email.")}).catch(()=>{alert("Text shown below — select all and copy manually.")});
+}
+
+goHome();
+</script>
+</body>
+</html>
