@@ -45,11 +45,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .row-2{grid-template-columns:1fr 1fr}
 .row-5{grid-template-columns:repeat(5,1fr)}
 @media(max-width:500px){.row-5{grid-template-columns:repeat(3,1fr)}.row-2{grid-template-columns:1fr}}
-.screen-panel{padding:14px;border-radius:10px;margin-bottom:14px}
+.screen-panel{padding:14px;border-radius:10px;margin-bottom:14px;position:sticky;top:60px;z-index:90}
 .screen-panel.pass{background:#F0FDF4;border:1px solid var(--green)}
 .screen-panel.fail{background:#FEF2F2;border:1px solid var(--red)}
 .screen-panel.partial{background:#FFFBEB;border:1px solid var(--amber)}
 .screen-title{font-weight:700;font-size:13px;margin-bottom:8px}
+.screen-chips{display:flex;flex-wrap:wrap;gap:4px}
+.screen-chip{font-size:10px;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center}
+.screen-toggle{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;padding:4px 0;margin-top:6px;text-decoration:underline}
+.screen-details{margin-top:8px}
 .criterion{display:flex;align-items:center;margin-bottom:4px;font-size:12px}
 .dot{width:9px;height:9px;border-radius:50%;margin-right:8px;flex-shrink:0}
 .dot-green{background:var(--green)}.dot-red{background:var(--red)}.dot-amber{background:var(--amber)}.dot-gray{background:#9CA3AF}
@@ -68,6 +72,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .file-list{margin-top:8px}
 .file-item{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--light);border-radius:6px;margin-bottom:4px;font-size:12px}
 .file-item a{color:var(--dark);text-decoration:none;font-weight:600}
+.file-actions{display:flex;gap:6px;align-items:center}
+.file-actions a,.file-actions button{font-size:11px;padding:2px 8px;border-radius:4px;cursor:pointer;font-weight:600;text-decoration:none}
+.file-actions a{background:var(--dark);color:#fff}
+.file-actions button{background:#FEF2F2;color:var(--red);border:1px solid var(--red)}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .6s linear infinite;margin-right:8px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-size:13px;font-weight:600;z-index:200;opacity:0;transition:opacity .3s}
@@ -76,6 +84,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .toast-err{background:var(--red);color:#fff}
 .loading-overlay{position:fixed;inset:0;background:rgba(10,22,40,.5);display:flex;align-items:center;justify-content:center;z-index:300}
 .loading-box{background:#fff;padding:24px 32px;border-radius:12px;text-align:center}
+.ai-panel{margin-top:10px;padding:12px;border-radius:8px;background:#FAFBFC;border:1px solid var(--border)}
+.ai-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.score-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;flex-shrink:0}
+.score-circle.green{background:var(--green)}.score-circle.amber{background:var(--amber)}.score-circle.red{background:var(--red)}
+.ai-status{font-weight:700;font-size:13px}
+.ai-status.pass{color:var(--green)}.ai-status.gaps{color:var(--amber)}.ai-status.fail{color:var(--red)}
+.ai-summary{font-size:12px;color:var(--text);margin-bottom:6px}
+.ai-expand-btn{background:none;border:none;color:var(--dark);font-size:11px;cursor:pointer;padding:4px 0;font-weight:600;text-decoration:underline}
+.ai-details{margin-top:8px;font-size:12px}
+.ai-details h4{font-size:11px;font-weight:700;color:var(--navy);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.5px}
+.ai-details ul{margin:0;padding-left:16px}
+.ai-details li{margin-bottom:2px}
+.ai-flag{background:#FFFBEB;border:1px solid var(--amber);padding:4px 8px;border-radius:4px;margin-bottom:3px;font-size:11px}
+.ai-crit{display:flex;align-items:center;margin-bottom:3px;font-size:12px}
+.ai-crit .dot{margin-right:6px}
 .hidden{display:none}
 </style>
 </head>
@@ -104,7 +127,7 @@ const TOOL_NAME = 'ey-rfp';
 <!-- HOME VIEW -->
 <div class="container" id="view-home">
   <div style="margin-bottom:16px;padding:14px;background:#fff;border-radius:10px;border:1px solid var(--border)">
-    <p style="font-size:13px;color:var(--text)"><strong>Hi Ana / Carolina</strong> — enter project details below. The tool instantly tells you if it qualifies for the EY RFPs. Fill in what you know, save, and upload any supporting docs.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Hi Ana / Carolina</strong> — this tool screens projects against the EY RFPs automatically using AI. Enter project details below, save, and upload any supporting docs.</p>
   </div>
   <button class="btn btn-primary" onclick="newProject()">+ Screen New Project</button>
   <button class="btn btn-outline" onclick="showDashboard()">View Saved Projects (<span id="proj-count">0</span>)</button>
@@ -361,8 +384,23 @@ function renderUploadedFiles(files){
   if(!files.length){el.innerHTML="";return}
   el.innerHTML=files.map(f=>`<div class="file-item">
     <span>📎 ${f.original_name} <span style="color:var(--muted)">(${(f.size_bytes/1024).toFixed(0)}KB)</span></span>
-    <a href="${API_BASE}/api/files/download/${f.id}" target="_blank">Download</a>
+    <div class="file-actions">
+      <a href="${API_BASE}/api/files/download/${f.id}" target="_blank">Download</a>
+      <button onclick="deleteFile('${f.id}')">Delete</button>
+    </div>
   </div>`).join("");
+}
+
+async function deleteFile(fileId){
+  if(!confirm("Delete this file?"))return;
+  try{
+    await api(`/api/files/${fileId}`,{method:"DELETE"});
+    toast("File deleted");
+    if(editId){
+      const res=await api(`/api/files/${TOOL_NAME}/${editId}`);
+      renderUploadedFiles(res.files||[]);
+    }
+  }catch(e){toast("Delete failed",false)}
 }
 
 // ============ SCREENING ============
@@ -388,6 +426,7 @@ function screen(p){
   return r;
 }
 
+let screenDetailsVisible=false;
 function runScreen(){
   const p=getFormData();const cr=screen(p);
   const pass=cr.filter(c=>c.s==="green").length;
@@ -396,11 +435,24 @@ function runScreen(){
   panel.className="screen-panel "+(fail>0?"fail":pass===cr.length?"pass":"partial");
   $("screen-title").textContent=fail>0?fail+" criteria failed":pass===cr.length?"All criteria passed!":pass+"/"+cr.length+" criteria met";
   $("screen-title").style.color=fail>0?"var(--red)":pass===cr.length?"var(--green)":"var(--amber)";
-  let html="";cr.forEach(c=>{html+=`<div class="criterion"><span class="dot dot-${c.s}"></span>${c.l}</div>`});
-  $("screen-criteria").innerHTML=html;
+  let chips='<div class="screen-chips">';
+  cr.forEach(c=>{
+    const bg=c.s==="green"?"#F0FDF4":c.s==="red"?"#FEF2F2":c.s==="amber"?"#FFFBEB":"#F3F4F6";
+    const fg=c.s==="green"?"var(--green)":c.s==="red"?"var(--red)":c.s==="amber"?"var(--amber)":"var(--muted)";
+    chips+=`<span class="screen-chip" style="background:${bg};color:${fg}"><span class="dot dot-${c.s}" style="margin-right:4px"></span>${c.l.split(":")[0]}</span>`;
+  });
+  chips+='</div>';
+  let details=`<div class="screen-details" style="display:${screenDetailsVisible?"block":"none"}">`;
+  cr.forEach(c=>{details+=`<div class="criterion"><span class="dot dot-${c.s}"></span>${c.l}</div>`});
+  details+='</div>';
+  $("screen-criteria").innerHTML=chips+`<button class="screen-toggle" onclick="toggleScreenDetails()">${screenDetailsVisible?"Hide details":"Show details"}</button>`+details;
   const btn=$("btn-save");
   if(fail>0){btn.className="btn btn-amber";btn.textContent="Save Anyway (has failures)"}
   else{btn.className="btn btn-green";btn.textContent=editId?"Update Project":"Save Project"}
+}
+function toggleScreenDetails(){
+  screenDetailsVisible=!screenDetailsVisible;
+  runScreen();
 }
 
 document.addEventListener("input",e=>{if(e.target.closest("#view-form"))runScreen()});
@@ -462,6 +514,69 @@ async function deleteProject(id){
 }
 
 // ============ DASHBOARD ============
+function renderAiPanel(proj){
+  const s=proj.screening;
+  if(!s)return '';
+  const score=s.score!=null?s.score:0;
+  const scoreColor=score>=70?"green":score>=40?"amber":"red";
+  const status=s.status||"UNKNOWN";
+  const statusClass=status==="PASS"?"pass":status==="FAIL"?"fail":"gaps";
+  const pid=proj.id;
+  let criteriaHtml='';
+  if(s.criteria&&s.criteria.length){
+    criteriaHtml='<h4>Criteria Results</h4>';
+    s.criteria.forEach(c=>{
+      const dot=c.pass?"green":c.pass===false?"red":"amber";
+      criteriaHtml+=`<div class="ai-crit"><span class="dot dot-${dot}"></span>${c.name||c.label||""}${c.note?" — "+c.note:""}</div>`;
+    });
+  }
+  let flagsHtml='';
+  if(s.flags&&s.flags.length){
+    flagsHtml='<h4>Flags</h4>';
+    s.flags.forEach(f=>{flagsHtml+=`<div class="ai-flag">${f}</div>`});
+  }
+  let missingHtml='';
+  if(s.missing_info&&s.missing_info.length){
+    missingHtml='<h4>Missing Information</h4><ul>';
+    s.missing_info.forEach(m=>{missingHtml+=`<li>${m}</li>`});
+    missingHtml+='</ul>';
+  }
+  let pricingHtml='';
+  if(s.pricing_guidance){
+    pricingHtml=`<h4>Pricing Guidance</h4><p>${s.pricing_guidance}</p>`;
+  }
+  let readinessHtml='';
+  if(s.submission_readiness){
+    readinessHtml=`<h4>Submission Readiness</h4><p>${s.submission_readiness}</p>`;
+  }
+  let answersHtml='';
+  if(s.draft_answers&&s.draft_answers.length){
+    answersHtml='<h4>Draft Abatable Answers</h4>';
+    s.draft_answers.forEach(a=>{
+      answersHtml+=`<div style="margin-bottom:6px"><strong style="font-size:11px">${a.question||""}</strong><p style="margin:2px 0;font-size:12px;color:var(--text)">${a.answer||""}</p></div>`;
+    });
+  }
+  return `<div class="ai-panel">
+    <div class="ai-header">
+      <div class="score-circle ${scoreColor}">${score}</div>
+      <div><div class="ai-status ${statusClass}">AI Screening: ${status}</div>
+        <div class="ai-summary">${s.summary||""}</div></div>
+    </div>
+    <button class="ai-expand-btn" onclick="toggleAiDetails('${pid}')">Show AI details</button>
+    <div class="ai-details hidden" id="ai-details-${pid}">
+      ${criteriaHtml}${flagsHtml}${missingHtml}${pricingHtml}${readinessHtml}${answersHtml}
+    </div>
+  </div>`;
+}
+
+function toggleAiDetails(pid){
+  const el=document.getElementById("ai-details-"+pid);
+  if(!el)return;
+  const btn=el.previousElementSibling;
+  if(el.classList.contains("hidden")){el.classList.remove("hidden");btn.textContent="Hide AI details"}
+  else{el.classList.add("hidden");btn.textContent="Show AI details"}
+}
+
 function renderDashboard(){
   const el=$("dash-projects");
   if(projects.length===0){el.innerHTML='<div style="text-align:center;padding:40px 0"><p style="color:var(--muted);font-size:13px">No projects saved yet.</p></div>';return}
@@ -477,12 +592,14 @@ function renderDashboard(){
       chips+=`<span class="chip" style="background:${bg};color:${fg}"><span class="dot dot-${c.s}" style="margin-right:4px"></span>${c.l.split(":")[0]}</span>`;
     });
     const time=new Date(proj.created_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+    const aiPanel=renderAiPanel(proj);
     html+=`<div class="proj-card">
       <div class="proj-header"><div><div class="proj-name">${p.name||"Unnamed"}</div>
         <div class="proj-meta">${p.rfp||"?"} | ${p.methodology||"?"} | ${p.country||"?"}</div>
         <div class="proj-meta">${p.submittedBy?`By: ${p.submittedBy} · `:""}${time}</div></div>
         <span class="badge ${badgeClass}">${badgeText}</span></div>
       <div class="chips">${chips}</div>
+      ${aiPanel}
       <div class="proj-actions">
         <button class="btn btn-sm btn-outline" onclick="editProject('${id}')">Edit</button>
         <button class="btn btn-sm btn-red-sm" onclick="deleteProject('${id}')">Delete</button>
