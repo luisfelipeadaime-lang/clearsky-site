@@ -104,7 +104,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .loading-box{background:#fff;padding:24px 32px;border-radius:12px;text-align:center}
 .hidden{display:none}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
+<script src="https://unpkg.com/docx@9.5.0/build/index.js"></script>
 </head>
 <body>
 <script>
@@ -244,7 +244,8 @@ h+='</div></div>';return h}
 function renderDashboard(){var el=$("dash-projects");if(!projects.length){el.innerHTML='<div style="text-align:center;padding:40px"><p style="color:var(--muted)">No projects yet.</p></div>';return}var h="";projects.forEach(function(proj){var p=proj.data,id=proj.id;var cr=screen(p);var pass=cr.filter(function(c){return c.s==="green"}).length;var fail=cr.filter(function(c){return c.s==="red"}).length;var bc=fail>0?"badge-fail":pass===cr.length?"badge-ready":"badge-gap";var bt=fail>0?fail+" FAIL":pass===cr.length?"READY":(cr.length-pass)+" gaps";var ch="";cr.forEach(function(c){var bg=c.s==="green"?"#F0FDF4":c.s==="red"?"#FEF2F2":c.s==="amber"?"#FFFBEB":"#F3F4F6";var fg=c.s==="green"?"var(--green)":c.s==="red"?"var(--red)":c.s==="amber"?"var(--amber)":"var(--muted)";ch+='<span class="chip" style="background:'+bg+';color:'+fg+'"><span class="dot dot-'+c.s+'" style="margin-right:4px"></span>'+c.l+'</span>'});var tm=new Date(proj.created_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
 h+='<div class="proj-card"><div class="proj-header"><div><div class="proj-name">'+(p.name||"Unnamed")+'</div><div class="proj-meta">'+(p.rfp||"?")+" | "+(p.methodology||"?")+" | "+(p.country||"?")+'</div><div class="proj-meta">'+(p.submittedBy?"By: "+p.submittedBy+" \u00B7 ":"")+tm+'</div></div><span class="badge '+bc+'">'+bt+'</span></div><div class="chips">'+ch+'</div>'+renderAIPanel(proj.screening,id)+'<div class="proj-actions" style="margin-top:10px">'+(proj.screening&&!proj.screening.error?'<button class="btn btn-sm" style="background:var(--navy);color:#fff" onclick="generateReport(\''+id+'\')">Report</button>':'')+'<button class="btn btn-sm btn-outline" onclick="editProject(\''+id+'\')">Edit</button><button class="btn btn-sm btn-red-sm" onclick="deleteProject(\''+id+'\')">Delete</button></div></div>'});el.innerHTML=h}
 
-async function generateReport(projId){
+async function generateReport(projId){try{
+if(typeof docx==='undefined'){toast("Report library still loading — try again in a moment",false);return}
 var proj=projects.find(function(x){return x.id===projId});
 if(!proj||!proj.screening||proj.screening.error){toast("No AI screening results yet",false);return}
 var p=proj.data,s=proj.screening;
@@ -288,7 +289,7 @@ var buf=await docx.Packer.toBlob(doc);
 var fn="ClearSky_Screening_"+(p.name||"Project").replace(/[^a-zA-Z0-9]/g,"_")+".docx";
 var a=document.createElement("a");a.href=URL.createObjectURL(buf);a.download=fn;a.click();URL.revokeObjectURL(a.href);
 toast("Report downloaded!");
-}
+}catch(e){console.error("Report generation error:",e);toast("Report failed: "+e.message,false)}}
 
 loadProjects().then(function(){$("proj-count").textContent=projects.length});
 </script>
