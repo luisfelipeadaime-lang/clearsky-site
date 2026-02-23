@@ -430,22 +430,21 @@ function showDetail(pid){
 function closeDetail(){openDetailId=null;$('detail').classList.remove('open');$('detail').innerHTML='';render()}
 function copyText(btn){var a=btn.previousElementSibling.textContent;navigator.clipboard.writeText(a).then(function(){var o=btn.textContent;btn.textContent='Copied!';btn.style.background='var(--green)';setTimeout(function(){btn.textContent=o;btn.style.background=''},1500)})}
 async function reScreen(pid){
-  var btn=document.getElementById('btn-rescreen');
-  var ld=$('sp-loading');ld.textContent='Running AI screening...';ld.classList.add('show');
-  if(btn)btn.disabled=true;
+  // Find ALL re-screen buttons on the page and disable them with loading text
+  var btns=document.querySelectorAll('[onclick*="reScreen"]');
+  btns.forEach(function(b){b.disabled=true;b.dataset.origText=b.textContent;b.textContent='⏳ Screening...'});
+  toast('AI screening started...');
   try{
     // Extract any unextracted files first
     var fl=await api('/api/files/'+TOOL+'/'+pid);
     var n=(fl.files||[]).length;
     for(var x=0;x<n;x++){
-      ld.textContent='Extracting document '+(x+1)+'/'+n+'...';
       try{var ex=await api('/api/'+TOOL+'/projects/'+pid+'/extract',{method:'POST'});if(!ex.extracted&&ex.remaining===0)break}catch(e){break}
     }
-    ld.textContent='Running AI screening...';
     await api('/api/'+TOOL+'/projects/'+pid+'/screen',{method:'POST'});
     toast('Re-screened!');
   }catch(e){toast('Screening failed: '+e.message,false)}
-  ld.classList.remove('show');
+  btns.forEach(function(b){b.disabled=false;b.textContent=b.dataset.origText||'🔄 Re-screen'});
   closeDetail();
   await loadProjects();
   showDetail(pid);
