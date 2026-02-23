@@ -529,6 +529,9 @@ function editProject(pid){
   var p=projects.find(function(x){return x.id===pid});if(!p)return;
   editId=pid;
   setFormData(p.data);
+  // Clear file input and preview to prevent cross-project file contamination
+  $('ff-files').value='';$('file-list').innerHTML='';
+  $('sp-loading').classList.remove('show');
   $('sp-title').textContent='Edit '+esc(p.data.name||'Project');
   $('ov').classList.add('open');$('sp').classList.add('open');
 }
