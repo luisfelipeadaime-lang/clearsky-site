@@ -463,15 +463,20 @@ async function saveProject(){
         await api('/api/files/upload',{method:'POST',body:fd,headers:{}});
       }
     }
-    // Screen
+    // Extract docs first (so AI screening has content)
+    if(fi.files.length>0){
+      ld.textContent='Extracting documents...';
+      for(var x=0;x<fi.files.length;x++){
+        try{var ex=await api('/api/'+TOOL+'/projects/'+pid+'/extract',{method:'POST'});if(!ex.extracted&&ex.remaining===0)break}catch(e){break}
+      }
+    }
+    // Screen (now with extracted doc content)
     ld.textContent='Running AI screening...';
     try{await api('/api/'+TOOL+'/projects/'+pid+'/screen',{method:'POST'})}catch(e){console.error('Screen error:',e)}
     toast('Saved & screened!');
     ld.classList.remove('show');
     closePanel();
     await loadProjects();
-    // Background extraction
-    if(fi.files.length>0){extractBackground(pid,fi.files.length)}
   }catch(e){ld.classList.remove('show');toast('Save failed: '+e.message,false)}
   btn.disabled=false;
 }
