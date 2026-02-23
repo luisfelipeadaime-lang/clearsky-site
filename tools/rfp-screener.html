@@ -226,6 +226,7 @@ DEADLINE: Same as ARR</pre></div>
       <div class="fr fr2"><div class="f"><label>Rating</label><input id="ff-rat" placeholder="e.g. BBB"></div><div class="f"><label>Agency</label><select id="ff-agency"><option value="">Select...</option><option>Sylvera</option><option>BeZero</option><option>Calyx Global</option><option>Not rated</option></select></div></div>
     </div>
     <div class="sp-sec"><div class="sp-sec-t">Documents</div>
+      <div id="existing-files"></div>
       <div class="uz" onclick="document.getElementById('ff-files').click()"><p><strong>Drop files</strong> or click to browse</p><small>PDDs, decks, maps, reports — AI reads these to draft answers</small><input type="file" id="ff-files" multiple hidden accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.png,.jpg,.jpeg"></div>
       <div class="fl" id="file-list"></div>
     </div>
@@ -530,10 +531,33 @@ function editProject(pid){
   editId=pid;
   setFormData(p.data);
   // Clear file input and preview to prevent cross-project file contamination
-  $('ff-files').value='';$('file-list').innerHTML='';
+  $('ff-files').value='';$('file-list').innerHTML='';$('existing-files').innerHTML='';
   $('sp-loading').classList.remove('show');
   $('sp-title').textContent='Edit '+esc(p.data.name||'Project');
   $('ov').classList.add('open');$('sp').classList.add('open');
+  loadEditFiles(pid);
+}
+async function loadEditFiles(pid){
+  var el=$('existing-files');
+  try{
+    var r=await api('/api/files/'+TOOL+'/'+pid);
+    var files=r.files||[];
+    if(!files.length){el.innerHTML='';return}
+    el.innerHTML='<div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px">Uploaded files</div>'
+      +files.map(function(f){
+        return '<div class="fi"><span>📎 '+esc(f.original_name)+' <span style="color:var(--faint)">('+Math.round(f.size_bytes/1024)+'KB)</span></span>'
+          +'<div><a href="#" onclick="event.preventDefault();downloadFile(\''+f.id+'\',\''+esc(f.original_name)+'\')" style="margin-right:8px;font-size:12px" title="Download">↓</a>'
+          +'<a href="#" onclick="event.preventDefault();deleteFile(\''+f.id+'\',\''+pid+'\')" style="color:var(--red);font-size:12px" title="Delete">✕</a></div></div>';
+      }).join('');
+  }catch(e){el.innerHTML=''}
+}
+async function deleteFile(fid,pid){
+  if(!confirm('Delete this file?'))return;
+  try{
+    await api('/api/files/delete/'+fid,{method:'DELETE'});
+    toast('File deleted');
+    loadEditFiles(pid);
+  }catch(e){toast('Delete failed: '+e.message,false)}
 }
 async function deleteProject(pid){
   if(!confirm('Delete this project?'))return;
@@ -546,7 +570,7 @@ function openPanel(){
   $('sp-title').textContent='Add Project';
   // Reset form
   ['ff-name','ff-dev','ff-country','ff-rfp','ff-meth','ff-std','ff-regid','ff-status','ff-carbon','ff-url','ff-v26','ff-v27','ff-v28','ff-v29','ff-v30','ff-pd','ff-pp','ff-issue','ff-len','ff-avg','ff-life','ff-rat','ff-agency','ff-contact','ff-who','ff-notes'].forEach(function(id){var el=$(id);if(el)el.value=''});
-  $('file-list').innerHTML='';$('sp-loading').classList.remove('show');
+  $('file-list').innerHTML='';$('existing-files').innerHTML='';$('sp-loading').classList.remove('show');
   onRfpChange();
   $('ov').classList.add('open');$('sp').classList.add('open');
 }
