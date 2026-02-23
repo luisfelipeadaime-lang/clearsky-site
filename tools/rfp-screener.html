@@ -364,7 +364,12 @@ function showDetail(pid){
   tab.appendChild(det);
 
   if(!s||s.error){
-    det.innerHTML='<div style="padding:24px;text-align:center;color:var(--faint)">No AI screening results yet. Edit the project and save to trigger screening.</div>';
+    var errMsg=s&&s.error?'<div style="color:var(--red);font-size:13px;margin-bottom:12px">⚠ '+esc(s.error)+'</div>':'';
+    det.innerHTML='<div style="padding:24px;text-align:center">'
+      +errMsg
+      +'<div style="color:var(--faint);margin-bottom:16px">No AI screening results yet.</div>'
+      +'<button class="det-btn primary" onclick="reScreen(\''+pid+'\')" id="btn-rescreen">🔄 Screen with AI</button>'
+      +'</div>';
     det.classList.add('open');
     render();
     return;
@@ -376,6 +381,7 @@ function showDetail(pid){
     +'<div><div class="det-name">'+esc(d.name||'')+'</div><div class="det-meta">'+esc(d.developer||'')+' · '+esc(d.country||'')+' · '+esc(d.methodology||'')+' · '+esc(d.standard||'')+'</div></div>'
     +'</div><div class="det-bar-right">'
     +'<button class="det-btn primary" onclick="generateReport(\''+pid+'\')">📄 Download Report</button>'
+    +'<button class="det-btn" onclick="reScreen(\''+pid+'\')">🔄 Re-screen</button>'
     +'<button class="det-btn" onclick="editProject(\''+pid+'\')">✎ Edit</button>'
     +'<button class="det-close" onclick="closeDetail()">✕</button>'
     +'</div></div>';
@@ -423,6 +429,27 @@ function showDetail(pid){
 }
 function closeDetail(){openDetailId=null;$('detail').classList.remove('open');$('detail').innerHTML='';render()}
 function copyText(btn){var a=btn.previousElementSibling.textContent;navigator.clipboard.writeText(a).then(function(){var o=btn.textContent;btn.textContent='Copied!';btn.style.background='var(--green)';setTimeout(function(){btn.textContent=o;btn.style.background=''},1500)})}
+async function reScreen(pid){
+  var btn=document.getElementById('btn-rescreen');
+  var ld=$('sp-loading');ld.textContent='Running AI screening...';ld.classList.add('show');
+  if(btn)btn.disabled=true;
+  try{
+    // Extract any unextracted files first
+    var fl=await api('/api/files/'+TOOL+'/'+pid);
+    var n=(fl.files||[]).length;
+    for(var x=0;x<n;x++){
+      ld.textContent='Extracting document '+(x+1)+'/'+n+'...';
+      try{var ex=await api('/api/'+TOOL+'/projects/'+pid+'/extract',{method:'POST'});if(!ex.extracted&&ex.remaining===0)break}catch(e){break}
+    }
+    ld.textContent='Running AI screening...';
+    await api('/api/'+TOOL+'/projects/'+pid+'/screen',{method:'POST'});
+    toast('Re-screened!');
+  }catch(e){toast('Screening failed: '+e.message,false)}
+  ld.classList.remove('show');
+  closeDetail();
+  await loadProjects();
+  showDetail(pid);
+}
 
 // ═══ RFP-DEPENDENT DROPDOWNS ═══
 var METHS={ARR:['VM0047','ISM Reforestation','ISM Agroforestry','PV Acorn','M001 (Equitable Earth)','Other'],Biochar:['VM0044','Puro Biochar','ISM Biochar','Other']};
@@ -463,21 +490,28 @@ async function saveProject(){
         await api('/api/files/upload',{method:'POST',body:fd,headers:{}});
       }
     }
-    // Extract ALL unextracted docs (new uploads + any previously failed)
-    ld.textContent='Extracting documents...';
-    var totalFiles=fi.files.length||0;
-    try{var fl=await api('/api/files/'+TOOL+'/'+pid);totalFiles=Math.max(totalFiles,(fl.files||[]).length)}catch(e){}
-    if(totalFiles>0){
+    // Extract docs if new files uploaded
+    var didUpload=fi.files.length>0;
+    if(didUpload){
+      ld.textContent='Extracting documents...';
+      var totalFiles=fi.files.length;
+      try{var fl=await api('/api/files/'+TOOL+'/'+pid);totalFiles=Math.max(totalFiles,(fl.files||[]).length)}catch(e){}
       for(var x=0;x<totalFiles;x++){
         ld.textContent='Extracting document '+(x+1)+'/'+totalFiles+'...';
         try{var ex=await api('/api/'+TOOL+'/projects/'+pid+'/extract',{method:'POST'});if(!ex.extracted&&ex.remaining===0)break}catch(e){break}
       }
     }
-    // Screen (now with extracted doc content)
-    ld.textContent='Running AI screening...';
+    // Only call AI screening if: new files uploaded OR no valid screening exists yet
+    var hasValidScreening=false;
+    if(editId){var ep=projects.find(function(x){return x.id===editId});hasValidScreening=ep&&ep.screening&&!ep.screening.error}
     var screenOk=true;
-    try{await api('/api/'+TOOL+'/projects/'+pid+'/screen',{method:'POST'})}catch(e){screenOk=false;console.error('Screen error:',e);toast('Saved but AI screening failed: '+e.message,false)}
-    if(screenOk) toast('Saved & screened!');
+    if(didUpload||!hasValidScreening){
+      ld.textContent='Running AI screening...';
+      try{await api('/api/'+TOOL+'/projects/'+pid+'/screen',{method:'POST'})}catch(e){screenOk=false;console.error('Screen error:',e);toast('Saved but AI screening failed: '+e.message,false)}
+      if(screenOk) toast(didUpload?'Saved, extracted & screened!':'Saved & screened!');
+    }else{
+      toast('Saved! (screening unchanged — use Re-screen to update AI analysis)');
+    }
     ld.classList.remove('show');
     closePanel();
     await loadProjects();
