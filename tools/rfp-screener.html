@@ -463,17 +463,21 @@ async function saveProject(){
         await api('/api/files/upload',{method:'POST',body:fd,headers:{}});
       }
     }
-    // Extract docs first (so AI screening has content)
-    if(fi.files.length>0){
-      ld.textContent='Extracting documents...';
-      for(var x=0;x<fi.files.length;x++){
+    // Extract ALL unextracted docs (new uploads + any previously failed)
+    ld.textContent='Extracting documents...';
+    var totalFiles=fi.files.length||0;
+    try{var fl=await api('/api/files/'+TOOL+'/'+pid);totalFiles=Math.max(totalFiles,(fl.files||[]).length)}catch(e){}
+    if(totalFiles>0){
+      for(var x=0;x<totalFiles;x++){
+        ld.textContent='Extracting document '+(x+1)+'/'+totalFiles+'...';
         try{var ex=await api('/api/'+TOOL+'/projects/'+pid+'/extract',{method:'POST'});if(!ex.extracted&&ex.remaining===0)break}catch(e){break}
       }
     }
     // Screen (now with extracted doc content)
     ld.textContent='Running AI screening...';
-    try{await api('/api/'+TOOL+'/projects/'+pid+'/screen',{method:'POST'})}catch(e){console.error('Screen error:',e)}
-    toast('Saved & screened!');
+    var screenOk=true;
+    try{await api('/api/'+TOOL+'/projects/'+pid+'/screen',{method:'POST'})}catch(e){screenOk=false;console.error('Screen error:',e);toast('Saved but AI screening failed: '+e.message,false)}
+    if(screenOk) toast('Saved & screened!');
     ld.classList.remove('show');
     closePanel();
     await loadProjects();
