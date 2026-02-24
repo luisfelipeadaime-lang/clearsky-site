@@ -168,6 +168,7 @@ tbody tr.row.selected{background:#EFF6FF;box-shadow:inset 3px 0 0 var(--navy)}
 
   <div id="tab-arr"><div class="tbl-wrap"><table><thead><tr><th>Status</th><th>Project</th><th>Country</th><th>Methodology</th><th>Score</th><th>Total Volume</th><th>Docs</th><th>Actions</th></tr></thead><tbody id="tbody-arr"></tbody></table></div><div class="detail" id="detail"></div></div>
   <div id="tab-bio" style="display:none"><div class="tbl-wrap"><table><thead><tr><th>Status</th><th>Project</th><th>Country</th><th>Methodology</th><th>Score</th><th>Total Volume</th><th>Docs</th><th>Actions</th></tr></thead><tbody id="tbody-bio"></tbody></table></div></div>
+  <div id="tab-soil" style="display:none"><div class="tbl-wrap"><table><thead><tr><th>Status</th><th>Project</th><th>Country</th><th>Methodology</th><th>Score</th><th>Total Volume</th><th>Docs</th><th>Actions</th></tr></thead><tbody id="tbody-soil"></tbody></table></div></div>
   <div id="tab-brief" style="display:none">
     <div class="rfp-brief"><h2>ARR RFP Overview</h2><div class="sub">EY Afforestation, Reforestation & Revegetation — Feb 2026</div><pre>After a successful spot RFP in 2025, EY is seeking proposals for near-term offtake of high-quality Nature Based removal projects. This RFP is focused on ARR projects, deliveries 2026-2030.
 
@@ -192,6 +193,19 @@ ADDITIONAL: Feedstock sustainability certification, production facility details,
 
 EXCLUDED: Same as ARR — no OFAC, no unapproved methodologies
 DEADLINE: Same as ARR</pre></div>
+    <div class="rfp-brief"><h2>Soil Carbon RFP Overview</h2><div class="sub">EY Soil Carbon Removal Projects — Feb 2026</div><pre>Same procurement cycle as ARR and Biochar. Focused on soil carbon removal projects.
+
+ACCEPTED METHODOLOGIES: VM0042 Improved Agricultural Land Management, Climate Action Reserve U.S. Soil Enrichment Protocol
+STANDARDS: VCS (Verra), Climate Action Reserve (CAR)
+CARBON PROFILE: Removals only
+VOLUME: 10,000 – 60,000 tCO₂e per year per project
+CO-BENEFITS: Supply chain sustainability, biodiversity, improved livelihoods preferred
+PAYMENT: Prepayment discount offers encouraged alongside payment on delivery (50 days)
+RATINGS: Preferred B+ (Sylvera/BeZero) or Tier 2 (Calyx). Not required.
+GEOGRAPHIES: EY operational countries preferred (150+). OFAC excluded.
+
+DEADLINE: Same as ARR/Biochar — 27 February 2026
+SHORTLIST: Week of 2 March | DD: Week of 6 April | VERPA: June 2026</pre></div>
   </div>
 </div>
 
@@ -201,7 +215,7 @@ DEADLINE: Same as ARR</pre></div>
   <div class="sp-body">
     <div class="loading-bar" id="sp-loading"></div>
     <div class="sp-sec"><div class="sp-sec-t">Basic Info</div>
-      <div class="fr fr2"><div class="f"><label>Your name</label><input id="ff-who" placeholder="Ana / Carolina / Luis"></div><div class="f"><label>Target RFP<span class="rq">*</span></label><select id="ff-rfp" onchange="onRfpChange()"><option value="">Select...</option><option value="ARR">ARR (Reforestation)</option><option value="Biochar">Biochar</option></select></div></div>
+      <div class="fr fr2"><div class="f"><label>Your name</label><input id="ff-who" placeholder="Ana / Carolina / Luis"></div><div class="f"><label>Target RFP<span class="rq">*</span></label><select id="ff-rfp" onchange="onRfpChange()"><option value="">Select...</option><option value="ARR">ARR (Reforestation)</option><option value="Biochar">Biochar</option><option value="Soil Carbon">Soil Carbon</option></select></div></div>
       <div class="fr fr2"><div class="f"><label>Project name<span class="rq">*</span></label><input id="ff-name" placeholder="e.g. Fasera Reforestation"></div><div class="f"><label>Developer<span class="rq">*</span></label><input id="ff-dev" placeholder="Developer company"></div></div>
       <div class="fr fr2"><div class="f"><label>Country<span class="rq">*</span></label><input id="ff-country" placeholder="e.g. Mozambique"></div><div class="f"><label>Developer contact</label><input id="ff-contact" placeholder="Name, email, phone"></div></div>
     </div>
@@ -250,7 +264,8 @@ var openDetailId=null;
 // ═══ ACCEPTED METHODOLOGIES (for chip coloring) ═══
 var ARR_METH=['VM0047','ISM Reforestation','ISM Agroforestry','PV Acorn','M001 (Equitable Earth)'];
 var BIO_METH=['VM0044','Puro Biochar','ISM Biochar'];
-var ALL_ACCEPTED=[].concat(ARR_METH,BIO_METH);
+var SOIL_METH=['VM0042','CAR Soil Enrichment Protocol'];
+var ALL_ACCEPTED=[].concat(ARR_METH,BIO_METH,SOIL_METH);
 
 // ═══ HELPERS ═══
 function $(id){return document.getElementById(id)}
@@ -282,6 +297,7 @@ async function loadProjects(){
 function render(){
   var arrProjs=projects.filter(function(p){return p.data.rfp==='ARR'});
   var bioProjs=projects.filter(function(p){return p.data.rfp==='Biochar'});
+  var soilProjs=projects.filter(function(p){return p.data.rfp==='Soil Carbon'});
   var ready=0,gaps=0,fails=0;
   projects.forEach(function(p){if(!p.screening)return;var st=p.screening.overall_status||'';if(st.toLowerCase().indexOf('pass')>-1||st.toLowerCase().indexOf('ready')>-1)ready++;else if(st.toLowerCase().indexOf('fail')>-1||st.toLowerCase().indexOf('not')>-1)fails++;else gaps++});
 
@@ -294,10 +310,12 @@ function render(){
   // Tabs
   $('tabs-bar').innerHTML='<button class="tab'+(currentTab==='arr'?' active':'')+'" onclick="switchTab(\'arr\',this)">ARR <span class="cnt">'+arrProjs.length+'</span></button>'
     +'<button class="tab'+(currentTab==='bio'?' active':'')+'" onclick="switchTab(\'bio\',this)">Biochar <span class="cnt">'+bioProjs.length+'</span></button>'
+    +'<button class="tab'+(currentTab==='soil'?' active':'')+'" onclick="switchTab(\'soil\',this)">Soil Carbon <span class="cnt">'+soilProjs.length+'</span></button>'
     +'<button class="tab'+(currentTab==='brief'?' active':'')+'" onclick="switchTab(\'brief\',this)">RFP Brief</button>';
 
   renderTable('tbody-arr',arrProjs);
   renderTable('tbody-bio',bioProjs);
+  renderTable('tbody-soil',soilProjs);
 }
 
 function renderTable(tbodyId,projs){
@@ -344,6 +362,7 @@ function switchTab(t,el){
   currentTab=t;
   $('tab-arr').style.display=t==='arr'?'block':'none';
   $('tab-bio').style.display=t==='bio'?'block':'none';
+  $('tab-soil').style.display=t==='soil'?'block':'none';
   $('tab-brief').style.display=t==='brief'?'block':'none';
   $('btn-add-tbl').style.display=t==='brief'?'none':'flex';
   $('btn-add-hdr').style.display=t==='brief'?'none':'flex';
@@ -361,7 +380,7 @@ function showDetail(pid){
   var det=$('detail');
 
   // Move detail under the correct table
-  var tab=d.rfp==='Biochar'?$('tab-bio'):$('tab-arr');
+  var tab=d.rfp==='Biochar'?$('tab-bio'):d.rfp==='Soil Carbon'?$('tab-soil'):$('tab-arr');
   tab.appendChild(det);
 
   if(!s||s.error){
@@ -452,11 +471,11 @@ async function reScreen(pid){
 }
 
 // ═══ RFP-DEPENDENT DROPDOWNS ═══
-var METHS={ARR:['VM0047','ISM Reforestation','ISM Agroforestry','PV Acorn','M001 (Equitable Earth)','Other'],Biochar:['VM0044','Puro Biochar','ISM Biochar','Other']};
-var STDS={ARR:['VCS (Verra)','Isometric','Plan Vivo','Equitable Earth','Other'],Biochar:['VCS (Verra)','Puro Earth','Isometric','Other']};
+var METHS={ARR:['VM0047','ISM Reforestation','ISM Agroforestry','PV Acorn','M001 (Equitable Earth)','Other'],Biochar:['VM0044','Puro Biochar','ISM Biochar','Other'],'Soil Carbon':['VM0042','CAR Soil Enrichment Protocol','Other']};
+var STDS={ARR:['VCS (Verra)','Isometric','Plan Vivo','Equitable Earth','Other'],Biochar:['VCS (Verra)','Puro Earth','Isometric','Other'],'Soil Carbon':['VCS (Verra)','Climate Action Reserve','Other']};
 function onRfpChange(){
   var rfp=$('ff-rfp').value;
-  $('sec-arr').style.display=rfp==='Biochar'?'none':'block';
+  $('sec-arr').style.display=(rfp==='Biochar'||rfp==='Soil Carbon')?'none':'block';
   var m=$('ff-meth'),s=$('ff-std');
   m.innerHTML='<option value="">Select...</option>';s.innerHTML='<option value="">Select...</option>';
   if(rfp&&METHS[rfp]){METHS[rfp].forEach(function(v){m.innerHTML+='<option>'+v+'</option>'});STDS[rfp].forEach(function(v){s.innerHTML+='<option>'+v+'</option>'})}
