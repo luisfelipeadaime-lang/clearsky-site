@@ -290,26 +290,24 @@ var isAsking=false;
 
 // ══════ AUTH ══════
 async function init(){
-  if(!token){window.location.href='/';return}
-  try{
-    var r=await fetch(API+'/api/auth/me',{headers:{'Authorization':'Bearer '+token}});
-    var d=await r.json();
-    if(d.user){user=d.user;document.getElementById('user-name').textContent=user.name;loadDocs();loadTags()}
-    else{token=null;localStorage.removeItem('cs_token');window.location.href='/'}
-  }catch(e){
-    // Network error — don't redirect, just load without user name
-    document.getElementById('user-name').textContent='';
-    loadDocs();loadTags();
+  // Try to load user info for display, but don't block on it
+  if(token){
+    try{
+      var r=await fetch(API+'/api/auth/me',{headers:{'Authorization':'Bearer '+token}});
+      var d=await r.json();
+      if(d.user){user=d.user;document.getElementById('user-name').textContent=user.name}
+    }catch(e){}
   }
+  loadDocs();loadTags();
 }
-function logout(){token=null;localStorage.removeItem('cs_token');window.location.href='/'}
+function logout(){localStorage.removeItem('cs_token');window.location.href='/'}
 
 async function api(path,opts){
   opts=opts||{};opts.headers=opts.headers||{};
   if(token)opts.headers['Authorization']='Bearer '+token;
   if(!(opts.body instanceof FormData)&&opts.body&&!opts.headers['Content-Type'])opts.headers['Content-Type']='application/json';
   var r=await fetch(API+path,opts);
-  if(r.status===401){window.location.href='/';throw new Error('Session expired')}
+  if(!r.ok){var err=await r.json().catch(function(){return{error:'Request failed'}});throw new Error(err.error||'Request failed')}
   return r.json();
 }
 
