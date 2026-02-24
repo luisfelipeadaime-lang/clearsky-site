@@ -292,12 +292,17 @@ var isAsking=false;
 async function init(){
   if(!token){window.location.href='/';return}
   try{
-    var r=await api('/api/auth/me');
-    if(r.user){user=r.user;document.getElementById('user-name').textContent=user.name;loadDocs();loadTags()}
-    else{window.location.href='/'}
-  }catch(e){window.location.href='/'}
+    var r=await fetch(API+'/api/auth/me',{headers:{'Authorization':'Bearer '+token}});
+    var d=await r.json();
+    if(d.user){user=d.user;document.getElementById('user-name').textContent=user.name;loadDocs();loadTags()}
+    else{token=null;localStorage.removeItem('cs_token');window.location.href='/'}
+  }catch(e){
+    // Network error — don't redirect, just load without user name
+    document.getElementById('user-name').textContent='';
+    loadDocs();loadTags();
+  }
 }
-function logout(){localStorage.removeItem('cs_token');window.location.href='/'}
+function logout(){token=null;localStorage.removeItem('cs_token');window.location.href='/'}
 
 async function api(path,opts){
   opts=opts||{};opts.headers=opts.headers||{};
