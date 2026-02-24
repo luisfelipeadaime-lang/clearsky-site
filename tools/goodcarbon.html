@@ -50,7 +50,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
 thead th{background:#F8FAFC;padding:9px 12px;text-align:left;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);border-bottom:2px solid var(--border);white-space:nowrap}
-th:nth-child(1){width:80px}th:nth-child(2){width:auto}th:nth-child(3){width:100px}th:nth-child(4){width:110px}th:nth-child(5){width:60px}th:nth-child(6){width:130px}th:nth-child(7){width:55px}th:nth-child(8){width:100px}
+th:nth-child(1){width:70px}th:nth-child(2){width:auto}th:nth-child(3){width:90px}th:nth-child(4){width:100px}th:nth-child(5){width:50px}th:nth-child(6){width:120px}th:nth-child(7){width:150px}th:nth-child(8){width:45px}th:nth-child(9){width:90px}
 tbody td{padding:10px 12px;border-bottom:1px solid #F1F5F9;vertical-align:middle;overflow:hidden;text-overflow:ellipsis}
 tbody tr.row{cursor:pointer;transition:background .1s}
 tbody tr.row:hover{background:#F8FAFC}
@@ -60,6 +60,11 @@ tbody tr.row.selected{background:#EFF6FF;box-shadow:inset 3px 0 0 var(--navy)}
 .badge.pass{background:var(--green-bg);color:var(--green)}.badge.fail{background:var(--red-bg);color:var(--red)}.badge.gaps{background:var(--amber-bg);color:var(--amber)}.badge.pending{background:#F1F5F9;color:var(--faint)}
 .badge .bd{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .badge.pass .bd{background:var(--green)}.badge.fail .bd{background:var(--red)}.badge.gaps .bd{background:var(--amber)}.badge.pending .bd{background:var(--faint)}
+.rt-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.3px;white-space:nowrap;margin-right:3px}
+.rt-badge.rt-aaa{background:#DCFCE7;color:#16A34A}.rt-badge.rt-aa{background:#DCFCE7;color:#16A34A}.rt-badge.rt-a{background:#D1FAE5;color:#059669}
+.rt-badge.rt-bbb{background:#FEF3C7;color:#D97706}.rt-badge.rt-bb{background:#FEF3C7;color:#D97706}.rt-badge.rt-b{background:#FEF3C7;color:#D97706}
+.rt-badge.rt-ccc{background:#FEE2E2;color:#DC2626}.rt-badge.rt-cc{background:#FEE2E2;color:#DC2626}.rt-badge.rt-c{background:#FEE2E2;color:#DC2626}
+.rt-badge.rt-d{background:#FEE2E2;color:#991B1B}.rt-badge.rt-nr{background:#F1F5F9;color:#94A3B8}
 .sc{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px}
 .sc.hi{color:var(--green)}.sc.md{color:var(--amber)}.sc.lo{color:var(--red)}
 .mc{font-size:11px;padding:2px 7px;border-radius:4px;font-weight:600;white-space:nowrap}
@@ -165,7 +170,7 @@ tbody tr.row.selected{background:#EFF6FF;box-shadow:inset 3px 0 0 var(--navy)}
     <button class="btn-gold" id="btn-add-tbl" onclick="openPanel()">+ Add Project</button>
   </div>
 
-  <div id="tab-all"><div class="tbl-wrap"><table><thead><tr><th>Status</th><th>Project</th><th>Country</th><th>Methodology</th><th>Score</th><th>Total Volume</th><th>Docs</th><th>Actions</th></tr></thead><tbody id="tbody-all"></tbody></table></div><div class="detail" id="detail"></div></div>
+  <div id="tab-all"><div class="tbl-wrap"><table><thead><tr><th>Status</th><th>Project</th><th>Country</th><th>Methodology</th><th>Score</th><th>Total Volume</th><th>Ratings</th><th>Docs</th><th>Actions</th></tr></thead><tbody id="tbody-all"></tbody></table></div><div class="detail" id="detail"></div></div>
   <div id="tab-brief" style="display:none">
     <div class="rfp-brief"><h2>goodcarbon NBS Portfolio RFP</h2><div class="sub">600,000 tCO₂e Nature-Based Solutions — 2028-2030 Delivery</div><pre>Buyer: Unnamed F&B client via goodcarbon GmbH
 Submission: rfp@goodcarbon.earth
@@ -228,8 +233,9 @@ DIFFERENTIATORS: Portfolio approach, Swiss Re insurance alignment, beyond-carbon
     <div class="sp-sec"><div class="sp-sec-t">Pricing (USD / tCO₂e)</div>
       <div class="fr fr2"><div class="f"><label>On delivery</label><input id="ff-pd" type="number" placeholder="e.g. 25"></div><div class="f"><label>With prepayment</label><input id="ff-pp" type="number" placeholder="e.g. 20"></div></div>
     </div>
-    <div class="sp-sec"><div class="sp-sec-t">Quality</div>
-      <div class="fr fr2"><div class="f"><label>Rating</label><input id="ff-rat" placeholder="e.g. BBB"></div><div class="f"><label>Agency</label><select id="ff-agency"><option value="">Select...</option><option>BeZero</option><option>Sylvera</option><option>Calyx Global</option><option>None</option></select></div></div>
+    <div class="sp-sec"><div class="sp-sec-t">Third-Party Ratings</div>
+      <div class="fr fr2"><div class="f"><label>BeZero Rating</label><select id="ff-bezero"><option value="">Select...</option><option>AAA</option><option>AA</option><option>A</option><option>BB</option><option>B</option><option>C</option><option>D</option><option>Not Rated</option><option>Unknown</option></select><p class="ht">Free at bezerocarbon.com</p></div><div class="f"><label>Sylvera Rating</label><select id="ff-sylvera"><option value="">Select...</option><option>AAA</option><option>AA</option><option>A</option><option>BBB</option><option>BB</option><option>B</option><option>CCC</option><option>CC</option><option>C</option><option>D</option><option>Not Rated</option><option>Unknown</option></select><p class="ht">Paid — sylvera.com</p></div></div>
+      <div class="fr fr2"><div class="f"><label>Calyx Rating</label><select id="ff-calyx"><option value="">Select...</option><option>AAA</option><option>AA</option><option>A</option><option>BBB</option><option>BB</option><option>B</option><option>CCC</option><option>CC</option><option>C</option><option>D</option><option>Not Rated</option><option>Unknown</option></select><p class="ht">Free tier at calyxglobal.com</p></div><div class="f"></div></div>
     </div>
     <div class="sp-sec"><div class="sp-sec-t">Documents</div>
       <div class="uz" onclick="document.getElementById('ff-files').click()"><p><strong>Drop files</strong> or click to browse</p><small>PDDs, decks, maps, reports — AI reads these to draft answers</small><input type="file" id="ff-files" multiple hidden accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.png,.jpg,.jpeg"></div>
@@ -296,9 +302,10 @@ function render(){
   renderTable('tbody-all',allProjs);
 }
 
+function ratingBadge(label,val){if(!val||val==='Unknown')return'';var cls='rt-nr';var v=val.toUpperCase();if(v==='AAA'||v==='AA')cls='rt-aaa';else if(v==='A')cls='rt-a';else if(v==='BBB'||v==='BB'||v==='B')cls='rt-bbb';else if(v==='CCC'||v==='CC'||v==='C')cls='rt-ccc';else if(v==='D')cls='rt-d';else if(v==='NOT RATED')cls='rt-nr';return '<span class="rt-badge '+cls+'" title="'+esc(label)+'">'+esc(label[0])+':'+esc(val)+'</span>'}
 function renderTable(tbodyId,projs){
   var tb=$(tbodyId);
-  if(!projs.length){tb.innerHTML='<tr><td colspan="8" class="empty-msg">No projects yet — click <strong>+ Add Project</strong> to start</td></tr>';return}
+  if(!projs.length){tb.innerHTML='<tr><td colspan="9" class="empty-msg">No projects yet — click <strong>+ Add Project</strong> to start</td></tr>';return}
   tb.innerHTML=projs.map(function(p){
     var d=p.data,s=p.screening,files=projectFiles[p.id]||[];
     var status='pending',statusLabel='Pending',score=null,scoreClass='';
@@ -317,6 +324,7 @@ function renderTable(tbodyId,projs){
     var volClass=vol>100000?'g':vol>0?'y':'r';
     var volStr=vol>=1000?(vol/1000).toFixed(0)+'k':vol||'0';
     var hasReport=s&&!s.error;
+    var ratings=ratingBadge('BeZero',d.bezero_rating)+ratingBadge('Sylvera',d.sylvera_rating)+ratingBadge('Calyx',d.calyx_rating);
 
     return '<tr class="row'+(openDetailId===p.id?' selected':'')+'" onclick="showDetail(\''+p.id+'\')">'
       +'<td><span class="badge '+status+'"><span class="bd"></span>'+statusLabel+'</span></td>'
@@ -325,6 +333,7 @@ function renderTable(tbodyId,projs){
       +'<td><span class="mc '+methClass+'">'+esc(d.methodology||'—')+'</span></td>'
       +'<td>'+(score!==null?'<span class="sc '+scoreClass+'">'+score+'</span>':'<span style="color:var(--faint)">—</span>')+'</td>'
       +'<td><div class="vb"><div class="vt"><div class="vf '+volClass+'" style="width:'+volPct+'%"></div></div><span class="vl">'+volStr+'</span></div></td>'
+      +'<td>'+(ratings||'<span style="color:var(--faint);font-size:10px">—</span>')+'</td>'
       +'<td><span class="fc">📎 '+files.length+'</span></td>'
       +'<td><div class="acts">'
         +(hasReport?'<button class="ab rp" title="Report" onclick="event.stopPropagation();generateReport(\''+p.id+'\')">📄</button>':'')
@@ -369,7 +378,9 @@ function showDetail(pid){
   var sc=s.score>=70?'hi':s.score>=40?'md':'lo';
   var html='<div class="det-bar"><div class="det-bar-left">'
     +'<div class="det-score '+sc+'">'+s.score+'</div>'
-    +'<div><div class="det-name">'+esc(d.name||'')+'</div><div class="det-meta">'+esc(d.developer||'')+' · '+esc(d.country||'')+' · '+esc(d.methodology||'')+' · '+esc(d.standard||'')+'</div></div>'
+    +'<div><div class="det-name">'+esc(d.name||'')+'</div><div class="det-meta">'+esc(d.developer||'')+' · '+esc(d.country||'')+' · '+esc(d.methodology||'')+' · '+esc(d.standard||'')+'</div>'
+    +(d.bezero_rating||d.sylvera_rating||d.calyx_rating?'<div style="margin-top:6px">'+ratingBadge('BeZero',d.bezero_rating)+ratingBadge('Sylvera',d.sylvera_rating)+ratingBadge('Calyx',d.calyx_rating)+'</div>':'')
+    +'</div>'
     +'</div><div class="det-bar-right">'
     +'<button class="det-btn primary" onclick="generateReport(\''+pid+'\')">📄 Download Report</button>'
     +'<button class="det-btn" onclick="editProject(\''+pid+'\')">✎ Edit</button>'
@@ -421,8 +432,8 @@ function closeDetail(){openDetailId=null;$('detail').classList.remove('open');$(
 function copyText(btn){var a=btn.previousElementSibling.textContent;navigator.clipboard.writeText(a).then(function(){var o=btn.textContent;btn.textContent='Copied!';btn.style.background='var(--green)';setTimeout(function(){btn.textContent=o;btn.style.background=''},1500)})}
 
 // ═══ FORM: SAVE ═══
-function getFormData(){return{name:$('ff-name').value,developer:$('ff-dev').value,country:$('ff-country').value,rfp:'NBS',methodology:$('ff-meth').value,standard:$('ff-std').value,registryId:$('ff-regid').value,status:$('ff-status').value,carbon:$('ff-carbon').value,registryUrl:$('ff-url').value,v2026:$('ff-v26').value,v2027:$('ff-v27').value,v2028:$('ff-v28').value,v2029:$('ff-v29').value,v2030:$('ff-v30').value,priceD:$('ff-pd').value,priceP:$('ff-pp').value,projectType:$('ff-ptype').value,region:$('ff-region').value,nativeSpeciesPct:$('ff-native').value,benefitSharingPct:$('ff-benefit').value,fpicStatus:$('ff-fpic').value,biodiversityAssessment:$('ff-biodiv').value,rating:$('ff-rat').value,ratingAgency:$('ff-agency').value,contact:$('ff-contact').value,submittedBy:$('ff-who').value,notes:$('ff-notes').value}}
-function setFormData(d){$('ff-name').value=d.name||'';$('ff-dev').value=d.developer||'';$('ff-country').value=d.country||'';$('ff-meth').value=d.methodology||'';$('ff-std').value=d.standard||'';$('ff-regid').value=d.registryId||'';$('ff-status').value=d.status||'';$('ff-carbon').value=d.carbon||'';$('ff-url').value=d.registryUrl||'';$('ff-v26').value=d.v2026||'';$('ff-v27').value=d.v2027||'';$('ff-v28').value=d.v2028||'';$('ff-v29').value=d.v2029||'';$('ff-v30').value=d.v2030||'';$('ff-pd').value=d.priceD||'';$('ff-pp').value=d.priceP||'';$('ff-ptype').value=d.projectType||'';$('ff-region').value=d.region||'';$('ff-native').value=d.nativeSpeciesPct||'';$('ff-benefit').value=d.benefitSharingPct||'';$('ff-fpic').value=d.fpicStatus||'';$('ff-biodiv').value=d.biodiversityAssessment||'';$('ff-rat').value=d.rating||'';$('ff-agency').value=d.ratingAgency||'';$('ff-contact').value=d.contact||'';$('ff-who').value=d.submittedBy||'';$('ff-notes').value=d.notes||''}
+function getFormData(){return{name:$('ff-name').value,developer:$('ff-dev').value,country:$('ff-country').value,rfp:'NBS',methodology:$('ff-meth').value,standard:$('ff-std').value,registryId:$('ff-regid').value,status:$('ff-status').value,carbon:$('ff-carbon').value,registryUrl:$('ff-url').value,v2026:$('ff-v26').value,v2027:$('ff-v27').value,v2028:$('ff-v28').value,v2029:$('ff-v29').value,v2030:$('ff-v30').value,priceD:$('ff-pd').value,priceP:$('ff-pp').value,projectType:$('ff-ptype').value,region:$('ff-region').value,nativeSpeciesPct:$('ff-native').value,benefitSharingPct:$('ff-benefit').value,fpicStatus:$('ff-fpic').value,biodiversityAssessment:$('ff-biodiv').value,bezero_rating:$('ff-bezero').value,sylvera_rating:$('ff-sylvera').value,calyx_rating:$('ff-calyx').value,contact:$('ff-contact').value,submittedBy:$('ff-who').value,notes:$('ff-notes').value}}
+function setFormData(d){$('ff-name').value=d.name||'';$('ff-dev').value=d.developer||'';$('ff-country').value=d.country||'';$('ff-meth').value=d.methodology||'';$('ff-std').value=d.standard||'';$('ff-regid').value=d.registryId||'';$('ff-status').value=d.status||'';$('ff-carbon').value=d.carbon||'';$('ff-url').value=d.registryUrl||'';$('ff-v26').value=d.v2026||'';$('ff-v27').value=d.v2027||'';$('ff-v28').value=d.v2028||'';$('ff-v29').value=d.v2029||'';$('ff-v30').value=d.v2030||'';$('ff-pd').value=d.priceD||'';$('ff-pp').value=d.priceP||'';$('ff-ptype').value=d.projectType||'';$('ff-region').value=d.region||'';$('ff-native').value=d.nativeSpeciesPct||'';$('ff-benefit').value=d.benefitSharingPct||'';$('ff-fpic').value=d.fpicStatus||'';$('ff-biodiv').value=d.biodiversityAssessment||'';$('ff-bezero').value=d.bezero_rating||'';$('ff-sylvera').value=d.sylvera_rating||'';$('ff-calyx').value=d.calyx_rating||'';$('ff-contact').value=d.contact||'';$('ff-who').value=d.submittedBy||'';$('ff-notes').value=d.notes||''}
 
 async function saveProject(){
   var d=getFormData();
@@ -490,7 +501,7 @@ function openPanel(){
   editId=null;
   $('sp-title').textContent='Add Project';
   // Reset form
-  ['ff-name','ff-dev','ff-country','ff-meth','ff-std','ff-regid','ff-status','ff-carbon','ff-url','ff-v26','ff-v27','ff-v28','ff-v29','ff-v30','ff-pd','ff-pp','ff-ptype','ff-region','ff-native','ff-benefit','ff-fpic','ff-biodiv','ff-rat','ff-agency','ff-contact','ff-who','ff-notes'].forEach(function(id){var el=$(id);if(el)el.value=''});
+  ['ff-name','ff-dev','ff-country','ff-meth','ff-std','ff-regid','ff-status','ff-carbon','ff-url','ff-v26','ff-v27','ff-v28','ff-v29','ff-v30','ff-pd','ff-pp','ff-ptype','ff-region','ff-native','ff-benefit','ff-fpic','ff-biodiv','ff-bezero','ff-sylvera','ff-calyx','ff-contact','ff-who','ff-notes'].forEach(function(id){var el=$(id);if(el)el.value=''});
   $('file-list').innerHTML='';$('sp-loading').classList.remove('show');
   $('ov').classList.add('open');$('sp').classList.add('open');
 }
@@ -529,7 +540,7 @@ ch.push(new docx.Paragraph({spacing:{after:200},border:{bottom:{style:docx.Borde
 ch.push(new docx.Paragraph({spacing:{after:120},children:[new docx.TextRun({text:"Score: "+s.score+"/100",font:"Arial",size:36,bold:true,color:sc}),new docx.TextRun({text:"    Status: "+s.overall_status,font:"Arial",size:36,bold:true,color:sc})]}));
 ch.push(new docx.Paragraph({spacing:{after:200},shading:{fill:LGRAY,type:docx.ShadingType.CLEAR},children:[new docx.TextRun({text:s.summary,font:"Arial",size:22,color:"1A1A2E"})]}));
 ch.push(new docx.Paragraph({spacing:{before:300,after:200},children:[new docx.TextRun({text:"Project Details",font:"Arial",size:28,bold:true,color:NAVY})]}));
-var dr=[["Project Name",p.name||""],["Developer",p.developer||""],["Country",p.country||""],["Project Type",p.projectType||""],["Geographic Region",p.region||""],["Methodology",p.methodology||""],["Standard",p.standard||""],["Registry ID",p.registryId||"Not provided"],["Carbon Profile",p.carbon||""],["Native Species %",p.nativeSpeciesPct?p.nativeSpeciesPct+"%":"Not provided"],["Benefit-Sharing %",p.benefitSharingPct?p.benefitSharingPct+"%":"Not provided"],["FPIC Status",p.fpicStatus||"Not provided"],["Biodiversity Assessment",p.biodiversityAssessment||"Not provided"],["Volume 2026",p.v2026?parseInt(p.v2026).toLocaleString()+" tCO2e":"N/A"],["Volume 2027",p.v2027?parseInt(p.v2027).toLocaleString()+" tCO2e":"N/A"],["Volume 2028",p.v2028?parseInt(p.v2028).toLocaleString()+" tCO2e":"N/A"],["Volume 2029",p.v2029?parseInt(p.v2029).toLocaleString()+" tCO2e":"N/A"],["Volume 2030",p.v2030?parseInt(p.v2030).toLocaleString()+" tCO2e":"N/A"],["Price (delivery)",p.priceD?"$"+p.priceD+"/tCO2e":"Not provided"],["Price (prepay)",p.priceP?"$"+p.priceP+"/tCO2e":"Not provided"]];
+var dr=[["Project Name",p.name||""],["Developer",p.developer||""],["Country",p.country||""],["Project Type",p.projectType||""],["Geographic Region",p.region||""],["Methodology",p.methodology||""],["Standard",p.standard||""],["Registry ID",p.registryId||"Not provided"],["Carbon Profile",p.carbon||""],["BeZero Rating",p.bezero_rating||"Not provided"],["Sylvera Rating",p.sylvera_rating||"Not provided"],["Calyx Rating",p.calyx_rating||"Not provided"],["Native Species %",p.nativeSpeciesPct?p.nativeSpeciesPct+"%":"Not provided"],["Benefit-Sharing %",p.benefitSharingPct?p.benefitSharingPct+"%":"Not provided"],["FPIC Status",p.fpicStatus||"Not provided"],["Biodiversity Assessment",p.biodiversityAssessment||"Not provided"],["Volume 2026",p.v2026?parseInt(p.v2026).toLocaleString()+" tCO2e":"N/A"],["Volume 2027",p.v2027?parseInt(p.v2027).toLocaleString()+" tCO2e":"N/A"],["Volume 2028",p.v2028?parseInt(p.v2028).toLocaleString()+" tCO2e":"N/A"],["Volume 2029",p.v2029?parseInt(p.v2029).toLocaleString()+" tCO2e":"N/A"],["Volume 2030",p.v2030?parseInt(p.v2030).toLocaleString()+" tCO2e":"N/A"],["Price (delivery)",p.priceD?"$"+p.priceD+"/tCO2e":"Not provided"],["Price (prepay)",p.priceP?"$"+p.priceP+"/tCO2e":"Not provided"]];
 ch.push(new docx.Table({width:{size:9360,type:docx.WidthType.DXA},columnWidths:[3200,6160],rows:dr.map(function(r){return new docx.TableRow({children:[new docx.TableCell({borders:bds,width:{size:3200,type:docx.WidthType.DXA},margins:cm,shading:{fill:"E8EDF2",type:docx.ShadingType.CLEAR},children:[new docx.Paragraph({children:[new docx.TextRun({text:r[0],font:"Arial",size:20,bold:true,color:NAVY})]})]}),new docx.TableCell({borders:bds,width:{size:6160,type:docx.WidthType.DXA},margins:cm,children:[new docx.Paragraph({children:[new docx.TextRun({text:r[1],font:"Arial",size:20})]})]})]})})
 }));
 if(s.criteria_results&&s.criteria_results.length){
