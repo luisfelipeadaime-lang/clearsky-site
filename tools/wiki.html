@@ -576,9 +576,10 @@ async function sendMessage(){
     removeLoading(loadingId);
 
     if(r.error){
-      appendMsg('ai','Sorry, I encountered an error: '+r.error,[]);
+      appendMsg('ai','Sorry, I encountered an error: '+r.error,[],null);
     }else{
-      appendMsg('ai',r.answer,r.sources||[]);
+      var meta={model:r.model||'',docs:r.context_docs||0,chars:r.context_chars||0};
+      appendMsg('ai',r.answer,r.sources||[],meta);
       conversation.push({role:'user',content:question});
       conversation.push({role:'assistant',content:r.answer});
     }
@@ -592,7 +593,7 @@ async function sendMessage(){
   input.focus();
 }
 
-function appendMsg(role,content,sources){
+function appendMsg(role,content,sources,meta){
   var msgs=document.getElementById('chat-msgs');
   var div=document.createElement('div');
   div.className='msg msg-'+role;
@@ -605,11 +606,17 @@ function appendMsg(role,content,sources){
     if(sources&&sources.length){
       srcHtml='<div class="msg-sources">';
       sources.forEach(function(s){
-        srcHtml+='<span class="msg-src" onclick="highlightDoc(\''+s.id+'\')">'+esc(s.title)+'</span>';
+        var label=s.source==='projects'?'Project':s.source==='extracts'?'Extract':'Doc';
+        srcHtml+='<span class="msg-src" onclick="highlightDoc(\''+s.id+'\')"><span style="opacity:.5;font-size:9px;margin-right:3px">'+label+'</span>'+esc(s.title)+'</span>';
       });
       srcHtml+='</div>';
     }
-    div.innerHTML='<div class="msg-bubble">'+html+'</div>'+srcHtml;
+    var metaHtml='';
+    if(meta&&meta.model){
+      var mName=meta.model.includes('haiku')?'Haiku':'Sonnet';
+      metaHtml='<div style="font-size:10px;color:var(--faint);margin-top:6px;font-family:JetBrains Mono,monospace">'+mName+' · '+meta.docs+' sources · '+(meta.chars/1000).toFixed(1)+'k chars</div>';
+    }
+    div.innerHTML='<div class="msg-bubble">'+html+'</div>'+srcHtml+metaHtml;
   }
 
   msgs.appendChild(div);
