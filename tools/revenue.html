@@ -1145,8 +1145,10 @@ function getOwnerName(ownerId) {
 function populateTeamSelect() {
   const select = document.getElementById('teamSelect');
   select.innerHTML = '<option value="">All Team</option>';
-  // Known team members first
   const knownNames = ['ana', 'carolina', 'luis', 'brian'];
+  const added = new Set();
+
+  // Known team members first (by name)
   for (const name of knownNames) {
     const ownerId = ownerNameToId[name];
     if (ownerId) {
@@ -1155,19 +1157,33 @@ function populateTeamSelect() {
       opt.textContent = name.charAt(0).toUpperCase() + name.slice(1);
       opt.dataset.name = name;
       select.appendChild(opt);
+      added.add(ownerId);
     }
   }
-  // Any other owners
+
+  // Remaining owners (named or unnamed from fallback)
   for (const o of cache.owners) {
+    if (added.has(o.owner_id)) continue;
     const first = (o.firstname || '').toLowerCase();
-    if (!knownNames.includes(first) && first) {
+    if (first && !knownNames.includes(first)) {
       const opt = document.createElement('option');
       opt.value = o.owner_id;
-      opt.textContent = o.firstname || o.email || o.owner_id;
+      opt.textContent = o.firstname || o.email || 'Owner ' + o.owner_id;
       opt.dataset.name = first;
       select.appendChild(opt);
+      added.add(o.owner_id);
+    } else if (!first) {
+      // Fallback: owner_id only, show with contact count if available
+      const label = o.contact_count ? `Team #${o.owner_id.slice(-4)} (${o.contact_count})` : `Owner ${o.owner_id.slice(-4)}`;
+      const opt = document.createElement('option');
+      opt.value = o.owner_id;
+      opt.textContent = label;
+      opt.dataset.name = '';
+      select.appendChild(opt);
+      added.add(o.owner_id);
     }
   }
+
   // Restore saved selection
   if (selectedOwnerId) {
     select.value = selectedOwnerId;
