@@ -376,7 +376,7 @@ body {
 .search-bar:focus { border-color: var(--gold); }
 .search-wrap { position: relative; margin-bottom: 12px; }
 .search-wrap::before {
-  content: '\u2315'; position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  content: '\2315'; position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
   font-size: 15px; color: var(--text-muted); pointer-events: none;
 }
 
@@ -773,7 +773,7 @@ let actionFilterOwner = '';
 let actionSearchTerm = '';
 
 // Buyer table state
-let buyerSortCol = 'company';
+let buyerSortCol = 'tier';
 let buyerSortDir = 'asc';
 let buyerSearchTerm = '';
 let buyerColumnFilters = {};
@@ -1066,8 +1066,18 @@ async function loadActionList() {
     const isProfiled = !!buyerProfile;
     const isAiExtracted = buyerProfile?.source === 'ai_extracted';
 
+    // Skip internal team contacts
+    const INTERNAL_DOMAINS = ['clearskyltd.com', 'leadingcarbon.com', 'maboroshi.com'];
+    if (email && INTERNAL_DOMAINS.some(d => email.toLowerCase().endsWith('@' + d))) continue;
+
     // Skip ALL confirmed non-buyers
     if (buyerProfile && buyerProfile.is_buyer === 0) continue;
+
+    // Skip sellers (mandate contains seller/supply-side/project developer keywords)
+    if (buyerProfile) {
+      const mandate = (buyerProfile.buying_mandate || '').toLowerCase();
+      if (mandate.includes('seller') || mandate.includes('supply side') || mandate.includes('project developer')) continue;
+    }
 
     // Skip dead leads: LOW confidence + cold + no engagement in 60d
     if (buyerProfile && buyerProfile.extraction_confidence === 'low' &&
@@ -1340,7 +1350,7 @@ function renderActionCard(a, rank) {
   }
 
   return `
-  <div class="action-card ${a.cardClass}" id="card-${a.hubspotId || rank}" onclick="openContactDetail('${a.hubspotId || ''}', '${esc(a.email)}')">
+  <div class="action-card ${a.cardClass}" id="card-${a.hubspotId || rank}" data-contact-id="${a.hubspotId || ''}" onclick="openContactDetail('${a.hubspotId || ''}', '${esc(a.email)}')">
     <div class="action-rank ${rank <= 3 ? 'top3' : ''}" title="Priority rank #${rank} (score: ${a.score})">${rank}</div>
     <div class="action-body">
       <div class="action-who">${esc(a.name)}${a.jobTitle ? ` <span>${esc(a.jobTitle)}</span>` : ''} <span>@ ${esc(a.company)}</span> ${ownerBadge}</div>
@@ -1440,10 +1450,16 @@ async function reassignContact(hubspotId, newOwnerId, newOwnerName) {
   closeAllMenus();
   try {
     await apiPatch('/revenue/reassign-contact', { hubspot_id: hubspotId, new_owner_id: newOwnerId });
-    toast(`Reassigned to ${newOwnerName.charAt(0).toUpperCase() + newOwnerName.slice(1)}`);
+    const displayName = newOwnerName.charAt(0).toUpperCase() + newOwnerName.slice(1);
+    toast(`Reassigned to ${displayName}`);
     // Update local cache
     const c = cache.activeContacts.find(c => c.hubspot_id === hubspotId);
     if (c) c.owner_id = newOwnerId;
+    // Live-update owner badges in the DOM for this contact
+    document.querySelectorAll(`[data-contact-id="${hubspotId}"] .owner-badge`).forEach(badge => {
+      badge.className = `owner-badge ${getOwnerBadgeClass(newOwnerId)}`;
+      if (badge.childNodes[0]) badge.childNodes[0].textContent = displayName;
+    });
     renderFilteredActions();
   } catch (e) {
     toast('Reassign failed: ' + e.message, 'error');
@@ -1907,7 +1923,8 @@ function renderBuyers() {
     }
   }
 
-  // Sort
+  // Sort — tier sort uses T1>T2>T3 ordering with secondary sort by confidence
+  const CONF_ORDER = { high: 0, medium: 1, low: 2, '': 3 };
   filteredBuyers.sort((a, b) => {
     let av = a[buyerSortCol] || '';
     let bv = b[buyerSortCol] || '';
@@ -1915,7 +1932,10 @@ function renderBuyers() {
     if (typeof bv === 'string') bv = bv.toLowerCase();
     if (av < bv) return buyerSortDir === 'asc' ? -1 : 1;
     if (av > bv) return buyerSortDir === 'asc' ? 1 : -1;
-    return 0;
+    // Secondary sort: by confidence (high > medium > low)
+    const ca = CONF_ORDER[((a.extraction_confidence || '')).toLowerCase()] ?? 3;
+    const cb = CONF_ORDER[((b.extraction_confidence || '')).toLowerCase()] ?? 3;
+    return ca - cb;
   });
 
   // Collect unique values for column filters
@@ -2021,7 +2041,7 @@ function toggleBuyerExpand(id) {
 function sortBuyers(col) {
   if (buyerSortCol === col) {
     if (buyerSortDir === 'asc') buyerSortDir = 'desc';
-    else if (buyerSortDir === 'desc') { buyerSortCol = 'company'; buyerSortDir = 'asc'; }
+    else if (buyerSortDir === 'desc') { buyerSortCol = 'tier'; buyerSortDir = 'asc'; }
   } else {
     buyerSortCol = col;
     buyerSortDir = 'asc';
