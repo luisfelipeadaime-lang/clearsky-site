@@ -83,13 +83,17 @@ body {
   font-weight: 500;
   color: var(--text);
 }
-.header-meta {
+.header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
-  font-size: 12px;
-  color: var(--text-muted);
+  gap: 12px;
 }
+.sync-status {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+.sync-status.syncing { color: var(--gold); }
 .header-date {
   font-family: var(--mono);
   font-size: 11px;
@@ -154,6 +158,7 @@ body {
 }
 .tab-badge.red { background: var(--red-bg); color: var(--red); }
 .tab-badge.gold { background: var(--gold-bg); color: var(--gold); }
+.tab-badge.blue { background: var(--blue-bg); color: var(--blue); }
 
 /* CONTENT */
 .content {
@@ -208,10 +213,14 @@ body {
 }
 .btn-outline:hover { border-color: var(--text-muted); color: var(--text); }
 .btn-sm { padding: 5px 10px; font-size: 11px; }
+.btn-xs { padding: 3px 8px; font-size: 10px; }
 .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
 .btn-danger:hover { background: rgba(248,113,113,0.2); }
 .btn-green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
 .btn-green:hover { background: rgba(52,211,153,0.2); }
+.btn-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(96,165,250,0.2); }
+.btn-blue:hover { background: rgba(96,165,250,0.2); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* STATS BAR */
 .stats-bar {
@@ -266,9 +275,9 @@ body {
   cursor: pointer;
 }
 .action-card:hover { background: var(--card-hover); border-color: var(--border-light); }
-.action-card.overdue { border-left: 3px solid var(--red); }
-.action-card.due-today { border-left: 3px solid var(--yellow); }
-.action-card.upcoming { border-left: 3px solid var(--green); }
+.action-card.stale-red { border-left: 3px solid var(--red); }
+.action-card.stale-yellow { border-left: 3px solid var(--yellow); }
+.action-card.stale-green { border-left: 3px solid var(--green); }
 
 .action-rank {
   width: 36px;
@@ -303,18 +312,20 @@ body {
   margin-bottom: 6px;
   line-height: 1.4;
 }
-.action-offer {
-  font-size: 12px;
-  color: var(--gold);
-  background: var(--gold-bg);
-  padding: 4px 8px;
-  border-radius: 4px;
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.action-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
 }
+.action-tag {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.action-tag.profiled { background: var(--green-bg); color: var(--green); }
+.action-tag.unprofiled { background: rgba(107,114,128,0.15); color: var(--text-muted); }
 
 .action-buttons {
   display: flex;
@@ -404,6 +415,7 @@ body {
 .owner-carolina { background: rgba(96,165,250,0.15); color: var(--blue); }
 .owner-luis { background: var(--gold-bg); color: var(--gold); }
 .owner-brian { background: var(--green-bg); color: var(--green); }
+.owner-unassigned { background: rgba(107,114,128,0.15); color: var(--text-muted); }
 
 /* TABLE */
 .data-table {
@@ -559,6 +571,63 @@ body {
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
+/* ENGAGEMENT PANEL */
+.engagement-panel {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.engagement-panel h4 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.engagement-item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.engagement-item:last-child { border-bottom: none; }
+.engagement-type {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 6px;
+}
+.engagement-type.email { background: var(--blue-bg); color: var(--blue); }
+.engagement-type.call { background: var(--green-bg); color: var(--green); }
+.engagement-type.meeting { background: var(--gold-bg2); color: var(--gold); }
+.engagement-type.note { background: rgba(107,114,128,0.15); color: var(--text-muted); }
+.engagement-date { color: var(--text-muted); font-family: var(--mono); font-size: 11px; }
+
+/* BUYER SPLIT */
+.buyer-section-header {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin: 24px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.buyer-section-header .count {
+  font-family: var(--mono);
+  background: var(--card);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
 /* EMPTY STATE */
 .empty-state {
   text-align: center;
@@ -601,6 +670,7 @@ body {
 }
 .toast-success { background: var(--green-bg); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
 .toast-error { background: var(--red-bg); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+.toast-info { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(96,165,250,0.3); }
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
 /* RESPONSIVE */
@@ -632,7 +702,9 @@ body {
       <div class="brand-divider"></div>
       <div class="brand-title">Revenue Command Center</div>
     </div>
-    <div class="header-meta">
+    <div class="header-actions">
+      <span class="sync-status" id="syncStatus"></span>
+      <button class="btn btn-outline btn-sm" id="syncBtn" onclick="syncHubSpot()">Sync HubSpot</button>
       <span class="status-dot"></span>
       <span class="header-date" id="headerDate"></span>
     </div>
@@ -642,10 +714,10 @@ body {
 <!-- TABS -->
 <div class="tabs">
   <div class="tabs-inner">
-    <div class="tab active" data-tab="actions">⚡ Actions <span class="tab-badge red" id="actionsBadge">0</span></div>
-    <div class="tab" data-tab="deals">📊 Deal Tracker <span class="tab-badge gold" id="dealsBadge">0</span></div>
-    <div class="tab" data-tab="inventory">📦 Inventory</div>
-    <div class="tab" data-tab="buyers">🎯 Buyer Intel</div>
+    <div class="tab active" data-tab="actions">Actions <span class="tab-badge red" id="actionsBadge">0</span></div>
+    <div class="tab" data-tab="deals">Deal Tracker <span class="tab-badge gold" id="dealsBadge">0</span></div>
+    <div class="tab" data-tab="inventory">Inventory</div>
+    <div class="tab" data-tab="buyers">Buyer Intel <span class="tab-badge blue" id="buyersBadge">0</span></div>
   </div>
 </div>
 
@@ -660,17 +732,13 @@ body {
     <div class="stats-bar" id="actionStats"></div>
     <div class="section-header">
       <div>
-        <div class="section-title">Today's Priority Actions</div>
-        <div class="section-subtitle">Ranked by revenue probability — work top to bottom</div>
+        <div class="section-title">Priority Actions</div>
+        <div class="section-subtitle">HubSpot contacts ranked by staleness — red = 14+ days, yellow = 7-14 days</div>
       </div>
-      <button class="btn btn-outline btn-sm" onclick="refreshActionList()">↻ Refresh</button>
+      <button class="btn btn-outline btn-sm" onclick="loadActionList()">Refresh</button>
     </div>
     <div class="action-list" id="actionList">
-      <div class="empty-state">
-        <div class="empty-state-icon">📋</div>
-        <div class="empty-state-text">Add deals and buyer profiles to generate your daily action list</div>
-        <button class="btn btn-gold" onclick="switchTab('deals'); openDealModal()">+ Add First Deal</button>
-      </div>
+      <div class="loading"><div class="spinner"></div>Loading HubSpot contacts...</div>
     </div>
   </div>
 
@@ -680,11 +748,16 @@ body {
     <div class="section-header">
       <div>
         <div class="section-title">Deal Pipeline</div>
-        <div class="section-subtitle">Drag deals through stages — red border = stuck too long</div>
+        <div class="section-subtitle">Red border = stuck too long</div>
       </div>
-      <button class="btn btn-gold" onclick="openDealModal()">+ New Deal</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" onclick="openImportDealsModal()">Import from HubSpot</button>
+        <button class="btn btn-gold" onclick="openDealModal()">+ New Deal</button>
+      </div>
     </div>
-    <div class="kanban" id="kanban"></div>
+    <div class="kanban" id="kanban">
+      <div class="loading" style="grid-column:1/-1"><div class="spinner"></div>Loading deals...</div>
+    </div>
   </div>
 
   <!-- TAB 3: INVENTORY -->
@@ -698,9 +771,9 @@ body {
     </div>
     <div class="filters" id="inventoryFilters">
       <button class="filter-pill active" data-filter="all">All</button>
-      <button class="filter-pill" data-filter="available">🟢 Available Now</button>
-      <button class="filter-pill" data-filter="forward">🟡 Forward</button>
-      <button class="filter-pill" data-filter="pipeline">🔵 Pipeline</button>
+      <button class="filter-pill" data-filter="available">Available Now</button>
+      <button class="filter-pill" data-filter="forward">Forward</button>
+      <button class="filter-pill" data-filter="pipeline">Pipeline</button>
     </div>
     <div style="overflow-x:auto;">
       <table class="data-table" id="inventoryTable">
@@ -723,35 +796,24 @@ body {
 
   <!-- TAB 4: BUYER INTEL -->
   <div class="tab-content" id="tab-buyers">
+    <div class="stats-bar" id="buyerStats"></div>
     <div class="section-header">
       <div>
         <div class="section-title">Buyer Intelligence</div>
-        <div class="section-subtitle">Know your counterparties — mandate, appetite, objections</div>
+        <div class="section-subtitle">Profiled buyers from your database + unprofiled HubSpot contacts</div>
       </div>
-      <button class="btn btn-gold" onclick="openBuyerModal()">+ Add Buyer</button>
+      <button class="btn btn-gold" onclick="openBuyerModal()">+ Profile Buyer</button>
     </div>
     <div class="filters" id="buyerFilters">
-      <button class="filter-pill active" data-filter="all">All</button>
-      <button class="filter-pill" data-filter="hot">🔴 Hot</button>
-      <button class="filter-pill" data-filter="warm">🟡 Warm</button>
-      <button class="filter-pill" data-filter="cold">🔵 Cold</button>
-      <button class="filter-pill" data-filter="new">🟢 New</button>
+      <button class="filter-pill active" data-filter="all">All Profiled</button>
+      <button class="filter-pill" data-filter="hot">Hot</button>
+      <button class="filter-pill" data-filter="warm">Warm</button>
+      <button class="filter-pill" data-filter="cold">Cold</button>
+      <button class="filter-pill" data-filter="new">New</button>
+      <button class="filter-pill" data-filter="unprofiled">Unprofiled</button>
     </div>
-    <div style="overflow-x:auto;">
-      <table class="data-table" id="buyersTable">
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Mandate</th>
-            <th>Credit Types</th>
-            <th>Tier</th>
-            <th>Status</th>
-            <th>Last Need</th>
-          </tr>
-        </thead>
-        <tbody id="buyersBody"></tbody>
-      </table>
+    <div id="buyersContent">
+      <div class="loading"><div class="spinner"></div>Loading buyer data...</div>
     </div>
   </div>
 </div>
@@ -765,7 +827,7 @@ body {
 // ============================================================
 // CONFIG
 // ============================================================
-const API_BASE = 'https://api-tools.oga.earth/api';
+const API = 'https://api-tools.oga.earth/api';
 const STAGES = ['conversation','pricing_sent','negotiating','closed_won','closed_lost'];
 const STAGE_LABELS = {
   conversation: 'Conversation',
@@ -783,147 +845,102 @@ const REL_STATUSES = ['hot','warm','cold','dormant','new'];
 const TIERS = ['T1','T2','T3'];
 
 // ============================================================
-// STATE (localStorage fallback until API connected)
+// IN-MEMORY CACHE (loaded from API, never from localStorage)
 // ============================================================
-let state = {
+let cache = {
   deals: [],
   projects: [],
   buyers: [],
-  actions: []
+  hubspotContacts: [],
+  hubspotCompanies: [],
+  hubspotDeals: [],
+  lastSync: null
 };
 
-function loadState() {
-  try {
-    const saved = localStorage.getItem('clearsky_revenue_state');
-    if (saved) {
-      state = JSON.parse(saved);
-    }
-    // Seed projects if empty
-    if (state.projects.length === 0) {
-      state.projects = getSeedProjects();
-      saveState();
-    }
-  } catch(e) { console.error('Failed to load state', e); }
-}
-
-function saveState() {
-  try {
-    localStorage.setItem('clearsky_revenue_state', JSON.stringify(state));
-  } catch(e) { console.error('Failed to save state', e); }
-}
-
-function generateId() {
-  return Math.random().toString(36).substr(2, 16);
-}
-
-function getSeedProjects() {
-  return [
-    { id: generateId(), name: 'Woodcache La Veta', short_name: 'Woodcache', project_type: 'TSB', registry: 'Puro.earth', status: 'available', available_volume: 750, volume_unit: 'CORCs', price_floor_usd: 140, price_ceiling_usd: 180, commission_min_pct: 3, commission_max_pct: 5, clearsky_role: 'principal', target_buyers: '["CDR mandate","EY RFP","Puro marketplace"]', one_liner: '750 CORCs spot delivery, terrestrial storage biomass, Colorado USA', delivery_date: 'immediate', corsia_eligible: false },
-    { id: generateId(), name: 'West Fraser Biochar', short_name: 'West Fraser', project_type: 'biochar', registry: 'Puro.earth', status: 'available', available_volume: 20000, volume_unit: 'CORCs', price_floor_usd: 100, price_ceiling_usd: 160, commission_min_pct: 3, commission_max_pct: 5, clearsky_role: 'non_exclusive_marketer', target_buyers: '["CDR mandate","EY RFP","biochar buyers"]', one_liner: '20K biochar CORCs, major producer, non-exclusive marketing', delivery_date: 'immediate', corsia_eligible: false },
-    { id: generateId(), name: 'Aperam', short_name: 'Aperam', project_type: 'biochar', registry: 'Puro.earth', status: 'available', available_volume: null, volume_unit: 'CORCs', price_floor_usd: 80, price_ceiling_usd: 140, commission_min_pct: 3, commission_max_pct: 5, clearsky_role: 'broker', target_buyers: '["CDR mandate","industrial buyers"]', one_liner: 'Industrial biochar credits from Aperam steel', delivery_date: 'immediate', corsia_eligible: false },
-    { id: generateId(), name: 'Fasera Australia', short_name: 'Fasera', project_type: 'TSB', registry: 'Puro.earth', status: 'forward', available_volume: 4000, volume_unit: 'CORCs', price_floor_usd: 190, price_ceiling_usd: 240, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'exclusive_marketer', target_buyers: '["CDR mandate","forward buyers","institutional"]', one_liner: '4K CORCs Q2 2026, Australian reforestation TSB', delivery_date: '2026-06-30', corsia_eligible: false },
-    { id: generateId(), name: 'Ecogreen Cameroon', short_name: 'Ecogreen', project_type: 'plastic', registry: 'Verra', status: 'pipeline', available_volume: 12500, volume_unit: 'plastic credits', price_floor_usd: 200, price_ceiling_usd: 350, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'developer', target_buyers: '["F&B brands","packaging","plastic mandate"]', one_liner: '12.5K plastic credits/yr, ClearSky proprietary project', delivery_date: '2026-12-31', corsia_eligible: false },
-    { id: generateId(), name: 'Roded Israel', short_name: 'Roded', project_type: 'plastic', registry: 'Verra', status: 'pipeline', available_volume: 9428, volume_unit: 'plastic credits', price_floor_usd: 200, price_ceiling_usd: 350, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'developer', target_buyers: '["F&B brands","packaging","plastic mandate"]', one_liner: '9.4K plastic credits/yr, ClearSky proprietary project', delivery_date: '2027-03-31', corsia_eligible: false },
-    { id: generateId(), name: 'Bolivia REDD+ TIOC', short_name: 'Bolivia', project_type: 'REDD+', registry: 'VCS', status: 'pipeline', available_volume: 5000000, volume_unit: 'tCO2e', price_floor_usd: 4, price_ceiling_usd: 5.50, commission_min_pct: 3, commission_max_pct: 5, clearsky_role: 'broker', target_buyers: '["CORSIA","voluntary bulk","compliance"]', one_liner: 'VM0015→VM0048 migration pending, 5M tCO2e/vintage, far shot timeline', delivery_date: 'TBD', corsia_eligible: false },
-    { id: generateId(), name: 'Sierra Leone Blue Carbon', short_name: 'Sierra Leone', project_type: 'blue_carbon', registry: 'VCS', status: 'pipeline', available_volume: null, volume_unit: 'tCO2e', price_floor_usd: 30, price_ceiling_usd: 50, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'broker', target_buyers: '["NBS buyers","blue carbon","institutional"]', one_liner: 'Mangrove restoration, West Africa, forward offtake available', delivery_date: '2027-06-30', corsia_eligible: false },
-    { id: generateId(), name: 'Spain MITECO ARR', short_name: 'Spain ARR', project_type: 'ARR', registry: 'MITECO', status: 'pipeline', available_volume: null, volume_unit: 'tCO2e', price_floor_usd: 60, price_ceiling_usd: 80, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'developer', target_buyers: '["EU compliance","Spanish corporates","ESG funds"]', one_liner: 'Spanish reforestation under MITECO carbon registry', delivery_date: '2027-01-01', corsia_eligible: false }
-  ];
+// ============================================================
+// API LAYER (no fallback — 100% server-driven)
+// ============================================================
+async function api(endpoint, method = 'GET', body = null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(`${API}${endpoint}`, opts);
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`API ${res.status}: ${text}`);
+  }
+  return res.json();
 }
 
 // ============================================================
-// API LAYER (with localStorage fallback)
+// DATA LOADING
 // ============================================================
-async function apiCall(endpoint, method = 'GET', body = null) {
+async function loadAll() {
   try {
-    const opts = { method, headers: { 'Content-Type': 'application/json' } };
-    if (body) opts.body = JSON.stringify(body);
-    const res = await fetch(`${API_BASE}${endpoint}`, opts);
-    if (!res.ok) throw new Error(`API ${res.status}`);
-    return await res.json();
+    const [deals, projects, buyers] = await Promise.all([
+      api('/revenue/deals'),
+      api('/revenue/projects'),
+      api('/revenue/buyers')
+    ]);
+    cache.deals = deals.data || [];
+    cache.projects = projects.data || [];
+    cache.buyers = buyers.data || [];
   } catch (e) {
-    console.warn('API unavailable, using localStorage:', e.message);
-    return null;
+    console.error('Failed to load core data:', e);
+    toast('Failed to load data: ' + e.message, 'error');
   }
 }
 
-// Try API first, fall back to localStorage
-async function loadDeals() {
-  const res = await apiCall('/revenue/deals');
-  if (res && res.data) { state.deals = res.data; saveState(); }
-  return state.deals;
-}
-async function loadProjects() {
-  const res = await apiCall('/revenue/projects');
-  if (res && res.data) { state.projects = res.data; saveState(); }
-  return state.projects;
-}
-async function loadBuyers() {
-  const res = await apiCall('/revenue/buyers');
-  if (res && res.data) { state.buyers = res.data; saveState(); }
-  return state.buyers;
+async function loadHubSpotCache() {
+  try {
+    const [contacts, companies, deals] = await Promise.all([
+      api('/hubspot/contacts/all'),
+      api('/hubspot/companies/all'),
+      api('/hubspot/deals/all')
+    ]);
+    cache.hubspotContacts = contacts.data || [];
+    cache.hubspotCompanies = companies.data || [];
+    cache.hubspotDeals = deals.data || [];
+    if (contacts.data && contacts.data.length > 0) {
+      cache.lastSync = contacts.data[0].synced_at;
+    }
+  } catch (e) {
+    console.warn('HubSpot cache empty — run sync first:', e.message);
+  }
 }
 
-async function saveDeal(deal) {
-  if (deal.id) {
-    await apiCall(`/revenue/deals/${deal.id}`, 'PUT', deal);
-    const idx = state.deals.findIndex(d => d.id === deal.id);
-    if (idx >= 0) state.deals[idx] = { ...state.deals[idx], ...deal, updated_at: new Date().toISOString() };
+async function syncHubSpot() {
+  const btn = document.getElementById('syncBtn');
+  const status = document.getElementById('syncStatus');
+  btn.disabled = true;
+  btn.textContent = 'Syncing...';
+  status.textContent = 'Syncing HubSpot...';
+  status.className = 'sync-status syncing';
+
+  try {
+    const result = await api('/hubspot/sync');
+    cache.lastSync = new Date().toISOString();
+    toast(`Synced ${result.contacts_synced || 0} contacts, ${result.companies_synced || 0} companies, ${result.deals_synced || 0} deals`);
+    await loadHubSpotCache();
+    renderCurrentTab();
+  } catch (e) {
+    toast('Sync failed: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sync HubSpot';
+    updateSyncStatus();
+  }
+}
+
+function updateSyncStatus() {
+  const el = document.getElementById('syncStatus');
+  if (cache.lastSync) {
+    const ago = timeSince(cache.lastSync);
+    el.textContent = `Last sync: ${ago}`;
+    el.className = 'sync-status';
   } else {
-    deal.id = generateId();
-    deal.created_at = new Date().toISOString();
-    deal.updated_at = deal.created_at;
-    const res = await apiCall('/revenue/deals', 'POST', deal);
-    if (res && res.data) deal = res.data;
-    state.deals.push(deal);
+    el.textContent = 'Not synced';
+    el.className = 'sync-status';
   }
-  saveState();
-  return deal;
-}
-
-async function saveProject(project) {
-  if (project.id) {
-    await apiCall(`/revenue/projects/${project.id}`, 'PUT', project);
-    const idx = state.projects.findIndex(p => p.id === project.id);
-    if (idx >= 0) state.projects[idx] = { ...state.projects[idx], ...project, updated_at: new Date().toISOString() };
-  } else {
-    project.id = generateId();
-    project.created_at = new Date().toISOString();
-    project.updated_at = project.created_at;
-    state.projects.push(project);
-  }
-  saveState();
-  return project;
-}
-
-async function saveBuyer(buyer) {
-  if (buyer.id) {
-    await apiCall(`/revenue/buyers/${buyer.id}`, 'PUT', buyer);
-    const idx = state.buyers.findIndex(b => b.id === buyer.id);
-    if (idx >= 0) state.buyers[idx] = { ...state.buyers[idx], ...buyer, updated_at: new Date().toISOString() };
-  } else {
-    buyer.id = generateId();
-    buyer.created_at = new Date().toISOString();
-    buyer.updated_at = buyer.created_at;
-    state.buyers.push(buyer);
-  }
-  saveState();
-  return buyer;
-}
-
-async function deleteDeal(id) {
-  await apiCall(`/revenue/deals/${id}`, 'DELETE');
-  state.deals = state.deals.filter(d => d.id !== id);
-  saveState();
-}
-async function deleteProject(id) {
-  await apiCall(`/revenue/projects/${id}`, 'DELETE');
-  state.projects = state.projects.filter(p => p.id !== id);
-  saveState();
-}
-async function deleteBuyer(id) {
-  await apiCall(`/revenue/buyers/${id}`, 'DELETE');
-  state.buyers = state.buyers.filter(b => b.id !== id);
-  saveState();
 }
 
 // ============================================================
@@ -932,10 +949,15 @@ async function deleteBuyer(id) {
 function switchTab(tabName) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === `tab-${tabName}`));
-  if (tabName === 'actions') refreshActionList();
-  if (tabName === 'deals') renderKanban();
-  if (tabName === 'inventory') renderInventory();
-  if (tabName === 'buyers') renderBuyers();
+  renderCurrentTab();
+}
+
+function renderCurrentTab() {
+  const tab = document.querySelector('.tab.active')?.dataset.tab || 'actions';
+  if (tab === 'actions') loadActionList();
+  if (tab === 'deals') renderKanban();
+  if (tab === 'inventory') renderInventory();
+  if (tab === 'buyers') renderBuyers();
 }
 
 document.querySelectorAll('.tab').forEach(tab => {
@@ -943,173 +965,281 @@ document.querySelectorAll('.tab').forEach(tab => {
 });
 
 // ============================================================
-// ACTION LIST
+// ACTION LIST — HubSpot contacts ranked by staleness
 // ============================================================
-function generateActionList() {
-  const actions = [];
+function loadActionList() {
+  const contacts = cache.hubspotContacts;
+  const buyers = cache.buyers;
+  const deals = cache.deals;
+  const projects = cache.projects;
   const today = new Date();
 
-  // Source 1: Active deals needing follow-up
-  for (const deal of state.deals) {
-    if (['closed_won','closed_lost','dead'].includes(deal.stage)) continue;
+  // Build lookup of profiled buyer emails
+  const profiledEmails = new Set(buyers.map(b => (b.contact_email || '').toLowerCase()).filter(Boolean));
 
-    const lastActivity = deal.last_activity_date ? new Date(deal.last_activity_date) : new Date(deal.created_at);
-    const daysSince = Math.floor((today - lastActivity) / 86400000);
-    const nextAction = deal.next_action_date ? new Date(deal.next_action_date) : null;
-    const daysToAction = nextAction ? Math.floor((nextAction - today) / 86400000) : 999;
+  const actions = [];
 
-    let urgency = 'upcoming';
+  // Source 1: HubSpot contacts ranked by staleness
+  for (const contact of contacts) {
+    const name = [contact.firstname, contact.lastname].filter(Boolean).join(' ') || contact.email || 'Unknown';
+    const company = contact.company || '—';
+    const email = contact.email || '';
+
+    // Calculate days since last activity
+    const lastActivity = contact.last_activity_date || contact.last_email_date || contact.synced_at;
+    const lastDate = lastActivity ? new Date(lastActivity) : null;
+    const daysSince = lastDate ? Math.floor((today - lastDate) / 86400000) : 999;
+
+    // Determine staleness level
+    let staleLevel = 'green';
     let trigger = '';
+    let score = 0;
 
-    if (daysSince > 14) {
-      urgency = 'overdue';
-      trigger = `🔴 No contact in ${daysSince} days — relationship going cold`;
-    } else if (daysSince > 7) {
-      urgency = 'due-today';
-      trigger = `🟡 ${daysSince} days since last activity — follow up now`;
-    } else if (daysToAction <= 0) {
-      urgency = 'due-today';
-      trigger = `🟡 Action due: ${deal.next_action || 'Follow up'}`;
-    } else if (deal.next_action) {
-      trigger = `🟢 Next: ${deal.next_action}`;
+    if (daysSince >= 14) {
+      staleLevel = 'red';
+      trigger = `No activity in ${daysSince} days — relationship going cold`;
+      score += 40;
+    } else if (daysSince >= 7) {
+      staleLevel = 'yellow';
+      trigger = `${daysSince} days since last activity — follow up soon`;
+      score += 20;
     } else {
-      trigger = `🟢 Active deal — ${STAGE_LABELS[deal.stage]}`;
+      trigger = `Active — last activity ${daysSince}d ago`;
+      score += 5;
     }
 
-    let score = 0;
-    score += Math.min((deal.value_usd || 0) / 10000, 20);
-    if (daysToAction <= 0) score += 30;
-    if (daysSince > 14) score += 25;
-    else if (daysSince > 7) score += 15;
-    if (deal.stage === 'negotiating') score += 20;
-    if (deal.stage === 'pricing_sent') score += 15;
+    // Check if this contact has a buyer profile
+    const isProfiled = profiledEmails.has(email.toLowerCase());
+    const buyerProfile = isProfiled ? buyers.find(b => (b.contact_email || '').toLowerCase() === email.toLowerCase()) : null;
 
-    const matchedProject = deal.project_name ? state.projects.find(p => p.short_name === deal.project_name || p.name === deal.project_name) : null;
-    const offer = matchedProject
-      ? `${matchedProject.short_name || matchedProject.name}: $${matchedProject.price_floor_usd}-${matchedProject.price_ceiling_usd}/${matchedProject.volume_unit}`
-      : deal.deal_description;
+    // Check if has active deal
+    const activeDeal = deals.find(d =>
+      !['closed_won','closed_lost','dead'].includes(d.stage) &&
+      (d.contact_email === email || d.company === company)
+    );
+
+    // Boost score for profiled buyers with inventory matches
+    if (buyerProfile) {
+      let buyerTypes = [];
+      try { buyerTypes = JSON.parse(buyerProfile.credit_types_interested || '[]'); } catch(e) {}
+
+      const availableProjects = projects.filter(p => ['available','forward'].includes(p.status));
+      const matches = availableProjects.filter(p => {
+        let targetBuyers = [];
+        try { targetBuyers = JSON.parse(p.target_buyers || '[]'); } catch(e) {}
+        return buyerTypes.some(bt =>
+          p.project_type.toLowerCase().includes(bt.toLowerCase()) ||
+          targetBuyers.some(tb => tb.toLowerCase().includes(bt.toLowerCase()))
+        );
+      });
+
+      if (matches.length > 0) {
+        score += 15 + matches.length * 3;
+        trigger += ` | Matches: ${matches.map(m => m.short_name || m.name).join(', ')}`;
+      }
+
+      if (buyerProfile.tier === 'T1') score += 10;
+      if (buyerProfile.tier === 'T2') score += 5;
+      if (buyerProfile.relationship_status === 'hot') score += 15;
+      if (buyerProfile.relationship_status === 'warm') score += 8;
+    }
+
+    // Boost for contacts with deals
+    if (activeDeal) {
+      score += 10;
+      if (activeDeal.stage === 'negotiating') score += 15;
+      if (activeDeal.stage === 'pricing_sent') score += 10;
+    }
 
     actions.push({
-      type: 'deal',
-      urgency,
+      staleLevel,
       score,
-      who: deal.contact_name || deal.company,
-      company: deal.company,
+      daysSince,
+      name,
+      company,
+      email,
       trigger,
-      offer,
-      value: deal.value_usd,
-      dealId: deal.id,
-      owner: deal.owner
+      isProfiled,
+      buyerProfile,
+      activeDeal,
+      hubspotId: contact.hubspot_id,
+      jobTitle: contact.jobtitle
     });
   }
 
-  // Source 2: Buyer profiles matched to available inventory
-  const availableProjects = state.projects.filter(p => ['available','forward'].includes(p.status));
+  // Source 2: Active deals with no HubSpot contact match
+  for (const deal of deals) {
+    if (['closed_won','closed_lost','dead'].includes(deal.stage)) continue;
+    const hasContactMatch = contacts.some(c => c.email === deal.contact_email || c.company === deal.company);
+    if (hasContactMatch) continue;
 
-  for (const buyer of state.buyers) {
-    if (buyer.relationship_status === 'dormant') continue;
-    // Skip if already has active deal
-    if (state.deals.some(d => d.company === buyer.company && !['closed_won','closed_lost','dead'].includes(d.stage))) continue;
+    const lastActivity = deal.last_activity_date || deal.created_at;
+    const daysSince = lastActivity ? Math.floor((today - new Date(lastActivity)) / 86400000) : 999;
 
-    let buyerTypes = [];
-    try { buyerTypes = JSON.parse(buyer.credit_types_interested || '[]'); } catch(e) {}
+    let staleLevel = 'green';
+    let score = 10;
+    if (daysSince >= 14) { staleLevel = 'red'; score += 30; }
+    else if (daysSince >= 7) { staleLevel = 'yellow'; score += 15; }
 
-    const matches = availableProjects.filter(p => {
-      let targetBuyers = [];
-      try { targetBuyers = JSON.parse(p.target_buyers || '[]'); } catch(e) {}
-      return buyerTypes.some(bt =>
-        p.project_type.toLowerCase().includes(bt.toLowerCase()) ||
-        targetBuyers.some(tb => tb.toLowerCase().includes(bt.toLowerCase()))
-      );
-    });
-
-    if (matches.length === 0) continue;
-
-    let score = 0;
-    if (buyer.tier === 'T1') score += 15;
-    if (buyer.tier === 'T2') score += 8;
-    if (buyer.relationship_status === 'hot') score += 20;
-    if (buyer.relationship_status === 'warm') score += 10;
-    score += matches.length * 5;
+    score += Math.min((deal.value_usd || 0) / 10000, 20);
 
     actions.push({
-      type: 'buyer_match',
-      urgency: buyer.relationship_status === 'hot' ? 'due-today' : 'upcoming',
+      staleLevel,
       score,
-      who: buyer.contact_name || buyer.company,
-      company: buyer.company,
-      trigger: `Mandate matches: ${matches.map(m => m.short_name || m.name).join(', ')}`,
-      offer: matches[0].one_liner,
-      value: null,
-      buyerId: buyer.id,
-      owner: buyer.relationship_owner
+      daysSince,
+      name: deal.contact_name || deal.company,
+      company: deal.company,
+      email: deal.contact_email || '',
+      trigger: `Deal: ${deal.deal_description} (${STAGE_LABELS[deal.stage] || deal.stage})`,
+      isProfiled: false,
+      buyerProfile: null,
+      activeDeal: deal,
+      hubspotId: null,
+      jobTitle: null
     });
   }
 
-  return actions.sort((a, b) => b.score - a.score).slice(0, 15);
-}
+  // Sort by score descending, take top 25
+  actions.sort((a, b) => b.score - a.score);
+  const topActions = actions.slice(0, 25);
 
-function refreshActionList() {
-  const actions = generateActionList();
-  const container = document.getElementById('actionList');
-
-  // Update badge
-  const overdue = actions.filter(a => a.urgency === 'overdue').length;
-  document.getElementById('actionsBadge').textContent = overdue || actions.length;
-  document.getElementById('actionsBadge').className = `tab-badge ${overdue > 0 ? 'red' : 'gold'}`;
-
-  // Stats
-  const pipeline = state.deals.filter(d => !['closed_won','closed_lost','dead'].includes(d.stage));
-  const pipelineValue = pipeline.reduce((sum, d) => sum + (d.value_usd || 0), 0);
-  const closedThisMonth = state.deals.filter(d => d.stage === 'closed_won' && d.updated_at && new Date(d.updated_at).getMonth() === new Date().getMonth());
-  const closedValue = closedThisMonth.reduce((sum, d) => sum + (d.value_usd || 0), 0);
-  const staleDeals = pipeline.filter(d => {
-    const last = d.last_activity_date ? new Date(d.last_activity_date) : new Date(d.created_at);
-    return (new Date() - last) / 86400000 > 14;
-  });
+  // Update stats
+  const staleRed = contacts.filter(c => {
+    const last = c.last_activity_date || c.last_email_date;
+    return last ? (today - new Date(last)) / 86400000 >= 14 : true;
+  }).length;
+  const staleYellow = contacts.filter(c => {
+    const last = c.last_activity_date || c.last_email_date;
+    if (!last) return false;
+    const days = (today - new Date(last)) / 86400000;
+    return days >= 7 && days < 14;
+  }).length;
+  const totalContacts = contacts.length;
+  const profiledCount = contacts.filter(c => profiledEmails.has((c.email || '').toLowerCase())).length;
+  const profiledPct = totalContacts > 0 ? Math.round(profiledCount / totalContacts * 100) : 0;
+  const pipeline = deals.filter(d => !['closed_won','closed_lost','dead'].includes(d.stage));
+  const pipelineValue = pipeline.reduce((s, d) => s + (d.value_usd || 0), 0);
 
   document.getElementById('actionStats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">HubSpot Contacts</div><div class="stat-value">${totalContacts}</div><div class="stat-delta">${profiledPct}% profiled</div></div>
     <div class="stat-card"><div class="stat-label">Pipeline Value</div><div class="stat-value gold">$${formatNum(pipelineValue)}</div><div class="stat-delta">${pipeline.length} active deals</div></div>
-    <div class="stat-card"><div class="stat-label">Closed This Month</div><div class="stat-value green">$${formatNum(closedValue)}</div><div class="stat-delta">${closedThisMonth.length} deals</div></div>
-    <div class="stat-card"><div class="stat-label">Stale (>14 days)</div><div class="stat-value ${staleDeals.length > 0 ? 'red' : ''}">${staleDeals.length}</div><div class="stat-delta ${staleDeals.length > 0 ? 'down' : ''}">need attention</div></div>
-    <div class="stat-card"><div class="stat-label">Today's Actions</div><div class="stat-value">${actions.length}</div><div class="stat-delta">${overdue} overdue</div></div>
+    <div class="stat-card"><div class="stat-label">Stale (14d+)</div><div class="stat-value ${staleRed > 0 ? 'red' : ''}">${staleRed}</div><div class="stat-delta ${staleRed > 0 ? 'down' : ''}">need attention</div></div>
+    <div class="stat-card"><div class="stat-label">Warning (7-14d)</div><div class="stat-value" style="color:var(--yellow)">${staleYellow}</div><div class="stat-delta">follow up soon</div></div>
   `;
 
-  if (actions.length === 0) {
+  // Update badge
+  document.getElementById('actionsBadge').textContent = staleRed || topActions.length;
+  document.getElementById('actionsBadge').className = `tab-badge ${staleRed > 0 ? 'red' : 'gold'}`;
+
+  const container = document.getElementById('actionList');
+
+  if (topActions.length === 0 && contacts.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon">📋</div>
-        <div class="empty-state-text">Add deals and buyer profiles to generate your daily action list</div>
-        <button class="btn btn-gold" onclick="switchTab('deals'); openDealModal()">+ Add First Deal</button>
+        <div class="empty-state-icon">HubSpot</div>
+        <div class="empty-state-text">No HubSpot contacts cached. Click "Sync HubSpot" to pull your CRM data.</div>
+        <button class="btn btn-gold" onclick="syncHubSpot()">Sync HubSpot Now</button>
       </div>`;
     return;
   }
 
-  container.innerHTML = actions.map((a, i) => `
-    <div class="action-card ${a.urgency}" onclick="${a.dealId ? `openDealModal('${a.dealId}')` : `openBuyerModal('${a.buyerId}')`}">
+  if (topActions.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">All clear</div>
+        <div class="empty-state-text">No actions needed right now. All contacts are active.</div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = topActions.map((a, i) => `
+    <div class="action-card stale-${a.staleLevel}" onclick="openContactDetail('${a.hubspotId || ''}', '${esc(a.email)}')">
       <div class="action-rank ${i < 3 ? 'top3' : ''}">${i + 1}</div>
       <div class="action-body">
-        <div class="action-who">${esc(a.who)} <span>@ ${esc(a.company)}</span></div>
-        <div class="action-trigger">${a.trigger}</div>
-        <div class="action-offer">${esc(a.offer || '')}</div>
+        <div class="action-who">${esc(a.name)}${a.jobTitle ? ` <span>${esc(a.jobTitle)}</span>` : ''} <span>@ ${esc(a.company)}</span></div>
+        <div class="action-trigger">${esc(a.trigger)}</div>
+        <div class="action-meta">
+          <span class="action-tag ${a.isProfiled ? 'profiled' : 'unprofiled'}">${a.isProfiled ? 'Profiled' : 'Unprofiled'}</span>
+          ${a.activeDeal ? `<span style="font-size:10px;color:var(--gold)">Deal: $${formatNum(a.activeDeal.value_usd || 0)}</span>` : ''}
+          <span style="font-size:10px;color:var(--text-muted);font-family:var(--mono)">${a.daysSince}d ago</span>
+        </div>
       </div>
       <div class="action-buttons">
-        ${a.value ? `<span style="font-family:var(--mono);font-size:12px;color:var(--gold);white-space:nowrap">$${formatNum(a.value)}</span>` : ''}
-        ${a.owner ? `<span class="kanban-card-owner owner-${a.owner}">${a.owner}</span>` : ''}
+        ${a.email ? `<button class="btn btn-outline btn-xs" onclick="event.stopPropagation();window.open('mailto:${esc(a.email)}')">Email</button>` : ''}
+        ${!a.isProfiled ? `<button class="btn btn-blue btn-xs" onclick="event.stopPropagation();openQuickProfile('${esc(a.name)}','${esc(a.company)}','${esc(a.email)}','${a.hubspotId || ''}')">Profile</button>` : ''}
       </div>
     </div>
   `).join('');
 }
 
 // ============================================================
-// KANBAN
+// CONTACT DETAIL — show HubSpot engagements
+// ============================================================
+async function openContactDetail(hubspotId, email) {
+  if (!hubspotId) {
+    // If no hubspot ID, try to open deal or buyer modal instead
+    const deal = cache.deals.find(d => d.contact_email === email);
+    if (deal) { openDealModal(deal.id); return; }
+    const buyer = cache.buyers.find(b => b.contact_email === email);
+    if (buyer) { openBuyerModal(buyer.id); return; }
+    return;
+  }
+
+  const contact = cache.hubspotContacts.find(c => c.hubspot_id === hubspotId);
+  const name = contact ? [contact.firstname, contact.lastname].filter(Boolean).join(' ') : email;
+
+  openModal(`
+    <div class="modal-title">${esc(name)} <button class="modal-close" onclick="closeModal()">×</button></div>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">${esc(contact?.company || '')} | ${esc(contact?.email || '')} | ${esc(contact?.jobtitle || '')}</div>
+    <div class="engagement-panel">
+      <h4>Recent Activity</h4>
+      <div id="engagementsList"><div class="loading"><div class="spinner"></div>Loading engagements...</div></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      ${email ? `<button class="btn btn-outline btn-sm" onclick="window.open('mailto:${esc(email)}')">Send Email</button>` : ''}
+      <button class="btn btn-blue btn-sm" onclick="closeModal();openQuickProfile('${esc(name)}','${esc(contact?.company || '')}','${esc(email)}','${hubspotId}')">Create Buyer Profile</button>
+      <button class="btn btn-outline btn-sm" onclick="closeModal()">Close</button>
+    </div>
+  `);
+
+  // Load engagements
+  try {
+    const result = await api(`/hubspot/contacts/${hubspotId}/engagements`);
+    const engagements = result.data || [];
+    const el = document.getElementById('engagementsList');
+
+    if (engagements.length === 0) {
+      el.innerHTML = '<div style="padding:12px;color:var(--text-muted);font-size:12px">No recent engagements found</div>';
+      return;
+    }
+
+    el.innerHTML = engagements.slice(0, 20).map(eng => {
+      const type = eng.type || 'note';
+      const date = eng.timestamp ? new Date(eng.timestamp).toLocaleDateString() : '';
+      const subject = eng.subject || eng.body_preview || '(no subject)';
+      return `
+        <div class="engagement-item">
+          <span class="engagement-type ${type}">${type}</span>
+          <span class="engagement-date">${date}</span>
+          <div style="margin-top:4px;color:var(--text-dim)">${esc(subject.substring(0, 120))}</div>
+        </div>`;
+    }).join('');
+  } catch (e) {
+    document.getElementById('engagementsList').innerHTML =
+      `<div style="padding:12px;color:var(--red);font-size:12px">Failed to load: ${esc(e.message)}</div>`;
+  }
+}
+
+// ============================================================
+// KANBAN — Deal Tracker
 // ============================================================
 function renderKanban() {
   const container = document.getElementById('kanban');
-  const pipeline = state.deals.filter(d => !['dead'].includes(d.stage));
+  const pipeline = cache.deals.filter(d => d.stage !== 'dead');
 
   // Update badge
-  document.getElementById('dealsBadge').textContent = pipeline.filter(d => !['closed_won','closed_lost'].includes(d.stage)).length;
+  const activeCount = pipeline.filter(d => !['closed_won','closed_lost'].includes(d.stage)).length;
+  document.getElementById('dealsBadge').textContent = activeCount;
 
   // Deal stats
   const activeDeals = pipeline.filter(d => !['closed_won','closed_lost'].includes(d.stage));
@@ -1117,7 +1247,7 @@ function renderKanban() {
   document.getElementById('dealStats').innerHTML = `
     <div class="stat-card"><div class="stat-label">Active Pipeline</div><div class="stat-value gold">$${formatNum(totalValue)}</div></div>
     <div class="stat-card"><div class="stat-label">Deals in Progress</div><div class="stat-value">${activeDeals.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Won This Month</div><div class="stat-value green">${pipeline.filter(d => d.stage === 'closed_won').length}</div></div>
+    <div class="stat-card"><div class="stat-label">Won</div><div class="stat-value green">${pipeline.filter(d => d.stage === 'closed_won').length}</div></div>
     <div class="stat-card"><div class="stat-label">Lost</div><div class="stat-value" style="color:var(--text-muted)">${pipeline.filter(d => d.stage === 'closed_lost').length}</div></div>
   `;
 
@@ -1143,7 +1273,7 @@ function renderKanban() {
                   <span class="kanban-card-owner owner-${d.owner || 'unassigned'}">${d.owner || '?'}</span>
                 </div>
                 ${isStale ? `<div style="font-size:10px;color:var(--red);margin-top:4px;font-family:var(--mono)">${daysSince}d stale</div>` : ''}
-                ${d.next_action ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px">→ ${esc(d.next_action)}</div>` : ''}
+                ${d.next_action ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px">${esc(d.next_action)}</div>` : ''}
               </div>`;
           }).join('')}
         </div>
@@ -1152,11 +1282,86 @@ function renderKanban() {
 }
 
 // ============================================================
+// IMPORT DEALS FROM HUBSPOT
+// ============================================================
+function openImportDealsModal() {
+  const hsDeals = cache.hubspotDeals;
+  if (hsDeals.length === 0) {
+    toast('No HubSpot deals cached. Run sync first.', 'info');
+    return;
+  }
+
+  // Filter out deals already imported (by matching dealname + amount)
+  const existingNames = new Set(cache.deals.map(d => d.deal_description?.toLowerCase()));
+  const importable = hsDeals.filter(d => !existingNames.has((d.dealname || '').toLowerCase()));
+
+  openModal(`
+    <div class="modal-title">Import Deals from HubSpot <button class="modal-close" onclick="closeModal()">×</button></div>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:16px">${importable.length} deals available to import (${hsDeals.length} total in HubSpot)</div>
+    ${importable.length === 0 ? '<div style="padding:24px;text-align:center;color:var(--text-muted)">All HubSpot deals already imported</div>' :
+      `<div style="max-height:400px;overflow-y:auto">
+        ${importable.map(d => `
+          <div style="display:flex;align-items:center;gap:12px;padding:10px;border-bottom:1px solid var(--border)">
+            <input type="checkbox" class="hs-deal-check" value="${esc(d.hubspot_id)}" style="accent-color:var(--gold)">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600">${esc(d.dealname || 'Untitled')}</div>
+              <div style="font-size:11px;color:var(--text-dim)">${esc(d.dealstage || '')} | ${d.amount ? '$' + formatNum(d.amount) : 'No amount'}${d.closedate ? ' | Close: ' + d.closedate.substring(0, 10) : ''}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button class="btn btn-gold" onclick="importSelectedDeals()">Import Selected</button>
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      </div>`
+    }
+  `);
+}
+
+async function importSelectedDeals() {
+  const checked = document.querySelectorAll('.hs-deal-check:checked');
+  if (checked.length === 0) { toast('Select at least one deal', 'info'); return; }
+
+  let imported = 0;
+  for (const cb of checked) {
+    const hsDeal = cache.hubspotDeals.find(d => d.hubspot_id === cb.value);
+    if (!hsDeal) continue;
+
+    try {
+      await api('/revenue/deals', 'POST', {
+        company: hsDeal.dealname || 'HubSpot Deal',
+        deal_description: hsDeal.dealname || '',
+        value_usd: hsDeal.amount || 0,
+        stage: mapHubSpotStage(hsDeal.dealstage),
+        notes: `Imported from HubSpot (ID: ${hsDeal.hubspot_id})`
+      });
+      imported++;
+    } catch (e) {
+      console.error('Failed to import deal:', e);
+    }
+  }
+
+  closeModal();
+  toast(`Imported ${imported} deal(s) from HubSpot`);
+  await loadAll();
+  renderKanban();
+}
+
+function mapHubSpotStage(hsStage) {
+  const s = (hsStage || '').toLowerCase();
+  if (s.includes('won') || s.includes('closed won')) return 'closed_won';
+  if (s.includes('lost') || s.includes('closed lost')) return 'closed_lost';
+  if (s.includes('negot') || s.includes('contract')) return 'negotiating';
+  if (s.includes('proposal') || s.includes('pricing') || s.includes('quote')) return 'pricing_sent';
+  return 'conversation';
+}
+
+// ============================================================
 // INVENTORY TABLE
 // ============================================================
 function renderInventory(filter = 'all') {
   const body = document.getElementById('inventoryBody');
-  const projects = filter === 'all' ? state.projects : state.projects.filter(p => p.status === filter);
+  const projects = filter === 'all' ? cache.projects : cache.projects.filter(p => p.status === filter);
 
   body.innerHTML = projects.map(p => {
     let targets = [];
@@ -1168,7 +1373,7 @@ function renderInventory(filter = 'all') {
         <td>${esc(p.registry || '—')}</td>
         <td><span class="badge badge-${p.status}">${p.status}</span></td>
         <td style="font-family:var(--mono)">${p.available_volume ? formatNum(p.available_volume) + ' ' + (p.volume_unit || '') : '—'}</td>
-        <td style="font-family:var(--mono)">${p.price_floor_usd ? `$${p.price_floor_usd} – $${p.price_ceiling_usd}` : '—'}</td>
+        <td style="font-family:var(--mono)">${p.price_floor_usd ? '$' + p.price_floor_usd + ' – $' + p.price_ceiling_usd : '—'}</td>
         <td><span style="font-size:11px">${(p.clearsky_role || '').replace(/_/g, ' ')}</span></td>
         <td style="max-width:160px"><span style="font-size:11px;color:var(--text-dim)">${targets.slice(0, 3).join(', ')}</span></td>
       </tr>`;
@@ -1180,31 +1385,95 @@ function renderInventory(filter = 'all') {
 }
 
 // ============================================================
-// BUYERS TABLE
+// BUYERS — profiled + unprofiled split
 // ============================================================
 function renderBuyers(filter = 'all') {
-  const body = document.getElementById('buyersBody');
-  const buyers = filter === 'all' ? state.buyers : state.buyers.filter(b => b.relationship_status === filter);
+  const container = document.getElementById('buyersContent');
+  const buyers = cache.buyers;
+  const contacts = cache.hubspotContacts;
 
-  if (buyers.length === 0) {
-    body.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-state-icon">🎯</div><div class="empty-state-text">No buyer profiles yet. Add your first counterparty.</div><button class="btn btn-gold btn-sm" onclick="openBuyerModal()">+ Add Buyer</button></div></td></tr>`;
+  // Stats
+  const profiledEmails = new Set(buyers.map(b => (b.contact_email || '').toLowerCase()).filter(Boolean));
+  const unprofiledContacts = contacts.filter(c => !profiledEmails.has((c.email || '').toLowerCase()));
+  const profiledPct = contacts.length > 0 ? Math.round(profiledEmails.size / contacts.length * 100) : 0;
+
+  document.getElementById('buyerStats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Profiled Buyers</div><div class="stat-value green">${buyers.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Unprofiled Contacts</div><div class="stat-value" style="color:var(--text-muted)">${unprofiledContacts.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Coverage</div><div class="stat-value ${profiledPct > 50 ? 'green' : profiledPct > 25 ? '' : 'red'}">${profiledPct}%</div><div class="stat-delta">of HubSpot contacts</div></div>
+    <div class="stat-card"><div class="stat-label">T1 Buyers</div><div class="stat-value gold">${buyers.filter(b => b.tier === 'T1').length}</div></div>
+  `;
+
+  // Update badge
+  document.getElementById('buyersBadge').textContent = unprofiledContacts.length;
+
+  // Show unprofiled tab
+  if (filter === 'unprofiled') {
+    container.innerHTML = `
+      <div class="buyer-section-header">Unprofiled HubSpot Contacts <span class="count">${unprofiledContacts.length}</span></div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Job Title</th><th>Last Activity</th><th></th></tr></thead>
+          <tbody>
+            ${unprofiledContacts.map(c => {
+              const name = [c.firstname, c.lastname].filter(Boolean).join(' ') || '—';
+              const lastAct = c.last_activity_date || c.last_email_date;
+              const days = lastAct ? Math.floor((new Date() - new Date(lastAct)) / 86400000) : null;
+              return `
+                <tr>
+                  <td><strong>${esc(name)}</strong></td>
+                  <td style="font-size:12px">${esc(c.email || '—')}</td>
+                  <td>${esc(c.company || '—')}</td>
+                  <td style="font-size:12px;color:var(--text-dim)">${esc(c.jobtitle || '—')}</td>
+                  <td style="font-family:var(--mono);font-size:11px;${days !== null && days >= 14 ? 'color:var(--red)' : ''}">${days !== null ? days + 'd ago' : '—'}</td>
+                  <td><button class="btn btn-blue btn-xs" onclick="openQuickProfile('${esc(name)}','${esc(c.company || '')}','${esc(c.email || '')}','${c.hubspot_id}')">Profile</button></td>
+                </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
     return;
   }
 
-  body.innerHTML = buyers.map(b => {
-    let types = [];
-    try { types = JSON.parse(b.credit_types_interested || '[]'); } catch(e) {}
-    return `
-      <tr onclick="openBuyerModal('${b.id}')">
-        <td><strong>${esc(b.company)}</strong></td>
-        <td>${esc(b.contact_name || '—')}</td>
-        <td style="max-width:180px"><span style="font-size:12px">${esc(b.buying_mandate || '—')}</span></td>
-        <td>${types.map(t => `<span class="badge" style="margin:1px;background:var(--gold-bg);color:var(--gold);font-size:10px">${t}</span>`).join(' ')}</td>
-        <td><span class="badge badge-${b.tier}">${b.tier}</span></td>
-        <td><span class="badge badge-${b.relationship_status}">${b.relationship_status}</span></td>
-        <td style="font-size:12px;color:var(--text-dim);max-width:160px">${esc(b.last_known_need || '—')}</td>
-      </tr>`;
-  }).join('');
+  // Show profiled buyers
+  const filteredBuyers = filter === 'all' ? buyers : buyers.filter(b => b.relationship_status === filter);
+
+  if (filteredBuyers.length === 0 && filter !== 'all') {
+    container.innerHTML = `
+      <div class="buyer-section-header">Profiled Buyers <span class="count">${buyers.length}</span></div>
+      <div class="empty-state"><div class="empty-state-text">No buyers match this filter</div></div>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="buyer-section-header">Profiled Buyers <span class="count">${filteredBuyers.length}</span></div>
+    <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead><tr><th>Company</th><th>Contact</th><th>Mandate</th><th>Credit Types</th><th>Tier</th><th>Status</th><th>Last Need</th></tr></thead>
+        <tbody>
+          ${filteredBuyers.length === 0 ? `
+            <tr><td colspan="7"><div class="empty-state"><div class="empty-state-text">No buyer profiles yet. Profile your HubSpot contacts to build intelligence.</div><button class="btn btn-gold btn-sm" onclick="openBuyerModal()">+ Profile Buyer</button></div></td></tr>
+          ` : filteredBuyers.map(b => {
+            let types = [];
+            try { types = JSON.parse(b.credit_types_interested || '[]'); } catch(e) {}
+            return `
+              <tr onclick="openBuyerModal('${b.id}')">
+                <td><strong>${esc(b.company)}</strong></td>
+                <td>${esc(b.contact_name || '—')}</td>
+                <td style="max-width:180px"><span style="font-size:12px">${esc(b.buying_mandate || '—')}</span></td>
+                <td>${types.map(t => `<span class="badge" style="margin:1px;background:var(--gold-bg);color:var(--gold);font-size:10px">${t}</span>`).join(' ')}</td>
+                <td><span class="badge badge-${b.tier}">${b.tier}</span></td>
+                <td><span class="badge badge-${b.relationship_status}">${b.relationship_status}</span></td>
+                <td style="font-size:12px;color:var(--text-dim);max-width:160px">${esc(b.last_known_need || '—')}</td>
+              </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+    ${unprofiledContacts.length > 0 ? `
+      <div class="buyer-section-header" style="margin-top:32px">Unprofiled Contacts <span class="count">${unprofiledContacts.length}</span></div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">${unprofiledContacts.length} HubSpot contacts without buyer profiles — <a href="#" onclick="event.preventDefault();document.querySelector('[data-filter=unprofiled]').click()" style="color:var(--gold)">View all</a></div>
+    ` : ''}`;
 }
 
 // ============================================================
@@ -1243,9 +1512,11 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
 
 // DEAL MODAL
 function openDealModal(id) {
-  const deal = id ? state.deals.find(d => d.id === id) : {};
+  const deal = id ? cache.deals.find(d => d.id === id) : {};
   const isEdit = !!id;
-  const projectOptions = state.projects.map(p => `<option value="${esc(p.short_name || p.name)}" ${deal.project_name === (p.short_name || p.name) ? 'selected' : ''}>${esc(p.short_name || p.name)}</option>`).join('');
+  const projectOptions = cache.projects.map(p =>
+    `<option value="${esc(p.short_name || p.name)}" ${deal.project_name === (p.short_name || p.name) ? 'selected' : ''}>${esc(p.short_name || p.name)}</option>`
+  ).join('');
 
   openModal(`
     <div class="modal-title">${isEdit ? 'Edit Deal' : 'New Deal'}<button class="modal-close" onclick="closeModal()">×</button></div>
@@ -1254,6 +1525,10 @@ function openDealModal(id) {
         <div class="form-group"><label class="form-label">Company *</label><input class="form-input" name="company" value="${esc(deal.company || '')}" required></div>
         <div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" name="contact_name" value="${esc(deal.contact_name || '')}"></div>
       </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" name="contact_email" type="email" value="${esc(deal.contact_email || '')}"></div>
+        <div class="form-group"><label class="form-label">Credit Type</label><input class="form-input" name="credit_type" value="${esc(deal.credit_type || '')}"></div>
+      </div>
       <div class="form-group"><label class="form-label">Deal Description *</label><input class="form-input" name="deal_description" value="${esc(deal.deal_description || '')}" required placeholder="e.g., CORSIA credit pricing for Q2"></div>
       <div class="form-row-3">
         <div class="form-group"><label class="form-label">Value (USD)</label><input class="form-input" name="value_usd" type="number" value="${deal.value_usd || ''}" placeholder="50000"></div>
@@ -1261,7 +1536,7 @@ function openDealModal(id) {
         <div class="form-group"><label class="form-label">Owner</label><select class="form-select" name="owner">${OWNERS.map(o => `<option value="${o}" ${deal.owner === o ? 'selected' : ''}>${o}</option>`).join('')}</select></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Project</label><select class="form-select" name="project_name"><option value="">— Select —</option>${projectOptions}</select></div>
+        <div class="form-group"><label class="form-label">Project</label><select class="form-select" name="project_name"><option value="">-- Select --</option>${projectOptions}</select></div>
         <div class="form-group"><label class="form-label">Volume (tonnes)</label><input class="form-input" name="volume_tonnes" type="number" value="${deal.volume_tonnes || ''}"></div>
       </div>
       <div class="form-group"><label class="form-label">Next Action</label><input class="form-input" name="next_action" value="${esc(deal.next_action || '')}" placeholder="e.g., Send term sheet to Thomas"></div>
@@ -1286,25 +1561,39 @@ async function submitDeal(e, id) {
   const deal = Object.fromEntries(fd.entries());
   deal.value_usd = parseFloat(deal.value_usd) || 0;
   deal.volume_tonnes = parseFloat(deal.volume_tonnes) || null;
-  if (id) deal.id = id;
-  await saveDeal(deal);
-  closeModal();
-  toast('Deal saved');
-  renderAll();
+
+  try {
+    if (id) {
+      await api(`/revenue/deals/${id}`, 'PUT', deal);
+    } else {
+      await api('/revenue/deals', 'POST', deal);
+    }
+    closeModal();
+    toast('Deal saved');
+    await loadAll();
+    renderCurrentTab();
+  } catch (e) {
+    toast('Failed to save deal: ' + e.message, 'error');
+  }
 }
 
 async function confirmDeleteDeal(id) {
   if (confirm('Delete this deal?')) {
-    await deleteDeal(id);
-    closeModal();
-    toast('Deal deleted');
-    renderAll();
+    try {
+      await api(`/revenue/deals/${id}`, 'DELETE');
+      closeModal();
+      toast('Deal deleted');
+      await loadAll();
+      renderCurrentTab();
+    } catch (e) {
+      toast('Failed to delete: ' + e.message, 'error');
+    }
   }
 }
 
 // PROJECT MODAL
 function openProjectModal(id) {
-  const proj = id ? state.projects.find(p => p.id === id) : {};
+  const proj = id ? cache.projects.find(p => p.id === id) : {};
   const isEdit = !!id;
 
   openModal(`
@@ -1354,25 +1643,39 @@ async function submitProject(e, id) {
   proj.price_ceiling_usd = parseFloat(proj.price_ceiling_usd) || null;
   proj.commission_min_pct = parseFloat(proj.commission_min_pct) || null;
   proj.commission_max_pct = parseFloat(proj.commission_max_pct) || null;
-  if (id) proj.id = id;
-  await saveProject(proj);
-  closeModal();
-  toast('Project saved');
-  renderAll();
+
+  try {
+    if (id) {
+      await api(`/revenue/projects/${id}`, 'PUT', proj);
+    } else {
+      await api('/revenue/projects', 'POST', proj);
+    }
+    closeModal();
+    toast('Project saved');
+    await loadAll();
+    renderCurrentTab();
+  } catch (e) {
+    toast('Failed to save project: ' + e.message, 'error');
+  }
 }
 
 async function confirmDeleteProject(id) {
   if (confirm('Delete this project?')) {
-    await deleteProject(id);
-    closeModal();
-    toast('Project deleted');
-    renderAll();
+    try {
+      await api(`/revenue/projects/${id}`, 'DELETE');
+      closeModal();
+      toast('Project deleted');
+      await loadAll();
+      renderCurrentTab();
+    } catch (e) {
+      toast('Failed to delete: ' + e.message, 'error');
+    }
   }
 }
 
 // BUYER MODAL
 function openBuyerModal(id) {
-  const buyer = id ? state.buyers.find(b => b.id === id) : {};
+  const buyer = id ? cache.buyers.find(b => b.id === id) : {};
   const isEdit = !!id;
 
   openModal(`
@@ -1384,7 +1687,7 @@ function openBuyerModal(id) {
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" name="contact_email" type="email" value="${esc(buyer.contact_email || '')}"></div>
-        <div class="form-group"><label class="form-label">Relationship Owner</label><select class="form-select" name="relationship_owner"><option value="">—</option>${OWNERS.filter(o => o !== 'unassigned').map(o => `<option value="${o}" ${buyer.relationship_owner === o ? 'selected' : ''}>${o}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Relationship Owner</label><select class="form-select" name="relationship_owner"><option value="">--</option>${OWNERS.filter(o => o !== 'unassigned').map(o => `<option value="${o}" ${buyer.relationship_owner === o ? 'selected' : ''}>${o}</option>`).join('')}</select></div>
       </div>
       <div class="form-group"><label class="form-label">Buying Mandate</label><textarea class="form-textarea" name="buying_mandate" rows="2" placeholder="What are they looking for?">${esc(buyer.buying_mandate || '')}</textarea></div>
       <div class="form-group"><label class="form-label">Credit Types Interested (JSON array)</label><input class="form-input" name="credit_types_interested" value='${esc(buyer.credit_types_interested || '[]')}' placeholder='["CORSIA","CDR","biochar"]'></div>
@@ -1399,8 +1702,11 @@ function openBuyerModal(id) {
         <div class="form-group"><label class="form-label">Deal Structure Pref</label><input class="form-input" name="deal_structure_preference" value="${esc(buyer.deal_structure_preference || '')}" placeholder="spot only"></div>
       </div>
       <div class="form-group"><label class="form-label">Known Objections</label><input class="form-input" name="objections" value="${esc(buyer.objections || '')}" placeholder="e.g., adverse to Cayman, no pre-purchase"></div>
+      <div class="form-group"><label class="form-label">Sustainability Commitments</label><input class="form-input" name="sustainability_commitments" value="${esc(buyer.sustainability_commitments || '')}"></div>
       <div class="form-group"><label class="form-label">Last Known Need</label><textarea class="form-textarea" name="last_known_need" rows="2">${esc(buyer.last_known_need || '')}</textarea></div>
       <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" name="notes" rows="2">${esc(buyer.notes || '')}</textarea></div>
+      <input type="hidden" name="hubspot_contact_id" value="${esc(buyer.hubspot_contact_id || '')}">
+      <input type="hidden" name="hubspot_company_id" value="${esc(buyer.hubspot_company_id || '')}">
       <div style="display:flex;gap:8px;margin-top:16px">
         <button type="submit" class="btn btn-gold">${isEdit ? 'Update' : 'Create'} Buyer</button>
         ${isEdit ? `<button type="button" class="btn btn-danger" onclick="confirmDeleteBuyer('${id}')">Delete</button>` : ''}
@@ -1410,23 +1716,55 @@ function openBuyerModal(id) {
   `);
 }
 
+// Quick profile — pre-fill from HubSpot contact
+function openQuickProfile(name, company, email, hubspotId) {
+  openBuyerModal();
+  // Fill in the form fields after modal opens
+  setTimeout(() => {
+    const form = document.querySelector('#modalContent form');
+    if (!form) return;
+    const nameInput = form.querySelector('[name=contact_name]');
+    const companyInput = form.querySelector('[name=company]');
+    const emailInput = form.querySelector('[name=contact_email]');
+    const hsInput = form.querySelector('[name=hubspot_contact_id]');
+    if (nameInput) nameInput.value = name;
+    if (companyInput) companyInput.value = company;
+    if (emailInput) emailInput.value = email;
+    if (hsInput) hsInput.value = hubspotId || '';
+  }, 50);
+}
+
 async function submitBuyer(e, id) {
   e.preventDefault();
   const fd = new FormData(e.target);
   const buyer = Object.fromEntries(fd.entries());
-  if (id) buyer.id = id;
-  await saveBuyer(buyer);
-  closeModal();
-  toast('Buyer profile saved');
-  renderAll();
+
+  try {
+    if (id) {
+      await api(`/revenue/buyers/${id}`, 'PUT', buyer);
+    } else {
+      await api('/revenue/buyers', 'POST', buyer);
+    }
+    closeModal();
+    toast('Buyer profile saved');
+    await loadAll();
+    renderCurrentTab();
+  } catch (e) {
+    toast('Failed to save buyer: ' + e.message, 'error');
+  }
 }
 
 async function confirmDeleteBuyer(id) {
   if (confirm('Delete this buyer profile?')) {
-    await deleteBuyer(id);
-    closeModal();
-    toast('Buyer deleted');
-    renderAll();
+    try {
+      await api(`/revenue/buyers/${id}`, 'DELETE');
+      closeModal();
+      toast('Buyer deleted');
+      await loadAll();
+      renderCurrentTab();
+    } catch (e) {
+      toast('Failed to delete: ' + e.message, 'error');
+    }
   }
 }
 
@@ -1447,21 +1785,24 @@ function formatNum(n) {
   return n.toLocaleString();
 }
 
+function timeSince(dateStr) {
+  const seconds = Math.floor((new Date() - new Date(dateStr)) / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return minutes + 'm ago';
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return hours + 'h ago';
+  const days = Math.floor(hours / 24);
+  return days + 'd ago';
+}
+
 function toast(msg, type = 'success') {
   const container = document.getElementById('toastContainer');
   const el = document.createElement('div');
   el.className = `toast toast-${type}`;
   el.textContent = msg;
   container.appendChild(el);
-  setTimeout(() => el.remove(), 3000);
-}
-
-function renderAll() {
-  const activeTab = document.querySelector('.tab.active')?.dataset.tab || 'actions';
-  if (activeTab === 'actions') refreshActionList();
-  if (activeTab === 'deals') renderKanban();
-  if (activeTab === 'inventory') renderInventory();
-  if (activeTab === 'buyers') renderBuyers();
+  setTimeout(() => el.remove(), 4000);
 }
 
 // ============================================================
@@ -1471,8 +1812,12 @@ document.getElementById('headerDate').textContent = new Date().toLocaleDateStrin
   weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
 });
 
-loadState();
-refreshActionList();
+(async function init() {
+  // Load core data and HubSpot cache in parallel
+  await Promise.all([loadAll(), loadHubSpotCache()]);
+  updateSyncStatus();
+  loadActionList();
+})();
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
@@ -1487,6 +1832,10 @@ document.addEventListener('keydown', (e) => {
     if (tab === 'deals') openDealModal();
     if (tab === 'inventory') openProjectModal();
     if (tab === 'buyers') openBuyerModal();
+  }
+  if (e.key === 's' && e.ctrlKey) {
+    e.preventDefault();
+    syncHubSpot();
   }
 });
 </script>
