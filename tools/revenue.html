@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClearSky Revenue Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A1628;
+  --navy-light: #111d30;
+  --surface: #111827;
+  --card: #1a2332;
+  --card-hover: #1f2a3c;
+  --border: #1e2d3d;
+  --border-light: #2a3a4e;
+  --gold: #C8A951;
+  --gold-dim: #a08a42;
+  --gold-bg: rgba(200,169,81,0.08);
+  --gold-bg2: rgba(200,169,81,0.15);
+  --green: #34d399;
+  --green-bg: rgba(52,211,153,0.1);
+  --red: #f87171;
+  --red-bg: rgba(248,113,113,0.1);
+  --yellow: #fbbf24;
+  --yellow-bg: rgba(251,191,36,0.1);
+  --blue: #60a5fa;
+  --blue-bg: rgba(96,165,250,0.1);
+  --purple: #a78bfa;
+  --text: #e5e7eb;
+  --text-dim: #9ca3af;
+  --text-muted: #6b7280;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.header {
+  background: var(--navy);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-logo {
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.brand-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-light);
+}
+.brand-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.header-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* TABS */
+.tabs {
+  background: var(--navy);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 57px;
+  z-index: 99;
+}
+.tabs-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  padding: 0 24px;
+  gap: 0;
+}
+.tab {
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  user-select: none;
+}
+.tab:hover { color: var(--text-dim); }
+.tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 9px;
+  margin-left: 6px;
+  font-family: var(--mono);
+}
+.tab-badge.red { background: var(--red-bg); color: var(--red); }
+.tab-badge.gold { background: var(--gold-bg); color: var(--gold); }
+
+/* CONTENT */
+.content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* SECTION HEADERS */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+.section-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* BUTTONS */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+.btn-gold {
+  background: var(--gold);
+  color: var(--navy);
+}
+.btn-gold:hover { background: #d4b55e; }
+.btn-outline {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border-light);
+}
+.btn-outline:hover { border-color: var(--text-muted); color: var(--text); }
+.btn-sm { padding: 5px 10px; font-size: 11px; }
+.btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+.btn-danger:hover { background: rgba(248,113,113,0.2); }
+.btn-green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+.btn-green:hover { background: rgba(52,211,153,0.2); }
+
+/* STATS BAR */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+}
+.stat-value.gold { color: var(--gold); }
+.stat-value.green { color: var(--green); }
+.stat-value.red { color: var(--red); }
+.stat-delta {
+  font-size: 11px;
+  margin-top: 4px;
+  font-family: var(--mono);
+}
+.stat-delta.up { color: var(--green); }
+.stat-delta.down { color: var(--red); }
+
+/* ACTION CARDS */
+.action-list { display: flex; flex-direction: column; gap: 10px; }
+.action-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 14px;
+  align-items: start;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.action-card:hover { background: var(--card-hover); border-color: var(--border-light); }
+.action-card.overdue { border-left: 3px solid var(--red); }
+.action-card.due-today { border-left: 3px solid var(--yellow); }
+.action-card.upcoming { border-left: 3px solid var(--green); }
+
+.action-rank {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--gold-bg);
+  color: var(--gold);
+}
+.action-rank.top3 { background: var(--gold-bg2); }
+
+.action-body { min-width: 0; }
+.action-who {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.action-who span {
+  font-weight: 400;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+.action-trigger {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.action-offer {
+  font-size: 12px;
+  color: var(--gold);
+  background: var(--gold-bg);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* KANBAN BOARD */
+.kanban {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  min-height: 400px;
+}
+.kanban-column {
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 12px;
+  min-height: 300px;
+}
+.kanban-header {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.kanban-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--card);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.kanban-cards { display: flex; flex-direction: column; gap: 8px; }
+.kanban-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.kanban-card:hover { background: var(--card-hover); border-color: var(--border-light); }
+.kanban-card.stale { border-color: var(--red); border-width: 1px; }
+.kanban-card-company {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.kanban-card-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.kanban-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+.kanban-card-value {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--gold);
+}
+.kanban-card-owner {
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.owner-ana { background: rgba(167,139,250,0.15); color: var(--purple); }
+.owner-carolina { background: rgba(96,165,250,0.15); color: var(--blue); }
+.owner-luis { background: var(--gold-bg); color: var(--gold); }
+.owner-brian { background: var(--green-bg); color: var(--green); }
+
+/* TABLE */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table thead th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--navy);
+}
+.data-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.data-table tbody tr:hover { background: var(--card-hover); }
+.data-table td {
+  padding: 10px 12px;
+  vertical-align: middle;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* BADGES */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.badge-available { background: var(--green-bg); color: var(--green); }
+.badge-forward { background: var(--yellow-bg); color: var(--yellow); }
+.badge-pipeline { background: var(--blue-bg); color: var(--blue); }
+.badge-sold_out { background: rgba(107,114,128,0.15); color: var(--text-muted); }
+.badge-hot { background: var(--red-bg); color: var(--red); }
+.badge-warm { background: var(--yellow-bg); color: var(--yellow); }
+.badge-cold { background: var(--blue-bg); color: var(--blue); }
+.badge-dormant { background: rgba(107,114,128,0.15); color: var(--text-muted); }
+.badge-new { background: var(--green-bg); color: var(--green); }
+.badge-T1 { background: var(--gold-bg2); color: var(--gold); font-weight: 700; }
+.badge-T2 { background: var(--blue-bg); color: var(--blue); }
+.badge-T3 { background: rgba(107,114,128,0.15); color: var(--text-muted); }
+
+/* FILTER PILLS */
+.filters {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.filter-pill {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 20px;
+  border: 1px solid var(--border-light);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+.filter-pill:hover { border-color: var(--text-muted); color: var(--text); }
+.filter-pill.active {
+  background: var(--gold-bg2);
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--navy-light);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px;
+}
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+}
+.modal-close:hover { color: var(--text); }
+
+/* FORM */
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--gold);
+}
+.form-textarea { resize: vertical; min-height: 60px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--text-muted);
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state-text { font-size: 14px; margin-bottom: 16px; }
+
+/* LOADING */
+.loading { text-align: center; padding: 40px; color: var(--text-muted); }
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* TOAST */
+.toast-container {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  animation: slideIn 0.3s ease;
+  max-width: 340px;
+}
+.toast-success { background: var(--green-bg); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+.toast-error { background: var(--red-bg); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .kanban { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .header-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .tabs-inner { overflow-x: auto; }
+  .tab { padding: 12px 14px; font-size: 12px; }
+  .content { padding: 16px; }
+  .kanban { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .action-card { grid-template-columns: 28px 1fr; }
+  .action-buttons { flex-direction: row; grid-column: 1 / -1; }
+  .form-row, .form-row-3 { grid-template-columns: 1fr; }
+  .data-table { font-size: 12px; }
+  .data-table td, .data-table th { padding: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-logo">ClearSky</div>
+      <div class="brand-divider"></div>
+      <div class="brand-title">Revenue Command Center</div>
+    </div>
+    <div class="header-meta">
+      <span class="status-dot"></span>
+      <span class="header-date" id="headerDate"></span>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tabs-inner">
+    <div class="tab active" data-tab="actions">⚡ Actions <span class="tab-badge red" id="actionsBadge">0</span></div>
+    <div class="tab" data-tab="deals">📊 Deal Tracker <span class="tab-badge gold" id="dealsBadge">0</span></div>
+    <div class="tab" data-tab="inventory">📦 Inventory</div>
+    <div class="tab" data-tab="buyers">🎯 Buyer Intel</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- TAB 1: ACTION LIST -->
+  <div class="tab-content active" id="tab-actions">
+    <div class="stats-bar" id="actionStats"></div>
+    <div class="section-header">
+      <div>
+        <div class="section-title">Today's Priority Actions</div>
+        <div class="section-subtitle">Ranked by revenue probability — work top to bottom</div>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="refreshActionList()">↻ Refresh</button>
+    </div>
+    <div class="action-list" id="actionList">
+      <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-text">Add deals and buyer profiles to generate your daily action list</div>
+        <button class="btn btn-gold" onclick="switchTab('deals'); openDealModal()">+ Add First Deal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: DEAL TRACKER -->
+  <div class="tab-content" id="tab-deals">
+    <div class="stats-bar" id="dealStats"></div>
+    <div class="section-header">
+      <div>
+        <div class="section-title">Deal Pipeline</div>
+        <div class="section-subtitle">Drag deals through stages — red border = stuck too long</div>
+      </div>
+      <button class="btn btn-gold" onclick="openDealModal()">+ New Deal</button>
+    </div>
+    <div class="kanban" id="kanban"></div>
+  </div>
+
+  <!-- TAB 3: INVENTORY -->
+  <div class="tab-content" id="tab-inventory">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Project Inventory</div>
+        <div class="section-subtitle">What we can sell — with pre-approved pricing ranges</div>
+      </div>
+      <button class="btn btn-gold" onclick="openProjectModal()">+ Add Project</button>
+    </div>
+    <div class="filters" id="inventoryFilters">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="available">🟢 Available Now</button>
+      <button class="filter-pill" data-filter="forward">🟡 Forward</button>
+      <button class="filter-pill" data-filter="pipeline">🔵 Pipeline</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="data-table" id="inventoryTable">
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Type</th>
+            <th>Registry</th>
+            <th>Status</th>
+            <th>Volume</th>
+            <th>Price Range (USD)</th>
+            <th>Our Role</th>
+            <th>Target Buyers</th>
+          </tr>
+        </thead>
+        <tbody id="inventoryBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 4: BUYER INTEL -->
+  <div class="tab-content" id="tab-buyers">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Buyer Intelligence</div>
+        <div class="section-subtitle">Know your counterparties — mandate, appetite, objections</div>
+      </div>
+      <button class="btn btn-gold" onclick="openBuyerModal()">+ Add Buyer</button>
+    </div>
+    <div class="filters" id="buyerFilters">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="hot">🔴 Hot</button>
+      <button class="filter-pill" data-filter="warm">🟡 Warm</button>
+      <button class="filter-pill" data-filter="cold">🔵 Cold</button>
+      <button class="filter-pill" data-filter="new">🟢 New</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="data-table" id="buyersTable">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Mandate</th>
+            <th>Credit Types</th>
+            <th>Tier</th>
+            <th>Status</th>
+            <th>Last Need</th>
+          </tr>
+        </thead>
+        <tbody id="buyersBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const API_BASE = 'https://api-tools.oga.earth/api';
+const STAGES = ['conversation','pricing_sent','negotiating','closed_won','closed_lost'];
+const STAGE_LABELS = {
+  conversation: 'Conversation',
+  pricing_sent: 'Pricing Sent',
+  negotiating: 'Negotiating',
+  closed_won: 'Closed Won',
+  closed_lost: 'Closed Lost'
+};
+const OWNERS = ['ana','carolina','luis','brian','unassigned'];
+const PROJECT_TYPES = ['TSB','biochar','REDD+','ARR','plastic','CORSIA','MITECO','blue_carbon','NBS','other'];
+const REGISTRIES = ['Puro.earth','VCS','GoldStandard','MITECO','Verra','Isometric','other'];
+const ROLES = ['principal','exclusive_marketer','non_exclusive_marketer','broker','developer'];
+const STATUSES = ['available','forward','pipeline','sold_out'];
+const REL_STATUSES = ['hot','warm','cold','dormant','new'];
+const TIERS = ['T1','T2','T3'];
+
+// ============================================================
+// STATE (localStorage fallback until API connected)
+// ============================================================
+let state = {
+  deals: [],
+  projects: [],
+  buyers: [],
+  actions: []
+};
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('clearsky_revenue_state');
+    if (saved) {
+      state = JSON.parse(saved);
+    }
+    // Seed projects if empty
+    if (state.projects.length === 0) {
+      state.projects = getSeedProjects();
+      saveState();
+    }
+  } catch(e) { console.error('Failed to load state', e); }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('clearsky_revenue_state', JSON.stringify(state));
+  } catch(e) { console.error('Failed to save state', e); }
+}
+
+function generateId() {
+  return Math.random().toString(36).substr(2, 16);
+}
+
+function getSeedProjects() {
+  return [
+    { id: generateId(), name: 'Woodcache La Veta', short_name: 'Woodcache', project_type: 'TSB', registry: 'Puro.earth', status: 'available', available_volume: 750, volume_unit: 'CORCs', price_floor_usd: 140, price_ceiling_usd: 180, commission_min_pct: 3, commission_max_pct: 5, clearsky_role: 'principal', target_buyers: '["CDR mandate","EY RFP","Puro marketplace"]', one_liner: '750 CORCs spot delivery, terrestrial storage biomass, Colorado USA', delivery_date: 'immediate', corsia_eligible: false },
+    { id: generateId(), name: 'West Fraser Biochar', short_name: 'West Fraser', project_type: 'biochar', registry: 'Puro.earth', status: 'available', available_volume: 20000, volume_unit: 'CORCs', price_floor_usd: 100, price_ceiling_usd: 160, commission_min_pct: 3, commission_max_pct: 5, clearsky_role: 'non_exclusive_marketer', target_buyers: '["CDR mandate","EY RFP","biochar buyers"]', one_liner: '20K biochar CORCs, major producer, non-exclusive marketing', delivery_date: 'immediate', corsia_eligible: false },
+    { id: generateId(), name: 'Aperam', short_name: 'Aperam', project_type: 'biochar', registry: 'Puro.earth', status: 'available', available_volume: null, volume_unit: 'CORCs', price_floor_usd: 80, price_ceiling_usd: 140, commission_min_pct: 3, commission_max_pct: 5, clearsky_role: 'broker', target_buyers: '["CDR mandate","industrial buyers"]', one_liner: 'Industrial biochar credits from Aperam steel', delivery_date: 'immediate', corsia_eligible: false },
+    { id: generateId(), name: 'Fasera Australia', short_name: 'Fasera', project_type: 'TSB', registry: 'Puro.earth', status: 'forward', available_volume: 4000, volume_unit: 'CORCs', price_floor_usd: 190, price_ceiling_usd: 240, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'exclusive_marketer', target_buyers: '["CDR mandate","forward buyers","institutional"]', one_liner: '4K CORCs Q2 2026, Australian reforestation TSB', delivery_date: '2026-06-30', corsia_eligible: false },
+    { id: generateId(), name: 'Ecogreen Cameroon', short_name: 'Ecogreen', project_type: 'plastic', registry: 'Verra', status: 'pipeline', available_volume: 12500, volume_unit: 'plastic credits', price_floor_usd: 200, price_ceiling_usd: 350, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'developer', target_buyers: '["F&B brands","packaging","plastic mandate"]', one_liner: '12.5K plastic credits/yr, ClearSky proprietary project', delivery_date: '2026-12-31', corsia_eligible: false },
+    { id: generateId(), name: 'Roded Israel', short_name: 'Roded', project_type: 'plastic', registry: 'Verra', status: 'pipeline', available_volume: 9428, volume_unit: 'plastic credits', price_floor_usd: 200, price_ceiling_usd: 350, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'developer', target_buyers: '["F&B brands","packaging","plastic mandate"]', one_liner: '9.4K plastic credits/yr, ClearSky proprietary project', delivery_date: '2027-03-31', corsia_eligible: false },
+    { id: generateId(), name: 'Bolivia REDD+ TIOC', short_name: 'Bolivia', project_type: 'REDD+', registry: 'VCS', status: 'pipeline', available_volume: 5000000, volume_unit: 'tCO2e', price_floor_usd: 4, price_ceiling_usd: 5.50, commission_min_pct: 3, commission_max_pct: 5, clearsky_role: 'broker', target_buyers: '["CORSIA","voluntary bulk","compliance"]', one_liner: 'VM0015→VM0048 migration pending, 5M tCO2e/vintage, far shot timeline', delivery_date: 'TBD', corsia_eligible: false },
+    { id: generateId(), name: 'Sierra Leone Blue Carbon', short_name: 'Sierra Leone', project_type: 'blue_carbon', registry: 'VCS', status: 'pipeline', available_volume: null, volume_unit: 'tCO2e', price_floor_usd: 30, price_ceiling_usd: 50, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'broker', target_buyers: '["NBS buyers","blue carbon","institutional"]', one_liner: 'Mangrove restoration, West Africa, forward offtake available', delivery_date: '2027-06-30', corsia_eligible: false },
+    { id: generateId(), name: 'Spain MITECO ARR', short_name: 'Spain ARR', project_type: 'ARR', registry: 'MITECO', status: 'pipeline', available_volume: null, volume_unit: 'tCO2e', price_floor_usd: 60, price_ceiling_usd: 80, commission_min_pct: null, commission_max_pct: null, clearsky_role: 'developer', target_buyers: '["EU compliance","Spanish corporates","ESG funds"]', one_liner: 'Spanish reforestation under MITECO carbon registry', delivery_date: '2027-01-01', corsia_eligible: false }
+  ];
+}
+
+// ============================================================
+// API LAYER (with localStorage fallback)
+// ============================================================
+async function apiCall(endpoint, method = 'GET', body = null) {
+  try {
+    const opts = { method, headers: { 'Content-Type': 'application/json' } };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(`${API_BASE}${endpoint}`, opts);
+    if (!res.ok) throw new Error(`API ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    console.warn('API unavailable, using localStorage:', e.message);
+    return null;
+  }
+}
+
+// Try API first, fall back to localStorage
+async function loadDeals() {
+  const res = await apiCall('/revenue/deals');
+  if (res && res.data) { state.deals = res.data; saveState(); }
+  return state.deals;
+}
+async function loadProjects() {
+  const res = await apiCall('/revenue/projects');
+  if (res && res.data) { state.projects = res.data; saveState(); }
+  return state.projects;
+}
+async function loadBuyers() {
+  const res = await apiCall('/revenue/buyers');
+  if (res && res.data) { state.buyers = res.data; saveState(); }
+  return state.buyers;
+}
+
+async function saveDeal(deal) {
+  if (deal.id) {
+    await apiCall(`/revenue/deals/${deal.id}`, 'PUT', deal);
+    const idx = state.deals.findIndex(d => d.id === deal.id);
+    if (idx >= 0) state.deals[idx] = { ...state.deals[idx], ...deal, updated_at: new Date().toISOString() };
+  } else {
+    deal.id = generateId();
+    deal.created_at = new Date().toISOString();
+    deal.updated_at = deal.created_at;
+    const res = await apiCall('/revenue/deals', 'POST', deal);
+    if (res && res.data) deal = res.data;
+    state.deals.push(deal);
+  }
+  saveState();
+  return deal;
+}
+
+async function saveProject(project) {
+  if (project.id) {
+    await apiCall(`/revenue/projects/${project.id}`, 'PUT', project);
+    const idx = state.projects.findIndex(p => p.id === project.id);
+    if (idx >= 0) state.projects[idx] = { ...state.projects[idx], ...project, updated_at: new Date().toISOString() };
+  } else {
+    project.id = generateId();
+    project.created_at = new Date().toISOString();
+    project.updated_at = project.created_at;
+    state.projects.push(project);
+  }
+  saveState();
+  return project;
+}
+
+async function saveBuyer(buyer) {
+  if (buyer.id) {
+    await apiCall(`/revenue/buyers/${buyer.id}`, 'PUT', buyer);
+    const idx = state.buyers.findIndex(b => b.id === buyer.id);
+    if (idx >= 0) state.buyers[idx] = { ...state.buyers[idx], ...buyer, updated_at: new Date().toISOString() };
+  } else {
+    buyer.id = generateId();
+    buyer.created_at = new Date().toISOString();
+    buyer.updated_at = buyer.created_at;
+    state.buyers.push(buyer);
+  }
+  saveState();
+  return buyer;
+}
+
+async function deleteDeal(id) {
+  await apiCall(`/revenue/deals/${id}`, 'DELETE');
+  state.deals = state.deals.filter(d => d.id !== id);
+  saveState();
+}
+async function deleteProject(id) {
+  await apiCall(`/revenue/projects/${id}`, 'DELETE');
+  state.projects = state.projects.filter(p => p.id !== id);
+  saveState();
+}
+async function deleteBuyer(id) {
+  await apiCall(`/revenue/buyers/${id}`, 'DELETE');
+  state.buyers = state.buyers.filter(b => b.id !== id);
+  saveState();
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(tabName) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === `tab-${tabName}`));
+  if (tabName === 'actions') refreshActionList();
+  if (tabName === 'deals') renderKanban();
+  if (tabName === 'inventory') renderInventory();
+  if (tabName === 'buyers') renderBuyers();
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+});
+
+// ============================================================
+// ACTION LIST
+// ============================================================
+function generateActionList() {
+  const actions = [];
+  const today = new Date();
+
+  // Source 1: Active deals needing follow-up
+  for (const deal of state.deals) {
+    if (['closed_won','closed_lost','dead'].includes(deal.stage)) continue;
+
+    const lastActivity = deal.last_activity_date ? new Date(deal.last_activity_date) : new Date(deal.created_at);
+    const daysSince = Math.floor((today - lastActivity) / 86400000);
+    const nextAction = deal.next_action_date ? new Date(deal.next_action_date) : null;
+    const daysToAction = nextAction ? Math.floor((nextAction - today) / 86400000) : 999;
+
+    let urgency = 'upcoming';
+    let trigger = '';
+
+    if (daysSince > 14) {
+      urgency = 'overdue';
+      trigger = `🔴 No contact in ${daysSince} days — relationship going cold`;
+    } else if (daysSince > 7) {
+      urgency = 'due-today';
+      trigger = `🟡 ${daysSince} days since last activity — follow up now`;
+    } else if (daysToAction <= 0) {
+      urgency = 'due-today';
+      trigger = `🟡 Action due: ${deal.next_action || 'Follow up'}`;
+    } else if (deal.next_action) {
+      trigger = `🟢 Next: ${deal.next_action}`;
+    } else {
+      trigger = `🟢 Active deal — ${STAGE_LABELS[deal.stage]}`;
+    }
+
+    let score = 0;
+    score += Math.min((deal.value_usd || 0) / 10000, 20);
+    if (daysToAction <= 0) score += 30;
+    if (daysSince > 14) score += 25;
+    else if (daysSince > 7) score += 15;
+    if (deal.stage === 'negotiating') score += 20;
+    if (deal.stage === 'pricing_sent') score += 15;
+
+    const matchedProject = deal.project_name ? state.projects.find(p => p.short_name === deal.project_name || p.name === deal.project_name) : null;
+    const offer = matchedProject
+      ? `${matchedProject.short_name || matchedProject.name}: $${matchedProject.price_floor_usd}-${matchedProject.price_ceiling_usd}/${matchedProject.volume_unit}`
+      : deal.deal_description;
+
+    actions.push({
+      type: 'deal',
+      urgency,
+      score,
+      who: deal.contact_name || deal.company,
+      company: deal.company,
+      trigger,
+      offer,
+      value: deal.value_usd,
+      dealId: deal.id,
+      owner: deal.owner
+    });
+  }
+
+  // Source 2: Buyer profiles matched to available inventory
+  const availableProjects = state.projects.filter(p => ['available','forward'].includes(p.status));
+
+  for (const buyer of state.buyers) {
+    if (buyer.relationship_status === 'dormant') continue;
+    // Skip if already has active deal
+    if (state.deals.some(d => d.company === buyer.company && !['closed_won','closed_lost','dead'].includes(d.stage))) continue;
+
+    let buyerTypes = [];
+    try { buyerTypes = JSON.parse(buyer.credit_types_interested || '[]'); } catch(e) {}
+
+    const matches = availableProjects.filter(p => {
+      let targetBuyers = [];
+      try { targetBuyers = JSON.parse(p.target_buyers || '[]'); } catch(e) {}
+      return buyerTypes.some(bt =>
+        p.project_type.toLowerCase().includes(bt.toLowerCase()) ||
+        targetBuyers.some(tb => tb.toLowerCase().includes(bt.toLowerCase()))
+      );
+    });
+
+    if (matches.length === 0) continue;
+
+    let score = 0;
+    if (buyer.tier === 'T1') score += 15;
+    if (buyer.tier === 'T2') score += 8;
+    if (buyer.relationship_status === 'hot') score += 20;
+    if (buyer.relationship_status === 'warm') score += 10;
+    score += matches.length * 5;
+
+    actions.push({
+      type: 'buyer_match',
+      urgency: buyer.relationship_status === 'hot' ? 'due-today' : 'upcoming',
+      score,
+      who: buyer.contact_name || buyer.company,
+      company: buyer.company,
+      trigger: `Mandate matches: ${matches.map(m => m.short_name || m.name).join(', ')}`,
+      offer: matches[0].one_liner,
+      value: null,
+      buyerId: buyer.id,
+      owner: buyer.relationship_owner
+    });
+  }
+
+  return actions.sort((a, b) => b.score - a.score).slice(0, 15);
+}
+
+function refreshActionList() {
+  const actions = generateActionList();
+  const container = document.getElementById('actionList');
+
+  // Update badge
+  const overdue = actions.filter(a => a.urgency === 'overdue').length;
+  document.getElementById('actionsBadge').textContent = overdue || actions.length;
+  document.getElementById('actionsBadge').className = `tab-badge ${overdue > 0 ? 'red' : 'gold'}`;
+
+  // Stats
+  const pipeline = state.deals.filter(d => !['closed_won','closed_lost','dead'].includes(d.stage));
+  const pipelineValue = pipeline.reduce((sum, d) => sum + (d.value_usd || 0), 0);
+  const closedThisMonth = state.deals.filter(d => d.stage === 'closed_won' && d.updated_at && new Date(d.updated_at).getMonth() === new Date().getMonth());
+  const closedValue = closedThisMonth.reduce((sum, d) => sum + (d.value_usd || 0), 0);
+  const staleDeals = pipeline.filter(d => {
+    const last = d.last_activity_date ? new Date(d.last_activity_date) : new Date(d.created_at);
+    return (new Date() - last) / 86400000 > 14;
+  });
+
+  document.getElementById('actionStats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Pipeline Value</div><div class="stat-value gold">$${formatNum(pipelineValue)}</div><div class="stat-delta">${pipeline.length} active deals</div></div>
+    <div class="stat-card"><div class="stat-label">Closed This Month</div><div class="stat-value green">$${formatNum(closedValue)}</div><div class="stat-delta">${closedThisMonth.length} deals</div></div>
+    <div class="stat-card"><div class="stat-label">Stale (>14 days)</div><div class="stat-value ${staleDeals.length > 0 ? 'red' : ''}">${staleDeals.length}</div><div class="stat-delta ${staleDeals.length > 0 ? 'down' : ''}">need attention</div></div>
+    <div class="stat-card"><div class="stat-label">Today's Actions</div><div class="stat-value">${actions.length}</div><div class="stat-delta">${overdue} overdue</div></div>
+  `;
+
+  if (actions.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-text">Add deals and buyer profiles to generate your daily action list</div>
+        <button class="btn btn-gold" onclick="switchTab('deals'); openDealModal()">+ Add First Deal</button>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = actions.map((a, i) => `
+    <div class="action-card ${a.urgency}" onclick="${a.dealId ? `openDealModal('${a.dealId}')` : `openBuyerModal('${a.buyerId}')`}">
+      <div class="action-rank ${i < 3 ? 'top3' : ''}">${i + 1}</div>
+      <div class="action-body">
+        <div class="action-who">${esc(a.who)} <span>@ ${esc(a.company)}</span></div>
+        <div class="action-trigger">${a.trigger}</div>
+        <div class="action-offer">${esc(a.offer || '')}</div>
+      </div>
+      <div class="action-buttons">
+        ${a.value ? `<span style="font-family:var(--mono);font-size:12px;color:var(--gold);white-space:nowrap">$${formatNum(a.value)}</span>` : ''}
+        ${a.owner ? `<span class="kanban-card-owner owner-${a.owner}">${a.owner}</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// KANBAN
+// ============================================================
+function renderKanban() {
+  const container = document.getElementById('kanban');
+  const pipeline = state.deals.filter(d => !['dead'].includes(d.stage));
+
+  // Update badge
+  document.getElementById('dealsBadge').textContent = pipeline.filter(d => !['closed_won','closed_lost'].includes(d.stage)).length;
+
+  // Deal stats
+  const activeDeals = pipeline.filter(d => !['closed_won','closed_lost'].includes(d.stage));
+  const totalValue = activeDeals.reduce((s, d) => s + (d.value_usd || 0), 0);
+  document.getElementById('dealStats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Active Pipeline</div><div class="stat-value gold">$${formatNum(totalValue)}</div></div>
+    <div class="stat-card"><div class="stat-label">Deals in Progress</div><div class="stat-value">${activeDeals.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Won This Month</div><div class="stat-value green">${pipeline.filter(d => d.stage === 'closed_won').length}</div></div>
+    <div class="stat-card"><div class="stat-label">Lost</div><div class="stat-value" style="color:var(--text-muted)">${pipeline.filter(d => d.stage === 'closed_lost').length}</div></div>
+  `;
+
+  container.innerHTML = STAGES.map(stage => {
+    const stageDeals = pipeline.filter(d => d.stage === stage);
+    return `
+      <div class="kanban-column" data-stage="${stage}">
+        <div class="kanban-header">
+          ${STAGE_LABELS[stage]}
+          <span class="kanban-count">${stageDeals.length}</span>
+        </div>
+        <div class="kanban-cards">
+          ${stageDeals.map(d => {
+            const lastAct = d.last_activity_date ? new Date(d.last_activity_date) : new Date(d.created_at);
+            const daysSince = Math.floor((new Date() - lastAct) / 86400000);
+            const isStale = (stage === 'conversation' && daysSince > 14) || (stage === 'pricing_sent' && daysSince > 7);
+            return `
+              <div class="kanban-card ${isStale ? 'stale' : ''}" onclick="openDealModal('${d.id}')">
+                <div class="kanban-card-company">${esc(d.company)}</div>
+                <div class="kanban-card-desc">${esc(d.deal_description || '')}</div>
+                <div class="kanban-card-meta">
+                  <span class="kanban-card-value">${d.value_usd ? '$' + formatNum(d.value_usd) : '—'}</span>
+                  <span class="kanban-card-owner owner-${d.owner || 'unassigned'}">${d.owner || '?'}</span>
+                </div>
+                ${isStale ? `<div style="font-size:10px;color:var(--red);margin-top:4px;font-family:var(--mono)">${daysSince}d stale</div>` : ''}
+                ${d.next_action ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px">→ ${esc(d.next_action)}</div>` : ''}
+              </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// INVENTORY TABLE
+// ============================================================
+function renderInventory(filter = 'all') {
+  const body = document.getElementById('inventoryBody');
+  const projects = filter === 'all' ? state.projects : state.projects.filter(p => p.status === filter);
+
+  body.innerHTML = projects.map(p => {
+    let targets = [];
+    try { targets = JSON.parse(p.target_buyers || '[]'); } catch(e) {}
+    return `
+      <tr onclick="openProjectModal('${p.id}')">
+        <td><strong>${esc(p.short_name || p.name)}</strong><br><span style="font-size:11px;color:var(--text-muted)">${esc(p.name)}</span></td>
+        <td>${esc(p.project_type)}</td>
+        <td>${esc(p.registry || '—')}</td>
+        <td><span class="badge badge-${p.status}">${p.status}</span></td>
+        <td style="font-family:var(--mono)">${p.available_volume ? formatNum(p.available_volume) + ' ' + (p.volume_unit || '') : '—'}</td>
+        <td style="font-family:var(--mono)">${p.price_floor_usd ? `$${p.price_floor_usd} – $${p.price_ceiling_usd}` : '—'}</td>
+        <td><span style="font-size:11px">${(p.clearsky_role || '').replace(/_/g, ' ')}</span></td>
+        <td style="max-width:160px"><span style="font-size:11px;color:var(--text-dim)">${targets.slice(0, 3).join(', ')}</span></td>
+      </tr>`;
+  }).join('');
+
+  if (projects.length === 0) {
+    body.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted)">No projects match filter</td></tr>';
+  }
+}
+
+// ============================================================
+// BUYERS TABLE
+// ============================================================
+function renderBuyers(filter = 'all') {
+  const body = document.getElementById('buyersBody');
+  const buyers = filter === 'all' ? state.buyers : state.buyers.filter(b => b.relationship_status === filter);
+
+  if (buyers.length === 0) {
+    body.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-state-icon">🎯</div><div class="empty-state-text">No buyer profiles yet. Add your first counterparty.</div><button class="btn btn-gold btn-sm" onclick="openBuyerModal()">+ Add Buyer</button></div></td></tr>`;
+    return;
+  }
+
+  body.innerHTML = buyers.map(b => {
+    let types = [];
+    try { types = JSON.parse(b.credit_types_interested || '[]'); } catch(e) {}
+    return `
+      <tr onclick="openBuyerModal('${b.id}')">
+        <td><strong>${esc(b.company)}</strong></td>
+        <td>${esc(b.contact_name || '—')}</td>
+        <td style="max-width:180px"><span style="font-size:12px">${esc(b.buying_mandate || '—')}</span></td>
+        <td>${types.map(t => `<span class="badge" style="margin:1px;background:var(--gold-bg);color:var(--gold);font-size:10px">${t}</span>`).join(' ')}</td>
+        <td><span class="badge badge-${b.tier}">${b.tier}</span></td>
+        <td><span class="badge badge-${b.relationship_status}">${b.relationship_status}</span></td>
+        <td style="font-size:12px;color:var(--text-dim);max-width:160px">${esc(b.last_known_need || '—')}</td>
+      </tr>`;
+  }).join('');
+}
+
+// ============================================================
+// FILTER PILLS
+// ============================================================
+document.querySelectorAll('#inventoryFilters .filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('#inventoryFilters .filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    renderInventory(pill.dataset.filter);
+  });
+});
+
+document.querySelectorAll('#buyerFilters .filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('#buyerFilters .filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    renderBuyers(pill.dataset.filter);
+  });
+});
+
+// ============================================================
+// MODALS
+// ============================================================
+function openModal(html) {
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+// DEAL MODAL
+function openDealModal(id) {
+  const deal = id ? state.deals.find(d => d.id === id) : {};
+  const isEdit = !!id;
+  const projectOptions = state.projects.map(p => `<option value="${esc(p.short_name || p.name)}" ${deal.project_name === (p.short_name || p.name) ? 'selected' : ''}>${esc(p.short_name || p.name)}</option>`).join('');
+
+  openModal(`
+    <div class="modal-title">${isEdit ? 'Edit Deal' : 'New Deal'}<button class="modal-close" onclick="closeModal()">×</button></div>
+    <form onsubmit="submitDeal(event, '${id || ''}')">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Company *</label><input class="form-input" name="company" value="${esc(deal.company || '')}" required></div>
+        <div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" name="contact_name" value="${esc(deal.contact_name || '')}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Deal Description *</label><input class="form-input" name="deal_description" value="${esc(deal.deal_description || '')}" required placeholder="e.g., CORSIA credit pricing for Q2"></div>
+      <div class="form-row-3">
+        <div class="form-group"><label class="form-label">Value (USD)</label><input class="form-input" name="value_usd" type="number" value="${deal.value_usd || ''}" placeholder="50000"></div>
+        <div class="form-group"><label class="form-label">Stage</label><select class="form-select" name="stage">${STAGES.map(s => `<option value="${s}" ${deal.stage === s ? 'selected' : ''}>${STAGE_LABELS[s]}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Owner</label><select class="form-select" name="owner">${OWNERS.map(o => `<option value="${o}" ${deal.owner === o ? 'selected' : ''}>${o}</option>`).join('')}</select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Project</label><select class="form-select" name="project_name"><option value="">— Select —</option>${projectOptions}</select></div>
+        <div class="form-group"><label class="form-label">Volume (tonnes)</label><input class="form-input" name="volume_tonnes" type="number" value="${deal.volume_tonnes || ''}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Next Action</label><input class="form-input" name="next_action" value="${esc(deal.next_action || '')}" placeholder="e.g., Send term sheet to Thomas"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Next Action Date</label><input class="form-input" name="next_action_date" type="date" value="${deal.next_action_date || ''}"></div>
+        <div class="form-group"><label class="form-label">Last Activity Date</label><input class="form-input" name="last_activity_date" type="date" value="${deal.last_activity_date || ''}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Blocker</label><input class="form-input" name="blocker" value="${esc(deal.blocker || '')}" placeholder="What's preventing this from moving forward?"></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" name="notes" rows="3">${esc(deal.notes || '')}</textarea></div>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button type="submit" class="btn btn-gold">${isEdit ? 'Update' : 'Create'} Deal</button>
+        ${isEdit ? `<button type="button" class="btn btn-danger" onclick="confirmDeleteDeal('${id}')">Delete</button>` : ''}
+        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      </div>
+    </form>
+  `);
+}
+
+async function submitDeal(e, id) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const deal = Object.fromEntries(fd.entries());
+  deal.value_usd = parseFloat(deal.value_usd) || 0;
+  deal.volume_tonnes = parseFloat(deal.volume_tonnes) || null;
+  if (id) deal.id = id;
+  await saveDeal(deal);
+  closeModal();
+  toast('Deal saved');
+  renderAll();
+}
+
+async function confirmDeleteDeal(id) {
+  if (confirm('Delete this deal?')) {
+    await deleteDeal(id);
+    closeModal();
+    toast('Deal deleted');
+    renderAll();
+  }
+}
+
+// PROJECT MODAL
+function openProjectModal(id) {
+  const proj = id ? state.projects.find(p => p.id === id) : {};
+  const isEdit = !!id;
+
+  openModal(`
+    <div class="modal-title">${isEdit ? 'Edit Project' : 'New Project'}<button class="modal-close" onclick="closeModal()">×</button></div>
+    <form onsubmit="submitProject(event, '${id || ''}')">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Project Name *</label><input class="form-input" name="name" value="${esc(proj.name || '')}" required></div>
+        <div class="form-group"><label class="form-label">Short Name</label><input class="form-input" name="short_name" value="${esc(proj.short_name || '')}"></div>
+      </div>
+      <div class="form-row-3">
+        <div class="form-group"><label class="form-label">Type *</label><select class="form-select" name="project_type" required>${PROJECT_TYPES.map(t => `<option value="${t}" ${proj.project_type === t ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Registry</label><select class="form-select" name="registry">${REGISTRIES.map(r => `<option value="${r}" ${proj.registry === r ? 'selected' : ''}>${r}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-select" name="status">${STATUSES.map(s => `<option value="${s}" ${proj.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+      </div>
+      <div class="form-row-3">
+        <div class="form-group"><label class="form-label">Available Volume</label><input class="form-input" name="available_volume" type="number" value="${proj.available_volume || ''}"></div>
+        <div class="form-group"><label class="form-label">Volume Unit</label><input class="form-input" name="volume_unit" value="${esc(proj.volume_unit || 'tCO2e')}"></div>
+        <div class="form-group"><label class="form-label">ClearSky Role</label><select class="form-select" name="clearsky_role">${ROLES.map(r => `<option value="${r}" ${proj.clearsky_role === r ? 'selected' : ''}>${r.replace(/_/g,' ')}</option>`).join('')}</select></div>
+      </div>
+      <div class="form-row-3">
+        <div class="form-group"><label class="form-label">Price Floor (USD)</label><input class="form-input" name="price_floor_usd" type="number" step="0.01" value="${proj.price_floor_usd || ''}"></div>
+        <div class="form-group"><label class="form-label">Price Ceiling (USD)</label><input class="form-input" name="price_ceiling_usd" type="number" step="0.01" value="${proj.price_ceiling_usd || ''}"></div>
+        <div class="form-group"><label class="form-label">Delivery Date</label><input class="form-input" name="delivery_date" value="${esc(proj.delivery_date || '')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Commission Min %</label><input class="form-input" name="commission_min_pct" type="number" step="0.1" value="${proj.commission_min_pct || ''}"></div>
+        <div class="form-group"><label class="form-label">Commission Max %</label><input class="form-input" name="commission_max_pct" type="number" step="0.1" value="${proj.commission_max_pct || ''}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Target Buyers (JSON array)</label><input class="form-input" name="target_buyers" value='${esc(proj.target_buyers || '[]')}' placeholder='["CDR mandate","CORSIA"]'></div>
+      <div class="form-group"><label class="form-label">One-Liner Pitch</label><input class="form-input" name="one_liner" value="${esc(proj.one_liner || '')}"></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" name="notes" rows="2">${esc(proj.notes || '')}</textarea></div>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button type="submit" class="btn btn-gold">${isEdit ? 'Update' : 'Create'} Project</button>
+        ${isEdit ? `<button type="button" class="btn btn-danger" onclick="confirmDeleteProject('${id}')">Delete</button>` : ''}
+        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      </div>
+    </form>
+  `);
+}
+
+async function submitProject(e, id) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const proj = Object.fromEntries(fd.entries());
+  proj.available_volume = parseFloat(proj.available_volume) || null;
+  proj.price_floor_usd = parseFloat(proj.price_floor_usd) || null;
+  proj.price_ceiling_usd = parseFloat(proj.price_ceiling_usd) || null;
+  proj.commission_min_pct = parseFloat(proj.commission_min_pct) || null;
+  proj.commission_max_pct = parseFloat(proj.commission_max_pct) || null;
+  if (id) proj.id = id;
+  await saveProject(proj);
+  closeModal();
+  toast('Project saved');
+  renderAll();
+}
+
+async function confirmDeleteProject(id) {
+  if (confirm('Delete this project?')) {
+    await deleteProject(id);
+    closeModal();
+    toast('Project deleted');
+    renderAll();
+  }
+}
+
+// BUYER MODAL
+function openBuyerModal(id) {
+  const buyer = id ? state.buyers.find(b => b.id === id) : {};
+  const isEdit = !!id;
+
+  openModal(`
+    <div class="modal-title">${isEdit ? 'Edit Buyer Profile' : 'New Buyer Profile'}<button class="modal-close" onclick="closeModal()">×</button></div>
+    <form onsubmit="submitBuyer(event, '${id || ''}')">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Company *</label><input class="form-input" name="company" value="${esc(buyer.company || '')}" required></div>
+        <div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" name="contact_name" value="${esc(buyer.contact_name || '')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" name="contact_email" type="email" value="${esc(buyer.contact_email || '')}"></div>
+        <div class="form-group"><label class="form-label">Relationship Owner</label><select class="form-select" name="relationship_owner"><option value="">—</option>${OWNERS.filter(o => o !== 'unassigned').map(o => `<option value="${o}" ${buyer.relationship_owner === o ? 'selected' : ''}>${o}</option>`).join('')}</select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Buying Mandate</label><textarea class="form-textarea" name="buying_mandate" rows="2" placeholder="What are they looking for?">${esc(buyer.buying_mandate || '')}</textarea></div>
+      <div class="form-group"><label class="form-label">Credit Types Interested (JSON array)</label><input class="form-input" name="credit_types_interested" value='${esc(buyer.credit_types_interested || '[]')}' placeholder='["CORSIA","CDR","biochar"]'></div>
+      <div class="form-row-3">
+        <div class="form-group"><label class="form-label">Volume Appetite</label><input class="form-input" name="volume_appetite" value="${esc(buyer.volume_appetite || '')}" placeholder="50K tonnes/yr"></div>
+        <div class="form-group"><label class="form-label">Budget Range</label><input class="form-input" name="budget_range" value="${esc(buyer.budget_range || '')}" placeholder="$5-10/tCO2e"></div>
+        <div class="form-group"><label class="form-label">Timeline Pressure</label><input class="form-input" name="timeline_pressure" value="${esc(buyer.timeline_pressure || '')}" placeholder="Q2 deadline"></div>
+      </div>
+      <div class="form-row-3">
+        <div class="form-group"><label class="form-label">Tier</label><select class="form-select" name="tier">${TIERS.map(t => `<option value="${t}" ${buyer.tier === t ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Relationship Status</label><select class="form-select" name="relationship_status">${REL_STATUSES.map(s => `<option value="${s}" ${buyer.relationship_status === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Deal Structure Pref</label><input class="form-input" name="deal_structure_preference" value="${esc(buyer.deal_structure_preference || '')}" placeholder="spot only"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Known Objections</label><input class="form-input" name="objections" value="${esc(buyer.objections || '')}" placeholder="e.g., adverse to Cayman, no pre-purchase"></div>
+      <div class="form-group"><label class="form-label">Last Known Need</label><textarea class="form-textarea" name="last_known_need" rows="2">${esc(buyer.last_known_need || '')}</textarea></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" name="notes" rows="2">${esc(buyer.notes || '')}</textarea></div>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button type="submit" class="btn btn-gold">${isEdit ? 'Update' : 'Create'} Buyer</button>
+        ${isEdit ? `<button type="button" class="btn btn-danger" onclick="confirmDeleteBuyer('${id}')">Delete</button>` : ''}
+        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      </div>
+    </form>
+  `);
+}
+
+async function submitBuyer(e, id) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const buyer = Object.fromEntries(fd.entries());
+  if (id) buyer.id = id;
+  await saveBuyer(buyer);
+  closeModal();
+  toast('Buyer profile saved');
+  renderAll();
+}
+
+async function confirmDeleteBuyer(id) {
+  if (confirm('Delete this buyer profile?')) {
+    await deleteBuyer(id);
+    closeModal();
+    toast('Buyer deleted');
+    renderAll();
+  }
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function esc(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = String(str);
+  return div.innerHTML;
+}
+
+function formatNum(n) {
+  if (n == null) return '0';
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(n >= 10000 ? 0 : 1) + 'K';
+  return n.toLocaleString();
+}
+
+function toast(msg, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.textContent = msg;
+  container.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+function renderAll() {
+  const activeTab = document.querySelector('.tab.active')?.dataset.tab || 'actions';
+  if (activeTab === 'actions') refreshActionList();
+  if (activeTab === 'deals') renderKanban();
+  if (activeTab === 'inventory') renderInventory();
+  if (activeTab === 'buyers') renderBuyers();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-US', {
+  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+});
+
+loadState();
+refreshActionList();
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  if (e.key === '1') switchTab('actions');
+  if (e.key === '2') switchTab('deals');
+  if (e.key === '3') switchTab('inventory');
+  if (e.key === '4') switchTab('buyers');
+  if (e.key === 'n' && e.ctrlKey) {
+    e.preventDefault();
+    const tab = document.querySelector('.tab.active')?.dataset.tab;
+    if (tab === 'deals') openDealModal();
+    if (tab === 'inventory') openProjectModal();
+    if (tab === 'buyers') openBuyerModal();
+  }
+});
+</script>
+</body>
+</html>
