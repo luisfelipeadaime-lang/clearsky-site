@@ -261,11 +261,24 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
   </div>
 </div>
 
-<!-- ═══ KNOWLEDGE LIBRARY ═══ -->
+<!-- ═══ SALES & REVENUE ═══ -->
 <div class="section fade fade-d5">
+  <div class="section-head"><div class="section-icon" style="background:rgba(200,169,81,.12);color:var(--gold)">💰</div><div class="section-title">Sales & Revenue</div></div>
+  <div class="tools-grid">
+    <div class="tool fade fade-d6" onclick="go('/tools/revenue.html')">
+      <div class="tool-status"><span class="tool-badge live">Live</span></div>
+      <div class="tool-name">Revenue Command Center</div>
+      <div class="tool-desc">Deal pipeline tracker, project inventory with pricing, buyer intelligence profiles, and daily prioritized action list</div>
+      <div class="tool-meta"><span id="rev-deals">— deals</span><span id="rev-projects">— projects</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ KNOWLEDGE LIBRARY ═══ -->
+<div class="section fade fade-d6">
   <div class="section-head"><div class="section-icon lib">📚</div><div class="section-title">Knowledge Library</div></div>
   <div class="tools-grid">
-    <div class="tool fade fade-d6" onclick="go('/tools/wiki.html')">
+    <div class="tool fade fade-d7" onclick="go('/tools/wiki.html')">
       <div class="tool-status"><span class="tool-badge live">Live</span></div>
       <div class="tool-name">Knowledge Wiki</div>
       <div class="tool-desc">Upload documents, search your knowledge library, and ask AI questions with cited answers. Bulk upload with auto-extraction.</div>
@@ -394,6 +407,8 @@ document.getElementById('l-email').addEventListener('keydown',function(e){if(e.k
 async function loadStats(){
   try{var r=await api('/api/ey-rfp/projects');var n=(r.projects||[]).length;document.getElementById('ey-count').textContent=n+' project'+(n!==1?'s':'')}catch(e){}
   try{var r=await api('/api/knowledge/docs?limit=1');document.getElementById('lib-count').textContent=(r.total||0)+' documents'}catch(e){}
+  try{var r=await api('/api/revenue/deals');var d=(r.data||[]).filter(function(x){return x.stage!=='closed_won'&&x.stage!=='closed_lost'&&x.stage!=='dead'});document.getElementById('rev-deals').textContent=d.length+' active deal'+(d.length!==1?'s':'')}catch(e){}
+  try{var r=await api('/api/revenue/projects');document.getElementById('rev-projects').textContent=(r.data||[]).length+' projects'}catch(e){}
 }
 
 // ── ADMIN: USERS ──
