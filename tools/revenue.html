@@ -460,6 +460,72 @@ body {
 .confidence-medium { background: var(--yellow-bg); color: var(--yellow); }
 .confidence-low { background: rgba(107,114,128,0.15); color: var(--text-muted); }
 
+/* OWNER BADGES */
+.owner-badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.owner-badge.owner-ana { background: rgba(167,139,250,0.15); color: #a78bfa; }
+.owner-badge.owner-carolina { background: rgba(96,165,250,0.15); color: #60a5fa; }
+.owner-badge.owner-luis { background: rgba(200,169,81,0.15); color: #C8A951; }
+.owner-badge.owner-brian { background: rgba(52,211,153,0.15); color: #34d399; }
+.owner-badge.owner-other { background: rgba(107,114,128,0.15); color: #9ca3af; }
+
+/* ENGAGEMENT INDICATORS */
+.engagement-bar {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text-muted);
+}
+.engagement-bar .eng-pip {
+  width: 4px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--border-light);
+}
+.engagement-bar .eng-pip.active { background: var(--gold); }
+.engagement-bar .eng-pip.hot { background: var(--green); }
+
+/* GROUP SECTION HEADERS */
+.action-group-header {
+  padding: 12px 16px 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.action-group-header .group-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+.action-group-header .group-count {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text-muted);
+}
+.action-group-header .group-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.action-group-header.group-active .group-label { color: var(--green); }
+.action-group-header.group-reengage .group-label { color: var(--gold); }
+.action-group-header.group-pipeline .group-label { color: var(--blue); }
+
+/* ENGAGEMENT CARD BORDERS */
+.action-card.eng-hot { border-left: 3px solid var(--green); }
+.action-card.eng-warm { border-left: 3px solid var(--gold); }
+.action-card.eng-cool { border-left: 3px solid var(--blue); }
+.action-card.eng-cold { border-left: 3px solid var(--text-muted); }
+
 .action-buttons {
   display: flex;
   flex-direction: column;
@@ -913,7 +979,7 @@ body {
     <div class="section-header">
       <div>
         <div class="section-title">Priority Actions</div>
-        <div class="section-subtitle">Smart-ranked contacts — profiled intelligence + deal activity + staleness</div>
+        <div class="section-subtitle">Ranked by engagement intensity — active conversations first, cold outreach last</div>
       </div>
       <button class="btn btn-outline btn-sm" onclick="loadActionList()">Refresh</button>
     </div>
@@ -1305,38 +1371,56 @@ async function loadActionList() {
     const isProfiled = !!buyerProfile;
     const isAiExtracted = buyerProfile?.source === 'ai_extracted';
 
-    // Skip is_buyer = false contacts (score penalty handles ranking, but skip the obvious non-buyers)
+    // Skip confirmed non-buyers
     if (buyerProfile && buyerProfile.is_buyer === 0 && buyerProfile.source === 'ai_extracted') {
-      continue; // Already confirmed not a buyer by AI
+      continue;
     }
 
-    // SMART SCORING
+    // Engagement data from enriched contacts cache
+    const engScore = contact.engagement_score || 0;
+    const act30d = contact.activity_count_30d || 0;
+    const act60d = contact.activity_count_60d || 0;
+    const emails60d = contact.email_count_60d || 0;
+    const calls60d = contact.call_count_60d || 0;
+    const meetings60d = contact.meeting_count_60d || 0;
+    const hasInbound = contact.has_inbound_reply === 1;
+
+    // ========================================
+    // NEW ENGAGEMENT-INTENSITY SCORING
+    // ========================================
     let score = 0;
 
-    // Check active deals
+    // TIER 1: Active two-way conversation (highest priority)
+    if (hasInbound && act30d >= 2) score += 50;
+    else if (hasInbound) score += 30;
+
+    // TIER 2: Recent engagement intensity
+    if (act30d >= 5) score += 30;       // Very active in last 30d
+    else if (act30d >= 2) score += 20;  // Moderately active
+    else if (act30d >= 1) score += 10;  // Some activity
+
+    // Calls and meetings are higher-quality signals
+    score += (calls60d * 8);
+    score += (meetings60d * 10);
+
+    // TIER 3: Deal stage boost
     const activeDeal = deals.find(d =>
       !['closed_won','closed_lost','dead'].includes(d.stage) &&
       (d.contact_email === email || d.company === company)
     );
     if (activeDeal) {
-      if (activeDeal.stage === 'negotiating') score += 30;
-      else if (activeDeal.stage === 'pricing_sent') score += 25;
+      if (activeDeal.stage === 'negotiating') score += 25;
+      else if (activeDeal.stage === 'pricing_sent') score += 20;
       else score += 10;
     }
 
-    // Temperature + profiled boost
+    // TIER 4: AI intelligence boost
     const temp = buyerProfile?.relationship_status || '';
-    if (temp === 'hot' && isProfiled) score += 20;
-    else if (temp === 'warm') score += 10;
+    if (temp === 'hot' && isProfiled) score += 15;
+    else if (temp === 'warm' && isProfiled) score += 8;
 
-    // Staleness
-    if (daysSince > 14) score += 25;
-    else if (daysSince >= 7) score += 15;
-
-    // Profile status
-    if (isProfiled) score += 10;
-
-    // Project match
+    // Profile + project match bonus
+    if (isProfiled) score += 5;
     let matchedProjects = [];
     if (buyerProfile) {
       let buyerTypes = [];
@@ -1350,29 +1434,34 @@ async function loadActionList() {
           targetBuyers.some(tb => tb.toLowerCase().includes(bt.toLowerCase()))
         );
       });
-      if (matchedProjects.length > 0) score += 15;
+      if (matchedProjects.length > 0) score += 10;
     }
 
-    // Confidence boost
-    if (buyerProfile?.extraction_confidence === 'high') score += 5;
+    // PENALTY: No engagement at all = deprioritize
+    if (engScore === 0 && act60d === 0 && !hasInbound) {
+      score -= 20; // Cold outreach with no response
+    }
 
-    // is_buyer false penalty
+    // PENALTY: confirmed not a buyer
     if (buyerProfile && buyerProfile.is_buyer === 0) score -= 100;
 
-    // Determine visual style
-    let staleLevel = 'green';
-    if (daysSince >= 14) staleLevel = 'red';
-    else if (daysSince >= 7) staleLevel = 'yellow';
+    // Staleness adds mild urgency for engaged contacts only (not for cold outreach)
+    if (engScore > 0 && daysSince >= 14) score += 8;
+    else if (engScore > 0 && daysSince >= 7) score += 4;
 
-    // Use temperature for border if profiled
-    let cardClass = `stale-${staleLevel}`;
-    if (isProfiled && temp) cardClass = `temp-${temp}`;
+    // Determine engagement level for card border
+    let engLevel = 'cold';
+    if (act30d >= 3 && hasInbound) engLevel = 'hot';
+    else if (act30d >= 1 || engScore >= 20) engLevel = 'warm';
+    else if (act60d >= 1) engLevel = 'cool';
 
     actions.push({
-      cardClass,
-      staleLevel,
+      cardClass: `eng-${engLevel}`,
+      engLevel,
       score,
+      engScore,
       daysSince,
+      act30d, act60d, emails60d, calls60d, meetings60d, hasInbound,
       name,
       company,
       email,
@@ -1390,7 +1479,6 @@ async function loadActionList() {
   // Also add active deals with no contact match
   for (const deal of deals) {
     if (['closed_won','closed_lost','dead'].includes(deal.stage)) continue;
-    // Filter by owner if selected
     if (selectedOwnerName && deal.owner && deal.owner !== selectedOwnerName) continue;
     const hasContactMatch = contacts.some(c => c.email === deal.contact_email || c.company === deal.company);
     if (hasContactMatch) continue;
@@ -1399,16 +1487,16 @@ async function loadActionList() {
     const daysSince = lastAct ? Math.floor((today - new Date(lastAct)) / 86400000) : 999;
 
     let score = 10;
-    if (deal.stage === 'negotiating') score += 30;
-    else if (deal.stage === 'pricing_sent') score += 25;
-    if (daysSince >= 14) score += 25;
-    else if (daysSince >= 7) score += 15;
+    if (deal.stage === 'negotiating') score += 25;
+    else if (deal.stage === 'pricing_sent') score += 20;
 
     actions.push({
-      cardClass: daysSince >= 14 ? 'stale-red' : daysSince >= 7 ? 'stale-yellow' : 'stale-green',
-      staleLevel: daysSince >= 14 ? 'red' : daysSince >= 7 ? 'yellow' : 'green',
+      cardClass: 'eng-warm',
+      engLevel: 'warm',
       score,
+      engScore: 0,
       daysSince,
+      act30d: 0, act60d: 0, emails60d: 0, calls60d: 0, meetings60d: 0, hasInbound: false,
       name: deal.contact_name || deal.company,
       company: deal.company,
       email: deal.contact_email || '',
@@ -1423,37 +1511,51 @@ async function loadActionList() {
     });
   }
 
-  // Sort by score descending, take top 30
+  // Sort by score descending
   actions.sort((a, b) => b.score - a.score);
-  const topActions = actions.slice(0, 30);
+
+  // Group into three visual sections
+  const activeConvos = []; // activity < 14d AND score > 20
+  const reengageNow = []; // 14-60d with some engagement
+  const pipeline = [];     // rest
+
+  for (const a of actions) {
+    if (a.daysSince < 14 && a.score > 20) activeConvos.push(a);
+    else if (a.daysSince >= 14 && a.daysSince <= 60 && a.engScore > 0) reengageNow.push(a);
+    else pipeline.push(a);
+  }
+
+  // Limit each group, total max ~40
+  const groupedActive = activeConvos.slice(0, 20);
+  const groupedReengage = reengageNow.slice(0, 10);
+  const groupedPipeline = pipeline.slice(0, 10);
+  const allGrouped = [...groupedActive, ...groupedReengage, ...groupedPipeline];
 
   // Stats
-  const staleRed = contacts.filter(c => {
-    const last = c.last_activity_date || c.last_email_date;
-    return last ? (today - new Date(last)) / 86400000 >= 14 : true;
-  }).length;
+  const engagedCount = contacts.filter(c => (c.engagement_score || 0) > 0).length;
+  const inboundCount = contacts.filter(c => c.has_inbound_reply === 1).length;
   const profiledCount = contacts.filter(c => buyerByHsId[c.hubspot_id] || buyerByEmail[(c.email || '').toLowerCase()]).length;
   const profiledPct = contacts.length > 0 ? Math.round(profiledCount / contacts.length * 100) : 0;
-  const pipeline = deals.filter(d => !['closed_won','closed_lost','dead'].includes(d.stage));
-  const pipelineValue = pipeline.reduce((s, d) => s + (d.value_usd || 0), 0);
+  const activePipeline = deals.filter(d => !['closed_won','closed_lost','dead'].includes(d.stage));
+  const pipelineValue = activePipeline.reduce((s, d) => s + (d.value_usd || 0), 0);
 
   document.getElementById('actionStats').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Active Contacts</div><div class="stat-value">${contacts.length}</div><div class="stat-delta">${profiledPct}% profiled</div></div>
-    <div class="stat-card"><div class="stat-label">Pipeline Value</div><div class="stat-value gold">$${formatNum(pipelineValue)}</div><div class="stat-delta">${pipeline.length} active deals</div></div>
-    <div class="stat-card"><div class="stat-label">Stale (14d+)</div><div class="stat-value ${staleRed > 0 ? 'red' : ''}">${staleRed}</div><div class="stat-delta ${staleRed > 0 ? 'down' : ''}">need attention</div></div>
-    <div class="stat-card"><div class="stat-label">AI Profiled</div><div class="stat-value green">${profiledCount}</div><div class="stat-delta">${contacts.length - profiledCount} remaining</div></div>
+    <div class="stat-card"><div class="stat-label">Active Conversations</div><div class="stat-value green">${activeConvos.length}</div><div class="stat-delta">two-way in 14d</div></div>
+    <div class="stat-card"><div class="stat-label">Engaged (60d)</div><div class="stat-value">${engagedCount}</div><div class="stat-delta">${inboundCount} with inbound replies</div></div>
+    <div class="stat-card"><div class="stat-label">Pipeline Value</div><div class="stat-value gold">$${formatNum(pipelineValue)}</div><div class="stat-delta">${activePipeline.length} active deals</div></div>
+    <div class="stat-card"><div class="stat-label">AI Profiled</div><div class="stat-value">${profiledCount}</div><div class="stat-delta">${profiledPct}% of ${contacts.length}</div></div>
   `;
 
   // Brian's KPI view
   renderBrianKpis();
 
   // Badge
-  document.getElementById('actionsBadge').textContent = topActions.length;
-  document.getElementById('actionsBadge').className = `tab-badge ${staleRed > 0 ? 'red' : 'gold'}`;
+  document.getElementById('actionsBadge').textContent = allGrouped.length;
+  document.getElementById('actionsBadge').className = `tab-badge ${activeConvos.length > 0 ? 'gold' : 'red'}`;
 
   const container = document.getElementById('actionList');
 
-  if (topActions.length === 0 && contacts.length === 0) {
+  if (allGrouped.length === 0 && contacts.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">HubSpot</div>
@@ -1463,75 +1565,140 @@ async function loadActionList() {
     return;
   }
 
-  if (topActions.length === 0) {
+  if (allGrouped.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">All clear</div>
-        <div class="empty-state-text">No actions needed right now. All contacts are active.</div>
+        <div class="empty-state-text">No actions needed right now. Run engagement enrichment to populate scores.</div>
       </div>`;
     return;
   }
 
-  container.innerHTML = topActions.map((a, i) => {
-    const bp = a.buyerProfile;
-    const hasSummary = bp && bp.last_discussion_summary;
-    const hasSuggested = bp && bp.suggested_next_action;
-    const suggestedProjects = bp?.suggested_projects || '';
-    const confidence = bp?.extraction_confidence || '';
+  // Render grouped sections
+  let html = '';
+  let globalRank = 0;
 
-    // Main trigger text
-    let triggerText = '';
-    if (hasSummary) {
-      // Show AI summary instead of staleness text
-      triggerText = '';
-    } else if (a.activeDeal) {
-      triggerText = `Deal: ${esc(a.activeDeal.deal_description || '')} (${STAGE_LABELS[a.activeDeal.stage] || a.activeDeal.stage})`;
-    } else if (a.daysSince >= 14) {
-      triggerText = `No activity in ${a.daysSince} days — relationship going cold`;
-    } else if (a.daysSince >= 7) {
-      triggerText = `${a.daysSince} days since last activity — follow up soon`;
-    } else {
-      triggerText = `Active — last activity ${a.daysSince}d ago`;
+  function renderGroup(items, groupClass, label) {
+    if (items.length === 0) return '';
+    let out = `<div class="action-group-header ${groupClass}"><span class="group-label">${label}</span><span class="group-count">${items.length}</span><span class="group-line"></span></div>`;
+    for (const a of items) {
+      globalRank++;
+      out += renderActionCard(a, globalRank);
     }
+    return out;
+  }
 
-    // Project badges
-    const projBadges = a.matchedProjects.map(p =>
-      `<span class="project-badge" title="${esc(p.one_liner || p.name)}">${esc(p.short_name || p.name)}</span>`
+  html += renderGroup(groupedActive, 'group-active', 'Active Conversations');
+  html += renderGroup(groupedReengage, 'group-reengage', 'Re-engage Now');
+  html += renderGroup(groupedPipeline, 'group-pipeline', 'Pipeline');
+
+  container.innerHTML = html;
+}
+
+function renderActionCard(a, rank) {
+  const bp = a.buyerProfile;
+  const hasSummary = bp && bp.last_discussion_summary;
+  const hasSuggested = bp && bp.suggested_next_action;
+  const suggestedProjects = bp?.suggested_projects || '';
+  const confidence = bp?.extraction_confidence || '';
+
+  // Owner badge
+  const ownerName = getOwnerDisplayName(a.ownerId);
+  const ownerBadgeClass = a.ownerId ? getOwnerBadgeClass(a.ownerId) : '';
+  const ownerBadge = ownerName ? `<span class="owner-badge ${ownerBadgeClass}">${esc(ownerName)}</span>` : '';
+
+  // Engagement indicator pips (max 5)
+  const engPips = Math.min(5, Math.ceil((a.engScore || 0) / 20));
+  let pipsHtml = '';
+  if (a.engScore > 0) {
+    pipsHtml = '<span class="engagement-bar">';
+    for (let i = 0; i < 5; i++) {
+      const cls = i < engPips ? (a.hasInbound ? 'active hot' : 'active') : '';
+      pipsHtml += `<span class="eng-pip ${cls}"></span>`;
+    }
+    pipsHtml += ` ${a.engScore}</span>`;
+  }
+
+  // Trigger text
+  let triggerText = '';
+  if (hasSummary) {
+    triggerText = '';
+  } else if (a.activeDeal) {
+    triggerText = `Deal: ${esc(a.activeDeal.deal_description || '')} (${STAGE_LABELS[a.activeDeal.stage] || a.activeDeal.stage})`;
+  } else if (a.act30d >= 2 && a.hasInbound) {
+    triggerText = `Active two-way conversation — ${a.act30d} activities in 30d`;
+  } else if (a.act30d >= 1) {
+    triggerText = `Recent activity — ${a.act30d} touch${a.act30d > 1 ? 'es' : ''} in 30d`;
+  } else if (a.daysSince >= 14 && a.engScore > 0) {
+    triggerText = `${a.daysSince}d since last activity — was engaged, re-engage now`;
+  } else if (a.daysSince >= 14) {
+    triggerText = `${a.daysSince}d ago — no response to outreach`;
+  } else {
+    triggerText = `Last activity ${a.daysSince}d ago`;
+  }
+
+  // Engagement detail line
+  let engDetail = '';
+  if (a.emails60d || a.calls60d || a.meetings60d) {
+    const parts = [];
+    if (a.emails60d) parts.push(`${a.emails60d} email${a.emails60d > 1 ? 's' : ''}`);
+    if (a.calls60d) parts.push(`${a.calls60d} call${a.calls60d > 1 ? 's' : ''}`);
+    if (a.meetings60d) parts.push(`${a.meetings60d} mtg${a.meetings60d > 1 ? 's' : ''}`);
+    if (a.hasInbound) parts.push('inbound reply');
+    engDetail = `<span style="font-size:10px;color:var(--text-muted);font-family:var(--mono)">${parts.join(' / ')}</span>`;
+  }
+
+  // Project badges
+  const projBadges = a.matchedProjects.map(p =>
+    `<span class="project-badge" title="${esc(p.one_liner || p.name)}">${esc(p.short_name || p.name)}</span>`
+  ).join(' ');
+
+  let aiProjBadges = '';
+  if (suggestedProjects && !a.matchedProjects.length) {
+    aiProjBadges = suggestedProjects.split(',').map(p => p.trim()).filter(Boolean).map(p =>
+      `<span class="project-badge" title="AI suggested">${esc(p)}</span>`
     ).join(' ');
+  }
 
-    // Suggested project badges from AI
-    let aiProjBadges = '';
-    if (suggestedProjects && !a.matchedProjects.length) {
-      aiProjBadges = suggestedProjects.split(',').map(p => p.trim()).filter(Boolean).map(p =>
-        `<span class="project-badge" title="AI suggested">${esc(p)}</span>`
-      ).join(' ');
-    }
+  return `
+  <div class="action-card ${a.cardClass}" id="card-${a.hubspotId || rank}" onclick="openContactDetail('${a.hubspotId || ''}', '${esc(a.email)}')">
+    <div class="action-rank ${rank <= 3 ? 'top3' : ''}">${rank}</div>
+    <div class="action-body">
+      <div class="action-who">${esc(a.name)}${a.jobTitle ? ` <span>${esc(a.jobTitle)}</span>` : ''} <span>@ ${esc(a.company)}</span> ${ownerBadge}</div>
+      ${hasSummary ? `<div class="action-intel-summary">${esc(bp.last_discussion_summary)}</div>` : ''}
+      ${triggerText ? `<div class="action-trigger">${triggerText}</div>` : ''}
+      ${hasSuggested ? `<div class="action-suggested">${esc(bp.suggested_next_action)}</div>` : ''}
+      <div class="action-meta">
+        ${pipsHtml}
+        ${a.isAiExtracted ? `<span class="action-tag ai-extracted">AI</span>` : a.isProfiled ? `<span class="action-tag profiled">Profiled</span>` : `<span class="action-tag unprofiled">New</span>`}
+        ${a.activeDeal ? `<span style="font-size:10px;color:var(--gold)">Deal: $${formatNum(a.activeDeal.value_usd || 0)}</span>` : ''}
+        ${confidence ? `<span class="confidence-badge confidence-${confidence}">${confidence}</span>` : ''}
+        ${engDetail}
+        <span style="font-size:10px;color:var(--text-muted);font-family:var(--mono)">${a.daysSince}d</span>
+        ${projBadges}
+        ${aiProjBadges}
+      </div>
+    </div>
+    <div class="action-buttons" onclick="event.stopPropagation()">
+      ${a.hubspotId ? `<button class="btn btn-purple btn-xs" id="intel-btn-${a.hubspotId}" onclick="extractIntel('${a.hubspotId}')">Extract Intel</button>` : ''}
+      ${a.hubspotId ? `<button class="btn btn-danger btn-xs" onclick="excludeContact('${a.hubspotId}', this)">Not a Buyer</button>` : ''}
+      ${a.email ? `<button class="btn btn-outline btn-xs" onclick="window.open('mailto:${esc(a.email)}')">Email</button>` : ''}
+      ${a.hubspotId ? `<button class="btn btn-outline btn-xs" onclick="openContactDetail('${a.hubspotId}', '${esc(a.email)}')">View Emails</button>` : ''}
+    </div>
+  </div>`;
+}
 
-    return `
-    <div class="action-card ${a.cardClass}" id="card-${a.hubspotId || i}" onclick="openContactDetail('${a.hubspotId || ''}', '${esc(a.email)}')">
-      <div class="action-rank ${i < 3 ? 'top3' : ''}">${i + 1}</div>
-      <div class="action-body">
-        <div class="action-who">${esc(a.name)}${a.jobTitle ? ` <span>${esc(a.jobTitle)}</span>` : ''} <span>@ ${esc(a.company)}</span></div>
-        ${hasSummary ? `<div class="action-intel-summary">${esc(bp.last_discussion_summary)}</div>` : ''}
-        ${triggerText ? `<div class="action-trigger">${triggerText}</div>` : ''}
-        ${hasSuggested ? `<div class="action-suggested">${esc(bp.suggested_next_action)}</div>` : ''}
-        <div class="action-meta">
-          ${a.isAiExtracted ? `<span class="action-tag ai-extracted">AI Extracted</span>` : a.isProfiled ? `<span class="action-tag profiled">Profiled</span>` : `<span class="action-tag unprofiled">Unprofiled</span>`}
-          ${a.activeDeal ? `<span style="font-size:10px;color:var(--gold)">Deal: $${formatNum(a.activeDeal.value_usd || 0)}</span>` : ''}
-          ${confidence ? `<span class="confidence-badge confidence-${confidence}">${confidence}</span>` : ''}
-          <span style="font-size:10px;color:var(--text-muted);font-family:var(--mono)">${a.daysSince}d ago</span>
-          ${projBadges}
-          ${aiProjBadges}
-        </div>
-      </div>
-      <div class="action-buttons" onclick="event.stopPropagation()">
-        ${a.hubspotId ? `<button class="btn btn-purple btn-xs" id="intel-btn-${a.hubspotId}" onclick="extractIntel('${a.hubspotId}')">Extract Intel</button>` : ''}
-        ${a.hubspotId ? `<button class="btn btn-danger btn-xs" onclick="excludeContact('${a.hubspotId}', this)">Not a Buyer</button>` : ''}
-        ${a.email ? `<button class="btn btn-outline btn-xs" onclick="window.open('mailto:${esc(a.email)}')">Email</button>` : ''}
-        ${a.hubspotId ? `<button class="btn btn-outline btn-xs" onclick="openContactDetail('${a.hubspotId}', '${esc(a.email)}')">View Emails</button>` : ''}
-      </div>
-    </div>`;
-  }).join('');
+// Helper functions for owner badges used in loadActionList
+function getOwnerBadgeClass(ownerId) {
+  const OWNER_COLORS = { ana: 'owner-ana', carolina: 'owner-carolina', luis: 'owner-luis', brian: 'owner-brian' };
+  const name = getOwnerName(ownerId);
+  return OWNER_COLORS[name] || 'owner-other';
+}
+function getOwnerDisplayName(ownerId) {
+  if (!ownerId) return '';
+  const o = ownerMap[ownerId];
+  if (o && o.firstname) return o.firstname;
+  return '';
 }
 
 // ============================================================
