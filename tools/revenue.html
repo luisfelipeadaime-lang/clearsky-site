@@ -86,7 +86,7 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 .sync-status {
   font-size: 11px;
@@ -111,6 +111,20 @@ body {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
 }
+
+/* TEAM SELECT */
+.team-select {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  padding: 6px 10px;
+  cursor: pointer;
+  outline: none;
+}
+.team-select:focus { border-color: var(--gold); }
 
 /* TABS */
 .tabs {
@@ -220,12 +234,14 @@ body {
 .btn-green:hover { background: rgba(52,211,153,0.2); }
 .btn-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(96,165,250,0.2); }
 .btn-blue:hover { background: rgba(96,165,250,0.2); }
+.btn-purple { background: rgba(167,139,250,0.1); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+.btn-purple:hover { background: rgba(167,139,250,0.2); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* STATS BAR */
 .stats-bar {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 12px;
   margin-bottom: 24px;
 }
@@ -260,6 +276,50 @@ body {
 .stat-delta.up { color: var(--green); }
 .stat-delta.down { color: var(--red); }
 
+/* KPI BAR (Brian view) */
+.kpi-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(52,211,153,0.05), rgba(200,169,81,0.05));
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.kpi-card {
+  text-align: center;
+}
+.kpi-card .kpi-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.kpi-card .kpi-value {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 700;
+}
+.kpi-card .kpi-target {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+.kpi-bar-progress {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+.kpi-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s;
+}
+
 /* ACTION CARDS */
 .action-list { display: flex; flex-direction: column; gap: 10px; }
 .action-card {
@@ -271,13 +331,44 @@ body {
   grid-template-columns: 36px 1fr auto;
   gap: 14px;
   align-items: start;
-  transition: all 0.15s;
+  transition: all 0.3s;
   cursor: pointer;
+  position: relative;
 }
 .action-card:hover { background: var(--card-hover); border-color: var(--border-light); }
 .action-card.stale-red { border-left: 3px solid var(--red); }
 .action-card.stale-yellow { border-left: 3px solid var(--yellow); }
 .action-card.stale-green { border-left: 3px solid var(--green); }
+.action-card.temp-hot { border-left: 3px solid var(--red); }
+.action-card.temp-warm { border-left: 3px solid var(--yellow); }
+.action-card.temp-cold { border-left: 3px solid var(--blue); }
+.action-card.removing {
+  opacity: 0;
+  transform: translateX(100px);
+  max-height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+.action-card.extracting {
+  border-color: var(--gold);
+  background: rgba(200,169,81,0.03);
+}
+.action-card.extracting::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 
 .action-rank {
   width: 36px;
@@ -312,9 +403,29 @@ body {
   margin-bottom: 6px;
   line-height: 1.4;
 }
+.action-intel-summary {
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 6px;
+  padding: 8px 10px;
+  background: rgba(200,169,81,0.04);
+  border-left: 2px solid var(--gold-dim);
+  border-radius: 0 4px 4px 0;
+}
+.action-suggested {
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 6px;
+  padding: 4px 8px;
+  background: var(--gold-bg);
+  border-radius: 4px;
+  display: inline-block;
+}
 .action-meta {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -326,6 +437,28 @@ body {
 }
 .action-tag.profiled { background: var(--green-bg); color: var(--green); }
 .action-tag.unprofiled { background: rgba(107,114,128,0.15); color: var(--text-muted); }
+.action-tag.ai-extracted { background: rgba(167,139,250,0.12); color: var(--purple); }
+.project-badge {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-weight: 600;
+  background: var(--gold-bg2);
+  color: var(--gold);
+  cursor: pointer;
+}
+.project-badge:hover { background: rgba(200,169,81,0.25); }
+.confidence-badge {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.confidence-high { background: var(--green-bg); color: var(--green); }
+.confidence-medium { background: var(--yellow-bg); color: var(--yellow); }
+.confidence-low { background: rgba(107,114,128,0.15); color: var(--text-muted); }
 
 .action-buttons {
   display: flex;
@@ -628,6 +761,39 @@ body {
   font-size: 11px;
 }
 
+/* BATCH PROGRESS */
+.batch-progress {
+  padding: 16px;
+  background: var(--card);
+  border: 1px solid var(--gold-dim);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.batch-progress-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.batch-progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.batch-progress-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+.batch-results {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+
 /* EMPTY STATE */
 .empty-state {
   text-align: center;
@@ -649,6 +815,16 @@ body {
   margin: 0 auto 12px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.spinner-inline {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
 
 /* TOAST */
 .toast-container {
@@ -704,6 +880,9 @@ body {
     </div>
     <div class="header-actions">
       <span class="sync-status" id="syncStatus"></span>
+      <select class="team-select" id="teamSelect" onchange="onTeamChange()">
+        <option value="">All Team</option>
+      </select>
       <button class="btn btn-outline btn-sm" id="syncBtn" onclick="syncHubSpot()">Sync HubSpot</button>
       <span class="status-dot"></span>
       <span class="header-date" id="headerDate"></span>
@@ -729,16 +908,17 @@ body {
 
   <!-- TAB 1: ACTION LIST -->
   <div class="tab-content active" id="tab-actions">
+    <div id="brianKpis" style="display:none"></div>
     <div class="stats-bar" id="actionStats"></div>
     <div class="section-header">
       <div>
         <div class="section-title">Priority Actions</div>
-        <div class="section-subtitle">HubSpot contacts ranked by staleness — red = 14+ days, yellow = 7-14 days</div>
+        <div class="section-subtitle">Smart-ranked contacts — profiled intelligence + deal activity + staleness</div>
       </div>
       <button class="btn btn-outline btn-sm" onclick="loadActionList()">Refresh</button>
     </div>
     <div class="action-list" id="actionList">
-      <div class="loading"><div class="spinner"></div>Loading HubSpot contacts...</div>
+      <div class="loading"><div class="spinner"></div>Loading contacts...</div>
     </div>
   </div>
 
@@ -800,10 +980,14 @@ body {
     <div class="section-header">
       <div>
         <div class="section-title">Buyer Intelligence</div>
-        <div class="section-subtitle">Profiled buyers from your database + unprofiled HubSpot contacts</div>
+        <div class="section-subtitle">AI-extracted buyer profiles from HubSpot email history</div>
       </div>
-      <button class="btn btn-gold" onclick="openBuyerModal()">+ Profile Buyer</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-purple btn-sm" id="batchExtractBtn" onclick="runBatchExtraction()">Run Batch Extraction (50)</button>
+        <button class="btn btn-gold" onclick="openBuyerModal()">+ Profile Buyer</button>
+      </div>
     </div>
+    <div id="batchProgressContainer" style="display:none"></div>
     <div class="filters" id="buyerFilters">
       <button class="filter-pill active" data-filter="all">All Profiled</button>
       <button class="filter-pill" data-filter="hot">Hot</button>
@@ -844,21 +1028,29 @@ const STATUSES = ['available','forward','pipeline','sold_out'];
 const REL_STATUSES = ['hot','warm','cold','dormant','new'];
 const TIERS = ['T1','T2','T3'];
 
+// Owner name → owner_id mapping (populated from /api/hubspot/owners)
+let ownerMap = {}; // { owner_id: { name, email, firstname, lastname } }
+let ownerNameToId = {}; // { 'ana': 'owner_id', ... }
+let selectedOwnerId = localStorage.getItem('rcc_owner_id') || '';
+let selectedOwnerName = localStorage.getItem('rcc_owner_name') || '';
+
 // ============================================================
-// IN-MEMORY CACHE (loaded from API, never from localStorage)
+// IN-MEMORY CACHE
 // ============================================================
 let cache = {
   deals: [],
   projects: [],
   buyers: [],
+  activeContacts: [],
   hubspotContacts: [],
   hubspotCompanies: [],
   hubspotDeals: [],
+  owners: [],
   lastSync: null
 };
 
 // ============================================================
-// API LAYER (no fallback — 100% server-driven)
+// API LAYER
 // ============================================================
 async function api(endpoint, method = 'GET', body = null) {
   const opts = { method, headers: { 'Content-Type': 'application/json' } };
@@ -890,6 +1082,18 @@ async function loadAll() {
   }
 }
 
+async function loadActiveContacts() {
+  try {
+    let endpoint = '/hubspot/contacts/active?limit=200';
+    if (selectedOwnerId) endpoint += '&owner_id=' + encodeURIComponent(selectedOwnerId);
+    const result = await api(endpoint);
+    cache.activeContacts = result.data || [];
+  } catch (e) {
+    console.warn('Active contacts failed:', e.message);
+    cache.activeContacts = [];
+  }
+}
+
 async function loadHubSpotCache() {
   try {
     const [contacts, companies, deals] = await Promise.all([
@@ -908,6 +1112,90 @@ async function loadHubSpotCache() {
   }
 }
 
+async function loadOwners() {
+  try {
+    const result = await api('/hubspot/owners');
+    cache.owners = result.data || [];
+    buildOwnerMaps();
+    populateTeamSelect();
+  } catch (e) {
+    console.warn('Failed to load owners:', e.message);
+    // Fallback: populate with known team names
+    populateTeamSelectFallback();
+  }
+}
+
+function buildOwnerMaps() {
+  ownerMap = {};
+  ownerNameToId = {};
+  for (const o of cache.owners) {
+    const first = (o.firstname || '').toLowerCase();
+    ownerMap[o.owner_id] = o;
+    if (first) ownerNameToId[first] = o.owner_id;
+  }
+}
+
+function getOwnerName(ownerId) {
+  if (!ownerId) return 'unassigned';
+  const o = ownerMap[ownerId];
+  if (o) return (o.firstname || '').toLowerCase() || 'unknown';
+  return 'unknown';
+}
+
+function populateTeamSelect() {
+  const select = document.getElementById('teamSelect');
+  select.innerHTML = '<option value="">All Team</option>';
+  // Known team members first
+  const knownNames = ['ana', 'carolina', 'luis', 'brian'];
+  for (const name of knownNames) {
+    const ownerId = ownerNameToId[name];
+    if (ownerId) {
+      const opt = document.createElement('option');
+      opt.value = ownerId;
+      opt.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+      opt.dataset.name = name;
+      select.appendChild(opt);
+    }
+  }
+  // Any other owners
+  for (const o of cache.owners) {
+    const first = (o.firstname || '').toLowerCase();
+    if (!knownNames.includes(first) && first) {
+      const opt = document.createElement('option');
+      opt.value = o.owner_id;
+      opt.textContent = o.firstname || o.email || o.owner_id;
+      opt.dataset.name = first;
+      select.appendChild(opt);
+    }
+  }
+  // Restore saved selection
+  if (selectedOwnerId) {
+    select.value = selectedOwnerId;
+  }
+}
+
+function populateTeamSelectFallback() {
+  const select = document.getElementById('teamSelect');
+  select.innerHTML = '<option value="">All Team</option>';
+  for (const name of ['Ana', 'Carolina', 'Luis', 'Brian']) {
+    const opt = document.createElement('option');
+    opt.value = name.toLowerCase();
+    opt.textContent = name;
+    opt.dataset.name = name.toLowerCase();
+    select.appendChild(opt);
+  }
+}
+
+function onTeamChange() {
+  const select = document.getElementById('teamSelect');
+  selectedOwnerId = select.value;
+  const selectedOption = select.options[select.selectedIndex];
+  selectedOwnerName = selectedOption?.dataset?.name || '';
+  localStorage.setItem('rcc_owner_id', selectedOwnerId);
+  localStorage.setItem('rcc_owner_name', selectedOwnerName);
+  renderCurrentTab();
+}
+
 async function syncHubSpot() {
   const btn = document.getElementById('syncBtn');
   const status = document.getElementById('syncStatus');
@@ -920,7 +1208,7 @@ async function syncHubSpot() {
     const result = await api('/hubspot/sync');
     cache.lastSync = new Date().toISOString();
     toast(`Synced ${result.contacts_synced || 0} contacts, ${result.companies_synced || 0} companies, ${result.deals_synced || 0} deals`);
-    await loadHubSpotCache();
+    await Promise.all([loadHubSpotCache(), loadActiveContacts(), loadOwners()]);
     renderCurrentTab();
   } catch (e) {
     toast('Sync failed: ' + e.message, 'error');
@@ -934,8 +1222,7 @@ async function syncHubSpot() {
 function updateSyncStatus() {
   const el = document.getElementById('syncStatus');
   if (cache.lastSync) {
-    const ago = timeSince(cache.lastSync);
-    el.textContent = `Last sync: ${ago}`;
+    el.textContent = `Last sync: ${timeSince(cache.lastSync)}`;
     el.className = 'sync-status';
   } else {
     el.textContent = 'Not synced';
@@ -965,24 +1252,31 @@ document.querySelectorAll('.tab').forEach(tab => {
 });
 
 // ============================================================
-// ACTION LIST — HubSpot contacts ranked by staleness
+// ACTION LIST — Smart-ranked with intelligence
 // ============================================================
-function loadActionList() {
-  const contacts = cache.hubspotContacts;
+async function loadActionList() {
+  // Load active contacts fresh (respects owner filter)
+  await loadActiveContacts();
+
+  const contacts = cache.activeContacts;
   const buyers = cache.buyers;
   const deals = cache.deals;
   const projects = cache.projects;
   const today = new Date();
 
-  // Build lookup of profiled buyer emails
-  const profiledEmails = new Set(buyers.map(b => (b.contact_email || '').toLowerCase()).filter(Boolean));
+  // Build buyer profile lookup by hubspot_contact_id
+  const buyerByHsId = {};
+  const buyerByEmail = {};
+  for (const b of buyers) {
+    if (b.hubspot_contact_id) buyerByHsId[b.hubspot_contact_id] = b;
+    if (b.contact_email) buyerByEmail[b.contact_email.toLowerCase()] = b;
+  }
 
   const actions = [];
 
-  // Source 1: HubSpot contacts ranked by staleness
   for (const contact of contacts) {
     const name = [contact.firstname, contact.lastname].filter(Boolean).join(' ') || contact.email || 'Unknown';
-    const company = contact.company || '—';
+    const company = contact.company || '';
     const email = contact.email || '';
 
     // Calculate days since last activity
@@ -990,41 +1284,49 @@ function loadActionList() {
     const lastDate = lastActivity ? new Date(lastActivity) : null;
     const daysSince = lastDate ? Math.floor((today - lastDate) / 86400000) : 999;
 
-    // Determine staleness level
-    let staleLevel = 'green';
-    let trigger = '';
-    let score = 0;
+    // Get buyer profile
+    const buyerProfile = buyerByHsId[contact.hubspot_id] || buyerByEmail[email.toLowerCase()] || null;
+    const isProfiled = !!buyerProfile;
+    const isAiExtracted = buyerProfile?.source === 'ai_extracted';
 
-    if (daysSince >= 14) {
-      staleLevel = 'red';
-      trigger = `No activity in ${daysSince} days — relationship going cold`;
-      score += 40;
-    } else if (daysSince >= 7) {
-      staleLevel = 'yellow';
-      trigger = `${daysSince} days since last activity — follow up soon`;
-      score += 20;
-    } else {
-      trigger = `Active — last activity ${daysSince}d ago`;
-      score += 5;
+    // Skip is_buyer = false contacts (score penalty handles ranking, but skip the obvious non-buyers)
+    if (buyerProfile && buyerProfile.is_buyer === 0 && buyerProfile.source === 'ai_extracted') {
+      continue; // Already confirmed not a buyer by AI
     }
 
-    // Check if this contact has a buyer profile
-    const isProfiled = profiledEmails.has(email.toLowerCase());
-    const buyerProfile = isProfiled ? buyers.find(b => (b.contact_email || '').toLowerCase() === email.toLowerCase()) : null;
+    // SMART SCORING
+    let score = 0;
 
-    // Check if has active deal
+    // Check active deals
     const activeDeal = deals.find(d =>
       !['closed_won','closed_lost','dead'].includes(d.stage) &&
       (d.contact_email === email || d.company === company)
     );
+    if (activeDeal) {
+      if (activeDeal.stage === 'negotiating') score += 30;
+      else if (activeDeal.stage === 'pricing_sent') score += 25;
+      else score += 10;
+    }
 
-    // Boost score for profiled buyers with inventory matches
+    // Temperature + profiled boost
+    const temp = buyerProfile?.relationship_status || '';
+    if (temp === 'hot' && isProfiled) score += 20;
+    else if (temp === 'warm') score += 10;
+
+    // Staleness
+    if (daysSince > 14) score += 25;
+    else if (daysSince >= 7) score += 15;
+
+    // Profile status
+    if (isProfiled) score += 10;
+
+    // Project match
+    let matchedProjects = [];
     if (buyerProfile) {
       let buyerTypes = [];
       try { buyerTypes = JSON.parse(buyerProfile.credit_types_interested || '[]'); } catch(e) {}
-
       const availableProjects = projects.filter(p => ['available','forward'].includes(p.status));
-      const matches = availableProjects.filter(p => {
+      matchedProjects = availableProjects.filter(p => {
         let targetBuyers = [];
         try { targetBuyers = JSON.parse(p.target_buyers || '[]'); } catch(e) {}
         return buyerTypes.some(bt =>
@@ -1032,103 +1334,105 @@ function loadActionList() {
           targetBuyers.some(tb => tb.toLowerCase().includes(bt.toLowerCase()))
         );
       });
-
-      if (matches.length > 0) {
-        score += 15 + matches.length * 3;
-        trigger += ` | Matches: ${matches.map(m => m.short_name || m.name).join(', ')}`;
-      }
-
-      if (buyerProfile.tier === 'T1') score += 10;
-      if (buyerProfile.tier === 'T2') score += 5;
-      if (buyerProfile.relationship_status === 'hot') score += 15;
-      if (buyerProfile.relationship_status === 'warm') score += 8;
+      if (matchedProjects.length > 0) score += 15;
     }
 
-    // Boost for contacts with deals
-    if (activeDeal) {
-      score += 10;
-      if (activeDeal.stage === 'negotiating') score += 15;
-      if (activeDeal.stage === 'pricing_sent') score += 10;
-    }
+    // Confidence boost
+    if (buyerProfile?.extraction_confidence === 'high') score += 5;
+
+    // is_buyer false penalty
+    if (buyerProfile && buyerProfile.is_buyer === 0) score -= 100;
+
+    // Determine visual style
+    let staleLevel = 'green';
+    if (daysSince >= 14) staleLevel = 'red';
+    else if (daysSince >= 7) staleLevel = 'yellow';
+
+    // Use temperature for border if profiled
+    let cardClass = `stale-${staleLevel}`;
+    if (isProfiled && temp) cardClass = `temp-${temp}`;
 
     actions.push({
+      cardClass,
       staleLevel,
       score,
       daysSince,
       name,
       company,
       email,
-      trigger,
       isProfiled,
+      isAiExtracted,
       buyerProfile,
       activeDeal,
+      matchedProjects,
       hubspotId: contact.hubspot_id,
-      jobTitle: contact.jobtitle
+      jobTitle: contact.jobtitle,
+      ownerId: contact.owner_id
     });
   }
 
-  // Source 2: Active deals with no HubSpot contact match
+  // Also add active deals with no contact match
   for (const deal of deals) {
     if (['closed_won','closed_lost','dead'].includes(deal.stage)) continue;
+    // Filter by owner if selected
+    if (selectedOwnerName && deal.owner && deal.owner !== selectedOwnerName) continue;
     const hasContactMatch = contacts.some(c => c.email === deal.contact_email || c.company === deal.company);
     if (hasContactMatch) continue;
 
-    const lastActivity = deal.last_activity_date || deal.created_at;
-    const daysSince = lastActivity ? Math.floor((today - new Date(lastActivity)) / 86400000) : 999;
+    const lastAct = deal.last_activity_date || deal.created_at;
+    const daysSince = lastAct ? Math.floor((today - new Date(lastAct)) / 86400000) : 999;
 
-    let staleLevel = 'green';
     let score = 10;
-    if (daysSince >= 14) { staleLevel = 'red'; score += 30; }
-    else if (daysSince >= 7) { staleLevel = 'yellow'; score += 15; }
-
-    score += Math.min((deal.value_usd || 0) / 10000, 20);
+    if (deal.stage === 'negotiating') score += 30;
+    else if (deal.stage === 'pricing_sent') score += 25;
+    if (daysSince >= 14) score += 25;
+    else if (daysSince >= 7) score += 15;
 
     actions.push({
-      staleLevel,
+      cardClass: daysSince >= 14 ? 'stale-red' : daysSince >= 7 ? 'stale-yellow' : 'stale-green',
+      staleLevel: daysSince >= 14 ? 'red' : daysSince >= 7 ? 'yellow' : 'green',
       score,
       daysSince,
       name: deal.contact_name || deal.company,
       company: deal.company,
       email: deal.contact_email || '',
-      trigger: `Deal: ${deal.deal_description} (${STAGE_LABELS[deal.stage] || deal.stage})`,
       isProfiled: false,
+      isAiExtracted: false,
       buyerProfile: null,
       activeDeal: deal,
+      matchedProjects: [],
       hubspotId: null,
-      jobTitle: null
+      jobTitle: null,
+      ownerId: null
     });
   }
 
-  // Sort by score descending, take top 25
+  // Sort by score descending, take top 30
   actions.sort((a, b) => b.score - a.score);
-  const topActions = actions.slice(0, 25);
+  const topActions = actions.slice(0, 30);
 
-  // Update stats
+  // Stats
   const staleRed = contacts.filter(c => {
     const last = c.last_activity_date || c.last_email_date;
     return last ? (today - new Date(last)) / 86400000 >= 14 : true;
   }).length;
-  const staleYellow = contacts.filter(c => {
-    const last = c.last_activity_date || c.last_email_date;
-    if (!last) return false;
-    const days = (today - new Date(last)) / 86400000;
-    return days >= 7 && days < 14;
-  }).length;
-  const totalContacts = contacts.length;
-  const profiledCount = contacts.filter(c => profiledEmails.has((c.email || '').toLowerCase())).length;
-  const profiledPct = totalContacts > 0 ? Math.round(profiledCount / totalContacts * 100) : 0;
+  const profiledCount = contacts.filter(c => buyerByHsId[c.hubspot_id] || buyerByEmail[(c.email || '').toLowerCase()]).length;
+  const profiledPct = contacts.length > 0 ? Math.round(profiledCount / contacts.length * 100) : 0;
   const pipeline = deals.filter(d => !['closed_won','closed_lost','dead'].includes(d.stage));
   const pipelineValue = pipeline.reduce((s, d) => s + (d.value_usd || 0), 0);
 
   document.getElementById('actionStats').innerHTML = `
-    <div class="stat-card"><div class="stat-label">HubSpot Contacts</div><div class="stat-value">${totalContacts}</div><div class="stat-delta">${profiledPct}% profiled</div></div>
+    <div class="stat-card"><div class="stat-label">Active Contacts</div><div class="stat-value">${contacts.length}</div><div class="stat-delta">${profiledPct}% profiled</div></div>
     <div class="stat-card"><div class="stat-label">Pipeline Value</div><div class="stat-value gold">$${formatNum(pipelineValue)}</div><div class="stat-delta">${pipeline.length} active deals</div></div>
     <div class="stat-card"><div class="stat-label">Stale (14d+)</div><div class="stat-value ${staleRed > 0 ? 'red' : ''}">${staleRed}</div><div class="stat-delta ${staleRed > 0 ? 'down' : ''}">need attention</div></div>
-    <div class="stat-card"><div class="stat-label">Warning (7-14d)</div><div class="stat-value" style="color:var(--yellow)">${staleYellow}</div><div class="stat-delta">follow up soon</div></div>
+    <div class="stat-card"><div class="stat-label">AI Profiled</div><div class="stat-value green">${profiledCount}</div><div class="stat-delta">${contacts.length - profiledCount} remaining</div></div>
   `;
 
-  // Update badge
-  document.getElementById('actionsBadge').textContent = staleRed || topActions.length;
+  // Brian's KPI view
+  renderBrianKpis();
+
+  // Badge
+  document.getElementById('actionsBadge').textContent = topActions.length;
   document.getElementById('actionsBadge').className = `tab-badge ${staleRed > 0 ? 'red' : 'gold'}`;
 
   const container = document.getElementById('actionList');
@@ -1137,7 +1441,7 @@ function loadActionList() {
     container.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">HubSpot</div>
-        <div class="empty-state-text">No HubSpot contacts cached. Click "Sync HubSpot" to pull your CRM data.</div>
+        <div class="empty-state-text">No active contacts found. Click "Sync HubSpot" to pull your CRM data.</div>
         <button class="btn btn-gold" onclick="syncHubSpot()">Sync HubSpot Now</button>
       </div>`;
     return;
@@ -1152,24 +1456,256 @@ function loadActionList() {
     return;
   }
 
-  container.innerHTML = topActions.map((a, i) => `
-    <div class="action-card stale-${a.staleLevel}" onclick="openContactDetail('${a.hubspotId || ''}', '${esc(a.email)}')">
+  container.innerHTML = topActions.map((a, i) => {
+    const bp = a.buyerProfile;
+    const hasSummary = bp && bp.last_discussion_summary;
+    const hasSuggested = bp && bp.suggested_next_action;
+    const suggestedProjects = bp?.suggested_projects || '';
+    const confidence = bp?.extraction_confidence || '';
+
+    // Main trigger text
+    let triggerText = '';
+    if (hasSummary) {
+      // Show AI summary instead of staleness text
+      triggerText = '';
+    } else if (a.activeDeal) {
+      triggerText = `Deal: ${esc(a.activeDeal.deal_description || '')} (${STAGE_LABELS[a.activeDeal.stage] || a.activeDeal.stage})`;
+    } else if (a.daysSince >= 14) {
+      triggerText = `No activity in ${a.daysSince} days — relationship going cold`;
+    } else if (a.daysSince >= 7) {
+      triggerText = `${a.daysSince} days since last activity — follow up soon`;
+    } else {
+      triggerText = `Active — last activity ${a.daysSince}d ago`;
+    }
+
+    // Project badges
+    const projBadges = a.matchedProjects.map(p =>
+      `<span class="project-badge" title="${esc(p.one_liner || p.name)}">${esc(p.short_name || p.name)}</span>`
+    ).join(' ');
+
+    // Suggested project badges from AI
+    let aiProjBadges = '';
+    if (suggestedProjects && !a.matchedProjects.length) {
+      aiProjBadges = suggestedProjects.split(',').map(p => p.trim()).filter(Boolean).map(p =>
+        `<span class="project-badge" title="AI suggested">${esc(p)}</span>`
+      ).join(' ');
+    }
+
+    return `
+    <div class="action-card ${a.cardClass}" id="card-${a.hubspotId || i}" onclick="openContactDetail('${a.hubspotId || ''}', '${esc(a.email)}')">
       <div class="action-rank ${i < 3 ? 'top3' : ''}">${i + 1}</div>
       <div class="action-body">
         <div class="action-who">${esc(a.name)}${a.jobTitle ? ` <span>${esc(a.jobTitle)}</span>` : ''} <span>@ ${esc(a.company)}</span></div>
-        <div class="action-trigger">${esc(a.trigger)}</div>
+        ${hasSummary ? `<div class="action-intel-summary">${esc(bp.last_discussion_summary)}</div>` : ''}
+        ${triggerText ? `<div class="action-trigger">${triggerText}</div>` : ''}
+        ${hasSuggested ? `<div class="action-suggested">${esc(bp.suggested_next_action)}</div>` : ''}
         <div class="action-meta">
-          <span class="action-tag ${a.isProfiled ? 'profiled' : 'unprofiled'}">${a.isProfiled ? 'Profiled' : 'Unprofiled'}</span>
+          ${a.isAiExtracted ? `<span class="action-tag ai-extracted">AI Extracted</span>` : a.isProfiled ? `<span class="action-tag profiled">Profiled</span>` : `<span class="action-tag unprofiled">Unprofiled</span>`}
           ${a.activeDeal ? `<span style="font-size:10px;color:var(--gold)">Deal: $${formatNum(a.activeDeal.value_usd || 0)}</span>` : ''}
+          ${confidence ? `<span class="confidence-badge confidence-${confidence}">${confidence}</span>` : ''}
           <span style="font-size:10px;color:var(--text-muted);font-family:var(--mono)">${a.daysSince}d ago</span>
+          ${projBadges}
+          ${aiProjBadges}
         </div>
       </div>
-      <div class="action-buttons">
-        ${a.email ? `<button class="btn btn-outline btn-xs" onclick="event.stopPropagation();window.open('mailto:${esc(a.email)}')">Email</button>` : ''}
-        ${!a.isProfiled ? `<button class="btn btn-blue btn-xs" onclick="event.stopPropagation();openQuickProfile('${esc(a.name)}','${esc(a.company)}','${esc(a.email)}','${a.hubspotId || ''}')">Profile</button>` : ''}
+      <div class="action-buttons" onclick="event.stopPropagation()">
+        ${a.hubspotId ? `<button class="btn btn-purple btn-xs" id="intel-btn-${a.hubspotId}" onclick="extractIntel('${a.hubspotId}')">Extract Intel</button>` : ''}
+        ${a.hubspotId ? `<button class="btn btn-danger btn-xs" onclick="excludeContact('${a.hubspotId}', this)">Not a Buyer</button>` : ''}
+        ${a.email ? `<button class="btn btn-outline btn-xs" onclick="window.open('mailto:${esc(a.email)}')">Email</button>` : ''}
+        ${a.hubspotId ? `<button class="btn btn-outline btn-xs" onclick="openContactDetail('${a.hubspotId}', '${esc(a.email)}')">View Emails</button>` : ''}
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// EXTRACT INTELLIGENCE — Single contact
+// ============================================================
+async function extractIntel(hubspotId) {
+  const card = document.getElementById('card-' + hubspotId);
+  const btn = document.getElementById('intel-btn-' + hubspotId);
+  if (!card || !btn) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-inline"></span> Extracting...';
+  card.classList.add('extracting');
+
+  try {
+    const result = await api('/revenue/extract-intelligence', 'POST', { contact_hubspot_id: hubspotId });
+    const data = result.data || result;
+
+    if (data.status === 'skipped') {
+      toast('Skipped: ' + (data.reason || 'insufficient data'), 'info');
+    } else if (data.status === 'error') {
+      toast('Extraction failed: ' + (data.reason || 'unknown'), 'error');
+    } else {
+      toast(`Intelligence extracted for ${data.intel?.buying_mandate ? 'buyer' : 'contact'}`);
+      // Reload buyers to get updated profile
+      await loadAll();
+      loadActionList();
+      return;
+    }
+  } catch (e) {
+    toast('Extraction error: ' + e.message, 'error');
+  } finally {
+    card.classList.remove('extracting');
+    btn.disabled = false;
+    btn.textContent = 'Extract Intel';
+  }
+}
+
+// ============================================================
+// EXCLUDE CONTACT — Not a Buyer
+// ============================================================
+async function excludeContact(hubspotId, btnEl) {
+  const card = document.getElementById('card-' + hubspotId);
+  if (!card) return;
+
+  try {
+    await api('/revenue/exclude-contact', 'POST', { hubspot_id: hubspotId, reason: 'marked by user' });
+    card.classList.add('removing');
+    setTimeout(() => card.remove(), 400);
+    toast('Contact excluded');
+  } catch (e) {
+    toast('Failed to exclude: ' + e.message, 'error');
+  }
+}
+
+// ============================================================
+// BATCH EXTRACTION
+// ============================================================
+async function runBatchExtraction() {
+  const btn = document.getElementById('batchExtractBtn');
+  const container = document.getElementById('batchProgressContainer');
+  btn.disabled = true;
+  btn.textContent = 'Running...';
+
+  container.style.display = 'block';
+  container.innerHTML = `
+    <div class="batch-progress">
+      <div class="batch-progress-text">Starting batch extraction...</div>
+      <div class="batch-progress-bar"><div class="batch-progress-fill" style="width:0%"></div></div>
+      <div class="batch-results"></div>
+    </div>`;
+
+  try {
+    // The API processes sequentially and returns all at once
+    const textEl = container.querySelector('.batch-progress-text');
+    const fillEl = container.querySelector('.batch-progress-fill');
+    textEl.textContent = 'Processing contacts... this may take a few minutes';
+    fillEl.style.width = '10%';
+
+    // Animate progress while waiting
+    let progress = 10;
+    const interval = setInterval(() => {
+      progress = Math.min(progress + 2, 90);
+      fillEl.style.width = progress + '%';
+    }, 3000);
+
+    const result = await api('/revenue/extract-intelligence', 'POST', { batch: true, limit: 50 });
+
+    clearInterval(interval);
+    fillEl.style.width = '100%';
+
+    const created = result.created || 0;
+    const updated = result.updated || 0;
+    const skipped = result.skipped || 0;
+    const errors = result.errors || 0;
+    const total = result.processed || 0;
+
+    textEl.textContent = `Batch complete: ${total} contacts processed`;
+    container.querySelector('.batch-results').innerHTML =
+      `<span style="color:var(--green)">Created: ${created}</span> | ` +
+      `<span style="color:var(--blue)">Updated: ${updated}</span> | ` +
+      `<span style="color:var(--text-muted)">Skipped: ${skipped}</span> | ` +
+      `<span style="color:var(--red)">Errors: ${errors}</span>`;
+
+    toast(`Batch extraction complete: ${created + updated} profiles created/updated`);
+
+    // Refresh data
+    await loadAll();
+    renderBuyers();
+  } catch (e) {
+    container.innerHTML = `<div class="batch-progress" style="border-color:var(--red)"><div class="batch-progress-text" style="color:var(--red)">Batch extraction failed: ${esc(e.message)}</div></div>`;
+    toast('Batch extraction failed: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Run Batch Extraction (50)';
+  }
+}
+
+// ============================================================
+// BRIAN'S KPI VIEW
+// ============================================================
+function renderBrianKpis() {
+  const kpiContainer = document.getElementById('brianKpis');
+  // Show only when Brian is selected
+  if (selectedOwnerName !== 'brian') {
+    kpiContainer.style.display = 'none';
+    return;
+  }
+  kpiContainer.style.display = 'block';
+
+  const now = new Date();
+  const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
+  weekStart.setHours(0,0,0,0);
+  const quarterStart = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
+
+  // Count touches this week (actions logged this week — using deal activity dates as proxy)
+  // Since we don't have a dedicated action_log in frontend cache, approximate from deal updates
+  const touchesThisWeek = cache.deals.filter(d => {
+    const lastAct = d.last_activity_date || d.updated_at;
+    return lastAct && new Date(lastAct) >= weekStart && (d.owner === 'brian' || !selectedOwnerId);
+  }).length;
+
+  // New contacts this quarter (buyer profiles created this quarter)
+  const newContactsQuarter = cache.buyers.filter(b => {
+    return b.created_at && new Date(b.created_at) >= quarterStart;
+  }).length;
+
+  // Pipeline value
+  const brianDeals = cache.deals.filter(d =>
+    !['closed_won','closed_lost','dead'].includes(d.stage) &&
+    (d.owner === 'brian' || !selectedOwnerId)
+  );
+  const pipelineValue = brianDeals.reduce((s, d) => s + (d.value_usd || 0), 0);
+
+  // Deals progressed (deals that moved stages recently)
+  const progressed = brianDeals.filter(d => {
+    const updated = d.updated_at ? new Date(d.updated_at) : null;
+    return updated && updated >= weekStart;
+  }).length;
+
+  const touchTarget = 50;
+  const contactTarget = 10;
+  const touchPct = Math.min(100, Math.round(touchesThisWeek / touchTarget * 100));
+  const contactPct = Math.min(100, Math.round(newContactsQuarter / contactTarget * 100));
+
+  kpiContainer.innerHTML = `
+    <div class="kpi-bar">
+      <div class="kpi-card">
+        <div class="kpi-label">Touches This Week</div>
+        <div class="kpi-value" style="color:${touchPct >= 80 ? 'var(--green)' : touchPct >= 50 ? 'var(--yellow)' : 'var(--red)'}">${touchesThisWeek}</div>
+        <div class="kpi-target">Target: ${touchTarget}/week</div>
+        <div class="kpi-bar-progress"><div class="kpi-bar-fill" style="width:${touchPct}%;background:${touchPct >= 80 ? 'var(--green)' : touchPct >= 50 ? 'var(--yellow)' : 'var(--red)'}"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">New Contacts (Quarter)</div>
+        <div class="kpi-value" style="color:${contactPct >= 80 ? 'var(--green)' : contactPct >= 50 ? 'var(--yellow)' : 'var(--red)'}">${newContactsQuarter}</div>
+        <div class="kpi-target">Target: ${contactTarget}/quarter</div>
+        <div class="kpi-bar-progress"><div class="kpi-bar-fill" style="width:${contactPct}%;background:${contactPct >= 80 ? 'var(--green)' : contactPct >= 50 ? 'var(--yellow)' : 'var(--red)'}"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Pipeline Value</div>
+        <div class="kpi-value gold">$${formatNum(pipelineValue)}</div>
+        <div class="kpi-target">${brianDeals.length} active deals</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Progressed This Week</div>
+        <div class="kpi-value" style="color:var(--green)">${progressed}</div>
+        <div class="kpi-target">deals moved forward</div>
+      </div>
+    </div>`;
 }
 
 // ============================================================
@@ -1177,7 +1713,6 @@ function loadActionList() {
 // ============================================================
 async function openContactDetail(hubspotId, email) {
   if (!hubspotId) {
-    // If no hubspot ID, try to open deal or buyer modal instead
     const deal = cache.deals.find(d => d.contact_email === email);
     if (deal) { openDealModal(deal.id); return; }
     const buyer = cache.buyers.find(b => b.contact_email === email);
@@ -1185,7 +1720,8 @@ async function openContactDetail(hubspotId, email) {
     return;
   }
 
-  const contact = cache.hubspotContacts.find(c => c.hubspot_id === hubspotId);
+  const contact = cache.activeContacts.find(c => c.hubspot_id === hubspotId) ||
+                   cache.hubspotContacts.find(c => c.hubspot_id === hubspotId);
   const name = contact ? [contact.firstname, contact.lastname].filter(Boolean).join(' ') : email;
 
   openModal(`
@@ -1195,14 +1731,14 @@ async function openContactDetail(hubspotId, email) {
       <h4>Recent Activity</h4>
       <div id="engagementsList"><div class="loading"><div class="spinner"></div>Loading engagements...</div></div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:16px">
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
       ${email ? `<button class="btn btn-outline btn-sm" onclick="window.open('mailto:${esc(email)}')">Send Email</button>` : ''}
-      <button class="btn btn-blue btn-sm" onclick="closeModal();openQuickProfile('${esc(name)}','${esc(contact?.company || '')}','${esc(email)}','${hubspotId}')">Create Buyer Profile</button>
+      <button class="btn btn-purple btn-sm" onclick="closeModal();extractIntel('${hubspotId}')">Extract Intel</button>
+      <button class="btn btn-blue btn-sm" onclick="closeModal();openQuickProfile('${esc(name)}','${esc(contact?.company || '')}','${esc(email)}','${hubspotId}')">Manual Profile</button>
       <button class="btn btn-outline btn-sm" onclick="closeModal()">Close</button>
     </div>
   `);
 
-  // Load engagements
   try {
     const result = await api(`/hubspot/contacts/${hubspotId}/engagements`);
     const engagements = result.data || [];
@@ -1235,13 +1771,16 @@ async function openContactDetail(hubspotId, email) {
 // ============================================================
 function renderKanban() {
   const container = document.getElementById('kanban');
-  const pipeline = cache.deals.filter(d => d.stage !== 'dead');
+  let pipeline = cache.deals.filter(d => d.stage !== 'dead');
 
-  // Update badge
+  // Filter by owner
+  if (selectedOwnerName) {
+    pipeline = pipeline.filter(d => d.owner === selectedOwnerName || !d.owner);
+  }
+
   const activeCount = pipeline.filter(d => !['closed_won','closed_lost'].includes(d.stage)).length;
   document.getElementById('dealsBadge').textContent = activeCount;
 
-  // Deal stats
   const activeDeals = pipeline.filter(d => !['closed_won','closed_lost'].includes(d.stage));
   const totalValue = activeDeals.reduce((s, d) => s + (d.value_usd || 0), 0);
   document.getElementById('dealStats').innerHTML = `
@@ -1269,7 +1808,7 @@ function renderKanban() {
                 <div class="kanban-card-company">${esc(d.company)}</div>
                 <div class="kanban-card-desc">${esc(d.deal_description || '')}</div>
                 <div class="kanban-card-meta">
-                  <span class="kanban-card-value">${d.value_usd ? '$' + formatNum(d.value_usd) : '—'}</span>
+                  <span class="kanban-card-value">${d.value_usd ? '$' + formatNum(d.value_usd) : ''}</span>
                   <span class="kanban-card-owner owner-${d.owner || 'unassigned'}">${d.owner || '?'}</span>
                 </div>
                 ${isStale ? `<div style="font-size:10px;color:var(--red);margin-top:4px;font-family:var(--mono)">${daysSince}d stale</div>` : ''}
@@ -1290,8 +1829,6 @@ function openImportDealsModal() {
     toast('No HubSpot deals cached. Run sync first.', 'info');
     return;
   }
-
-  // Filter out deals already imported (by matching dealname + amount)
   const existingNames = new Set(cache.deals.map(d => d.deal_description?.toLowerCase()));
   const importable = hsDeals.filter(d => !existingNames.has((d.dealname || '').toLowerCase()));
 
@@ -1321,12 +1858,10 @@ function openImportDealsModal() {
 async function importSelectedDeals() {
   const checked = document.querySelectorAll('.hs-deal-check:checked');
   if (checked.length === 0) { toast('Select at least one deal', 'info'); return; }
-
   let imported = 0;
   for (const cb of checked) {
     const hsDeal = cache.hubspotDeals.find(d => d.hubspot_id === cb.value);
     if (!hsDeal) continue;
-
     try {
       await api('/revenue/deals', 'POST', {
         company: hsDeal.dealname || 'HubSpot Deal',
@@ -1336,11 +1871,8 @@ async function importSelectedDeals() {
         notes: `Imported from HubSpot (ID: ${hsDeal.hubspot_id})`
       });
       imported++;
-    } catch (e) {
-      console.error('Failed to import deal:', e);
-    }
+    } catch (e) { console.error('Failed to import deal:', e); }
   }
-
   closeModal();
   toast(`Imported ${imported} deal(s) from HubSpot`);
   await loadAll();
@@ -1370,10 +1902,10 @@ function renderInventory(filter = 'all') {
       <tr onclick="openProjectModal('${p.id}')">
         <td><strong>${esc(p.short_name || p.name)}</strong><br><span style="font-size:11px;color:var(--text-muted)">${esc(p.name)}</span></td>
         <td>${esc(p.project_type)}</td>
-        <td>${esc(p.registry || '—')}</td>
+        <td>${esc(p.registry || '')}</td>
         <td><span class="badge badge-${p.status}">${p.status}</span></td>
-        <td style="font-family:var(--mono)">${p.available_volume ? formatNum(p.available_volume) + ' ' + (p.volume_unit || '') : '—'}</td>
-        <td style="font-family:var(--mono)">${p.price_floor_usd ? '$' + p.price_floor_usd + ' – $' + p.price_ceiling_usd : '—'}</td>
+        <td style="font-family:var(--mono)">${p.available_volume ? formatNum(p.available_volume) + ' ' + (p.volume_unit || '') : ''}</td>
+        <td style="font-family:var(--mono)">${p.price_floor_usd ? '$' + p.price_floor_usd + ' - $' + p.price_ceiling_usd : ''}</td>
         <td><span style="font-size:11px">${(p.clearsky_role || '').replace(/_/g, ' ')}</span></td>
         <td style="max-width:160px"><span style="font-size:11px;color:var(--text-dim)">${targets.slice(0, 3).join(', ')}</span></td>
       </tr>`;
@@ -1390,24 +1922,24 @@ function renderInventory(filter = 'all') {
 function renderBuyers(filter = 'all') {
   const container = document.getElementById('buyersContent');
   const buyers = cache.buyers;
-  const contacts = cache.hubspotContacts;
+  const contacts = cache.activeContacts.length > 0 ? cache.activeContacts : cache.hubspotContacts;
 
-  // Stats
+  const profiledHsIds = new Set(buyers.filter(b => b.hubspot_contact_id).map(b => b.hubspot_contact_id));
   const profiledEmails = new Set(buyers.map(b => (b.contact_email || '').toLowerCase()).filter(Boolean));
-  const unprofiledContacts = contacts.filter(c => !profiledEmails.has((c.email || '').toLowerCase()));
-  const profiledPct = contacts.length > 0 ? Math.round(profiledEmails.size / contacts.length * 100) : 0;
+  const unprofiledContacts = contacts.filter(c =>
+    !profiledHsIds.has(c.hubspot_id) && !profiledEmails.has((c.email || '').toLowerCase())
+  );
+  const profiledPct = contacts.length > 0 ? Math.round(profiledHsIds.size / contacts.length * 100) : 0;
+  const aiExtracted = buyers.filter(b => b.source === 'ai_extracted').length;
 
   document.getElementById('buyerStats').innerHTML = `
     <div class="stat-card"><div class="stat-label">Profiled Buyers</div><div class="stat-value green">${buyers.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Unprofiled Contacts</div><div class="stat-value" style="color:var(--text-muted)">${unprofiledContacts.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Coverage</div><div class="stat-value ${profiledPct > 50 ? 'green' : profiledPct > 25 ? '' : 'red'}">${profiledPct}%</div><div class="stat-delta">of HubSpot contacts</div></div>
+    <div class="stat-card"><div class="stat-label">AI Extracted</div><div class="stat-value" style="color:var(--purple)">${aiExtracted}</div></div>
+    <div class="stat-card"><div class="stat-label">Unprofiled</div><div class="stat-value" style="color:var(--text-muted)">${unprofiledContacts.length}</div></div>
     <div class="stat-card"><div class="stat-label">T1 Buyers</div><div class="stat-value gold">${buyers.filter(b => b.tier === 'T1').length}</div></div>
   `;
-
-  // Update badge
   document.getElementById('buyersBadge').textContent = unprofiledContacts.length;
 
-  // Show unprofiled tab
   if (filter === 'unprofiled') {
     container.innerHTML = `
       <div class="buyer-section-header">Unprofiled HubSpot Contacts <span class="count">${unprofiledContacts.length}</span></div>
@@ -1416,17 +1948,20 @@ function renderBuyers(filter = 'all') {
           <thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Job Title</th><th>Last Activity</th><th></th></tr></thead>
           <tbody>
             ${unprofiledContacts.map(c => {
-              const name = [c.firstname, c.lastname].filter(Boolean).join(' ') || '—';
+              const name = [c.firstname, c.lastname].filter(Boolean).join(' ') || '';
               const lastAct = c.last_activity_date || c.last_email_date;
               const days = lastAct ? Math.floor((new Date() - new Date(lastAct)) / 86400000) : null;
               return `
                 <tr>
                   <td><strong>${esc(name)}</strong></td>
-                  <td style="font-size:12px">${esc(c.email || '—')}</td>
-                  <td>${esc(c.company || '—')}</td>
-                  <td style="font-size:12px;color:var(--text-dim)">${esc(c.jobtitle || '—')}</td>
-                  <td style="font-family:var(--mono);font-size:11px;${days !== null && days >= 14 ? 'color:var(--red)' : ''}">${days !== null ? days + 'd ago' : '—'}</td>
-                  <td><button class="btn btn-blue btn-xs" onclick="openQuickProfile('${esc(name)}','${esc(c.company || '')}','${esc(c.email || '')}','${c.hubspot_id}')">Profile</button></td>
+                  <td style="font-size:12px">${esc(c.email || '')}</td>
+                  <td>${esc(c.company || '')}</td>
+                  <td style="font-size:12px;color:var(--text-dim)">${esc(c.jobtitle || '')}</td>
+                  <td style="font-family:var(--mono);font-size:11px;${days !== null && days >= 14 ? 'color:var(--red)' : ''}">${days !== null ? days + 'd ago' : ''}</td>
+                  <td>
+                    <button class="btn btn-purple btn-xs" onclick="extractIntel('${c.hubspot_id}')" style="margin-right:4px">Extract Intel</button>
+                    <button class="btn btn-blue btn-xs" onclick="openQuickProfile('${esc(name)}','${esc(c.company || '')}','${esc(c.email || '')}','${c.hubspot_id}')">Manual</button>
+                  </td>
                 </tr>`;
             }).join('')}
           </tbody>
@@ -1435,36 +1970,30 @@ function renderBuyers(filter = 'all') {
     return;
   }
 
-  // Show profiled buyers
   const filteredBuyers = filter === 'all' ? buyers : buyers.filter(b => b.relationship_status === filter);
-
-  if (filteredBuyers.length === 0 && filter !== 'all') {
-    container.innerHTML = `
-      <div class="buyer-section-header">Profiled Buyers <span class="count">${buyers.length}</span></div>
-      <div class="empty-state"><div class="empty-state-text">No buyers match this filter</div></div>`;
-    return;
-  }
 
   container.innerHTML = `
     <div class="buyer-section-header">Profiled Buyers <span class="count">${filteredBuyers.length}</span></div>
     <div style="overflow-x:auto">
       <table class="data-table">
-        <thead><tr><th>Company</th><th>Contact</th><th>Mandate</th><th>Credit Types</th><th>Tier</th><th>Status</th><th>Last Need</th></tr></thead>
+        <thead><tr><th>Company</th><th>Contact</th><th>Mandate</th><th>Credit Types</th><th>Tier</th><th>Status</th><th>Confidence</th><th>Source</th></tr></thead>
         <tbody>
           ${filteredBuyers.length === 0 ? `
-            <tr><td colspan="7"><div class="empty-state"><div class="empty-state-text">No buyer profiles yet. Profile your HubSpot contacts to build intelligence.</div><button class="btn btn-gold btn-sm" onclick="openBuyerModal()">+ Profile Buyer</button></div></td></tr>
+            <tr><td colspan="8"><div class="empty-state"><div class="empty-state-text">No buyer profiles match this filter. Use "Run Batch Extraction" to auto-profile contacts.</div></div></td></tr>
           ` : filteredBuyers.map(b => {
             let types = [];
             try { types = JSON.parse(b.credit_types_interested || '[]'); } catch(e) {}
+            const isAi = b.source === 'ai_extracted';
             return `
               <tr onclick="openBuyerModal('${b.id}')">
                 <td><strong>${esc(b.company)}</strong></td>
-                <td>${esc(b.contact_name || '—')}</td>
-                <td style="max-width:180px"><span style="font-size:12px">${esc(b.buying_mandate || '—')}</span></td>
+                <td>${esc(b.contact_name || '')}</td>
+                <td style="max-width:180px"><span style="font-size:12px">${esc(b.buying_mandate || '')}</span></td>
                 <td>${types.map(t => `<span class="badge" style="margin:1px;background:var(--gold-bg);color:var(--gold);font-size:10px">${t}</span>`).join(' ')}</td>
-                <td><span class="badge badge-${b.tier}">${b.tier}</span></td>
-                <td><span class="badge badge-${b.relationship_status}">${b.relationship_status}</span></td>
-                <td style="font-size:12px;color:var(--text-dim);max-width:160px">${esc(b.last_known_need || '—')}</td>
+                <td><span class="badge badge-${b.tier}">${b.tier || ''}</span></td>
+                <td><span class="badge badge-${b.relationship_status}">${b.relationship_status || ''}</span></td>
+                <td>${b.extraction_confidence ? `<span class="confidence-badge confidence-${b.extraction_confidence}">${b.extraction_confidence}</span>` : ''}</td>
+                <td><span style="font-size:10px;color:${isAi ? 'var(--purple)' : 'var(--text-muted)'}">${isAi ? 'AI' : 'manual'}</span></td>
               </tr>`;
           }).join('')}
         </tbody>
@@ -1472,7 +2001,7 @@ function renderBuyers(filter = 'all') {
     </div>
     ${unprofiledContacts.length > 0 ? `
       <div class="buyer-section-header" style="margin-top:32px">Unprofiled Contacts <span class="count">${unprofiledContacts.length}</span></div>
-      <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">${unprofiledContacts.length} HubSpot contacts without buyer profiles — <a href="#" onclick="event.preventDefault();document.querySelector('[data-filter=unprofiled]').click()" style="color:var(--gold)">View all</a></div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">${unprofiledContacts.length} active contacts without buyer profiles — <a href="#" onclick="event.preventDefault();document.querySelector('[data-filter=unprofiled]').click()" style="color:var(--gold)">View all</a></div>
     ` : ''}`;
 }
 
@@ -1561,33 +2090,23 @@ async function submitDeal(e, id) {
   const deal = Object.fromEntries(fd.entries());
   deal.value_usd = parseFloat(deal.value_usd) || 0;
   deal.volume_tonnes = parseFloat(deal.volume_tonnes) || null;
-
   try {
-    if (id) {
-      await api(`/revenue/deals/${id}`, 'PUT', deal);
-    } else {
-      await api('/revenue/deals', 'POST', deal);
-    }
+    if (id) { await api(`/revenue/deals/${id}`, 'PUT', deal); }
+    else { await api('/revenue/deals', 'POST', deal); }
     closeModal();
     toast('Deal saved');
     await loadAll();
     renderCurrentTab();
-  } catch (e) {
-    toast('Failed to save deal: ' + e.message, 'error');
-  }
+  } catch (e) { toast('Failed to save deal: ' + e.message, 'error'); }
 }
 
 async function confirmDeleteDeal(id) {
   if (confirm('Delete this deal?')) {
     try {
       await api(`/revenue/deals/${id}`, 'DELETE');
-      closeModal();
-      toast('Deal deleted');
-      await loadAll();
-      renderCurrentTab();
-    } catch (e) {
-      toast('Failed to delete: ' + e.message, 'error');
-    }
+      closeModal(); toast('Deal deleted');
+      await loadAll(); renderCurrentTab();
+    } catch (e) { toast('Failed to delete: ' + e.message, 'error'); }
   }
 }
 
@@ -1643,33 +2162,21 @@ async function submitProject(e, id) {
   proj.price_ceiling_usd = parseFloat(proj.price_ceiling_usd) || null;
   proj.commission_min_pct = parseFloat(proj.commission_min_pct) || null;
   proj.commission_max_pct = parseFloat(proj.commission_max_pct) || null;
-
   try {
-    if (id) {
-      await api(`/revenue/projects/${id}`, 'PUT', proj);
-    } else {
-      await api('/revenue/projects', 'POST', proj);
-    }
-    closeModal();
-    toast('Project saved');
-    await loadAll();
-    renderCurrentTab();
-  } catch (e) {
-    toast('Failed to save project: ' + e.message, 'error');
-  }
+    if (id) { await api(`/revenue/projects/${id}`, 'PUT', proj); }
+    else { await api('/revenue/projects', 'POST', proj); }
+    closeModal(); toast('Project saved');
+    await loadAll(); renderCurrentTab();
+  } catch (e) { toast('Failed to save project: ' + e.message, 'error'); }
 }
 
 async function confirmDeleteProject(id) {
   if (confirm('Delete this project?')) {
     try {
       await api(`/revenue/projects/${id}`, 'DELETE');
-      closeModal();
-      toast('Project deleted');
-      await loadAll();
-      renderCurrentTab();
-    } catch (e) {
-      toast('Failed to delete: ' + e.message, 'error');
-    }
+      closeModal(); toast('Project deleted');
+      await loadAll(); renderCurrentTab();
+    } catch (e) { toast('Failed to delete: ' + e.message, 'error'); }
   }
 }
 
@@ -1704,11 +2211,14 @@ function openBuyerModal(id) {
       <div class="form-group"><label class="form-label">Known Objections</label><input class="form-input" name="objections" value="${esc(buyer.objections || '')}" placeholder="e.g., adverse to Cayman, no pre-purchase"></div>
       <div class="form-group"><label class="form-label">Sustainability Commitments</label><input class="form-input" name="sustainability_commitments" value="${esc(buyer.sustainability_commitments || '')}"></div>
       <div class="form-group"><label class="form-label">Last Known Need</label><textarea class="form-textarea" name="last_known_need" rows="2">${esc(buyer.last_known_need || '')}</textarea></div>
+      ${isEdit && buyer.last_discussion_summary ? `<div class="form-group"><label class="form-label">AI Discussion Summary</label><div style="font-size:12px;color:var(--text-dim);padding:8px;background:var(--surface);border-radius:6px">${esc(buyer.last_discussion_summary)}</div></div>` : ''}
+      ${isEdit && buyer.suggested_next_action ? `<div class="form-group"><label class="form-label">AI Suggested Action</label><div style="font-size:12px;color:var(--gold);padding:8px;background:var(--gold-bg);border-radius:6px">${esc(buyer.suggested_next_action)}</div></div>` : ''}
       <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" name="notes" rows="2">${esc(buyer.notes || '')}</textarea></div>
       <input type="hidden" name="hubspot_contact_id" value="${esc(buyer.hubspot_contact_id || '')}">
       <input type="hidden" name="hubspot_company_id" value="${esc(buyer.hubspot_company_id || '')}">
       <div style="display:flex;gap:8px;margin-top:16px">
         <button type="submit" class="btn btn-gold">${isEdit ? 'Update' : 'Create'} Buyer</button>
+        ${isEdit && buyer.hubspot_contact_id ? `<button type="button" class="btn btn-purple btn-sm" onclick="closeModal();extractIntel('${buyer.hubspot_contact_id}')">Re-Extract Intel</button>` : ''}
         ${isEdit ? `<button type="button" class="btn btn-danger" onclick="confirmDeleteBuyer('${id}')">Delete</button>` : ''}
         <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
       </div>
@@ -1716,10 +2226,8 @@ function openBuyerModal(id) {
   `);
 }
 
-// Quick profile — pre-fill from HubSpot contact
 function openQuickProfile(name, company, email, hubspotId) {
   openBuyerModal();
-  // Fill in the form fields after modal opens
   setTimeout(() => {
     const form = document.querySelector('#modalContent form');
     if (!form) return;
@@ -1738,33 +2246,21 @@ async function submitBuyer(e, id) {
   e.preventDefault();
   const fd = new FormData(e.target);
   const buyer = Object.fromEntries(fd.entries());
-
   try {
-    if (id) {
-      await api(`/revenue/buyers/${id}`, 'PUT', buyer);
-    } else {
-      await api('/revenue/buyers', 'POST', buyer);
-    }
-    closeModal();
-    toast('Buyer profile saved');
-    await loadAll();
-    renderCurrentTab();
-  } catch (e) {
-    toast('Failed to save buyer: ' + e.message, 'error');
-  }
+    if (id) { await api(`/revenue/buyers/${id}`, 'PUT', buyer); }
+    else { await api('/revenue/buyers', 'POST', buyer); }
+    closeModal(); toast('Buyer profile saved');
+    await loadAll(); renderCurrentTab();
+  } catch (e) { toast('Failed to save buyer: ' + e.message, 'error'); }
 }
 
 async function confirmDeleteBuyer(id) {
   if (confirm('Delete this buyer profile?')) {
     try {
       await api(`/revenue/buyers/${id}`, 'DELETE');
-      closeModal();
-      toast('Buyer deleted');
-      await loadAll();
-      renderCurrentTab();
-    } catch (e) {
-      toast('Failed to delete: ' + e.message, 'error');
-    }
+      closeModal(); toast('Buyer deleted');
+      await loadAll(); renderCurrentTab();
+    } catch (e) { toast('Failed to delete: ' + e.message, 'error'); }
   }
 }
 
@@ -1813,8 +2309,7 @@ document.getElementById('headerDate').textContent = new Date().toLocaleDateStrin
 });
 
 (async function init() {
-  // Load core data and HubSpot cache in parallel
-  await Promise.all([loadAll(), loadHubSpotCache()]);
+  await Promise.all([loadAll(), loadHubSpotCache(), loadOwners()]);
   updateSyncStatus();
   loadActionList();
 })();
