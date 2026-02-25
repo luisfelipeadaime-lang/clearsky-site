@@ -701,12 +701,20 @@ body {
     <div class="search-wrap">
       <input class="search-bar" id="buyerSearch" type="text" placeholder="Search buyers by company, name, mandate..." oninput="onBuyerSearch()" title="Filter buyer table by keyword">
     </div>
-    <div class="filters" id="buyerFilters">
-      <button class="filter-pill active" data-filter="all">All Profiled</button>
+    <div class="filter-row" id="buyerFilters">
+      <span class="filter-group-label">Status:</span>
+      <button class="filter-pill active" data-filter="buyers_only">Buyers Only</button>
       <button class="filter-pill" data-filter="hot">Hot</button>
       <button class="filter-pill" data-filter="warm">Warm</button>
       <button class="filter-pill" data-filter="cold">Cold</button>
       <button class="filter-pill" data-filter="new">New</button>
+      <span class="filter-divider"></span>
+      <span class="filter-group-label">Quality:</span>
+      <button class="filter-pill active" data-quality="medium_plus">Medium+</button>
+      <button class="filter-pill" data-quality="high_only">High Only</button>
+      <button class="filter-pill" data-quality="all_quality">All Quality</button>
+      <span class="filter-divider"></span>
+      <button class="filter-pill" data-filter="show_all">Show All (unfiltered)</button>
       <button class="filter-pill" data-filter="unprofiled">Unprofiled</button>
     </div>
     <div class="active-filters" id="buyerActiveFilters"></div>
@@ -824,7 +832,7 @@ async function loadAll() {
 
 async function loadActiveContacts() {
   try {
-    let endpoint = '/hubspot/contacts/active?limit=200';
+    let endpoint = '/hubspot/contacts/active?limit=500';
     if (selectedOwnerId) endpoint += '&owner_id=' + encodeURIComponent(selectedOwnerId);
     const result = await api(endpoint);
     cache.activeContacts = result.data || [];
@@ -1058,7 +1066,13 @@ async function loadActionList() {
     const isProfiled = !!buyerProfile;
     const isAiExtracted = buyerProfile?.source === 'ai_extracted';
 
-    if (buyerProfile && buyerProfile.is_buyer === 0 && buyerProfile.source === 'ai_extracted') continue;
+    // Skip ALL confirmed non-buyers
+    if (buyerProfile && buyerProfile.is_buyer === 0) continue;
+
+    // Skip dead leads: LOW confidence + cold + no engagement in 60d
+    if (buyerProfile && buyerProfile.extraction_confidence === 'low' &&
+        buyerProfile.relationship_status === 'cold' &&
+        (contact.activity_count_60d || 0) === 0) continue;
 
     const engScore = contact.engagement_score || 0;
     const act30d = contact.activity_count_30d || 0;
@@ -1109,7 +1123,6 @@ async function loadActionList() {
     }
 
     if (engScore === 0 && act60d === 0 && !hasInbound) score -= 20;
-    if (buyerProfile && buyerProfile.is_buyer === 0) score -= 100;
     if (engScore > 0 && daysSince >= 14) score += 8;
     else if (engScore > 0 && daysSince >= 7) score += 4;
 
@@ -1158,9 +1171,9 @@ async function loadActionList() {
   }
 
   actionListCache = {
-    active: activeConvos.slice(0, 20),
-    reengage: reengageNow.slice(0, 10),
-    pipeline: pipeline.slice(0, 10)
+    active: activeConvos.slice(0, 30),
+    reengage: reengageNow.slice(0, 20),
+    pipeline: pipeline.slice(0, 15)
   };
 
   // Stats
@@ -1171,9 +1184,11 @@ async function loadActionList() {
   const activePipeline = deals.filter(d => !['closed_won','closed_lost','dead'].includes(d.stage));
   const pipelineValue = activePipeline.reduce((s, d) => s + (d.value_usd || 0), 0);
 
+  const allGroupedCount = actionListCache.active.length + actionListCache.reengage.length + actionListCache.pipeline.length;
   document.getElementById('actionStats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Showing</div><div class="stat-value">${allGroupedCount}</div><div class="stat-delta">of ${contacts.length} active contacts</div></div>
     <div class="stat-card"><div class="stat-label">Active Conversations</div><div class="stat-value green">${activeConvos.length}</div><div class="stat-delta">two-way in 14d</div></div>
-    <div class="stat-card"><div class="stat-label">Engaged (60d)</div><div class="stat-value">${engagedCount}</div><div class="stat-delta">${inboundCount} with inbound replies</div></div>
+    <div class="stat-card"><div class="stat-label">Engaged (90d)</div><div class="stat-value">${engagedCount}</div><div class="stat-delta">${inboundCount} with inbound replies</div></div>
     <div class="stat-card"><div class="stat-label">Pipeline Value</div><div class="stat-value gold">$${formatNum(pipelineValue)}</div><div class="stat-delta">${activePipeline.length} active deals</div></div>
     <div class="stat-card"><div class="stat-label">AI Profiled</div><div class="stat-value">${profiledCount}</div><div class="stat-delta">${profiledPct}% of ${contacts.length}</div></div>
   `;
@@ -1783,10 +1798,9 @@ function renderInventory(filter = 'all') {
 // ============================================================
 // BUYERS — Search, Sort, Filter, Expand, Bulk, CSV
 // ============================================================
-function renderBuyers(filter) {
-  if (filter === undefined) {
-    filter = document.querySelector('#buyerFilters .filter-pill.active')?.dataset?.filter || 'all';
-  }
+function renderBuyers() {
+  const filter = buyerStatusFilter;
+  const quality = buyerQualityFilter;
   const container = document.getElementById('buyersContent');
   const buyers = cache.buyers;
   const contacts = cache.activeContacts.length > 0 ? cache.activeContacts : cache.hubspotContacts;
@@ -1797,14 +1811,36 @@ function renderBuyers(filter) {
     !profiledHsIds.has(c.hubspot_id) && !profiledEmails.has((c.email || '').toLowerCase())
   );
   const aiExtracted = buyers.filter(b => b.source === 'ai_extracted').length;
+  const buyersOnly = buyers.filter(b => b.is_buyer !== 0);
+  const medPlusCount = buyersOnly.filter(b => ['high','medium'].includes(b.extraction_confidence)).length;
+  const highOnlyCount = buyersOnly.filter(b => b.extraction_confidence === 'high').length;
 
   document.getElementById('buyerStats').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Profiled Buyers</div><div class="stat-value green">${buyers.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Profiled Buyers</div><div class="stat-value green">${buyersOnly.length}</div><div class="stat-delta">${buyers.length} total profiles</div></div>
     <div class="stat-card"><div class="stat-label">AI Extracted</div><div class="stat-value" style="color:var(--purple)">${aiExtracted}</div></div>
     <div class="stat-card"><div class="stat-label">Unprofiled</div><div class="stat-value" style="color:var(--text-muted)">${unprofiledContacts.length}</div></div>
-    <div class="stat-card"><div class="stat-label">T1 Buyers</div><div class="stat-value gold">${buyers.filter(b => b.tier === 'T1').length}</div></div>
+    <div class="stat-card"><div class="stat-label">T1 Buyers</div><div class="stat-value gold">${buyersOnly.filter(b => b.tier === 'T1').length}</div></div>
   `;
   document.getElementById('buyersBadge').textContent = unprofiledContacts.length;
+
+  // Update filter pill counts
+  const statusPills = document.querySelectorAll('#buyerFilters [data-filter]');
+  statusPills.forEach(p => {
+    const f = p.dataset.filter;
+    if (f === 'buyers_only') p.textContent = `Buyers Only (${buyersOnly.length})`;
+    else if (f === 'hot') p.textContent = `Hot (${buyersOnly.filter(b => b.relationship_status === 'hot').length})`;
+    else if (f === 'warm') p.textContent = `Warm (${buyersOnly.filter(b => b.relationship_status === 'warm').length})`;
+    else if (f === 'cold') p.textContent = `Cold (${buyersOnly.filter(b => b.relationship_status === 'cold').length})`;
+    else if (f === 'new') p.textContent = `New (${buyersOnly.filter(b => b.relationship_status === 'new').length})`;
+    else if (f === 'unprofiled') p.textContent = `Unprofiled (${unprofiledContacts.length})`;
+  });
+  const qualityPills = document.querySelectorAll('#buyerFilters [data-quality]');
+  qualityPills.forEach(p => {
+    const q = p.dataset.quality;
+    if (q === 'medium_plus') p.textContent = `Medium+ (${medPlusCount})`;
+    else if (q === 'high_only') p.textContent = `High Only (${highOnlyCount})`;
+    else if (q === 'all_quality') p.textContent = `All Quality (${buyers.length})`;
+  });
 
   // Unprofiled view
   if (filter === 'unprofiled') {
@@ -1830,7 +1866,24 @@ function renderBuyers(filter) {
   }
 
   // Profiled buyers — filtered, searched, sorted
-  let filteredBuyers = filter === 'all' ? [...buyers] : buyers.filter(b => b.relationship_status === filter);
+  let filteredBuyers = [...buyers];
+
+  // Status filter
+  if (filter === 'buyers_only' || filter === 'all') {
+    // "buyers_only" hides is_buyer=0; "all" shows everything
+    if (filter === 'buyers_only') {
+      filteredBuyers = filteredBuyers.filter(b => b.is_buyer !== 0);
+    }
+  } else if (['hot','warm','cold','new','dormant'].includes(filter)) {
+    filteredBuyers = filteredBuyers.filter(b => b.relationship_status === filter && b.is_buyer !== 0);
+  }
+
+  // Quality filter
+  if (quality === 'medium_plus') {
+    filteredBuyers = filteredBuyers.filter(b => !b.extraction_confidence || ['high','medium'].includes(b.extraction_confidence));
+  } else if (quality === 'high_only') {
+    filteredBuyers = filteredBuyers.filter(b => b.extraction_confidence === 'high');
+  }
 
   // Apply search
   const search = buyerSearchTerm.toLowerCase();
@@ -2089,11 +2142,40 @@ document.querySelectorAll('#inventoryFilters .filter-pill').forEach(pill => {
   });
 });
 
-document.querySelectorAll('#buyerFilters .filter-pill').forEach(pill => {
+// Buyer filter state
+let buyerStatusFilter = 'buyers_only';
+let buyerQualityFilter = 'medium_plus';
+
+document.querySelectorAll('#buyerFilters [data-filter]').forEach(pill => {
   pill.addEventListener('click', () => {
-    document.querySelectorAll('#buyerFilters .filter-pill').forEach(p => p.classList.remove('active'));
+    const f = pill.dataset.filter;
+    if (f === 'show_all') {
+      // Reset both filters
+      buyerStatusFilter = 'all';
+      buyerQualityFilter = 'all_quality';
+      document.querySelectorAll('#buyerFilters [data-filter]').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('#buyerFilters [data-quality]').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      document.querySelector('#buyerFilters [data-quality="all_quality"]').classList.add('active');
+    } else if (f === 'unprofiled') {
+      buyerStatusFilter = 'unprofiled';
+      document.querySelectorAll('#buyerFilters [data-filter]').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+    } else {
+      buyerStatusFilter = f;
+      document.querySelectorAll('#buyerFilters [data-filter]').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+    }
+    renderBuyers();
+  });
+});
+
+document.querySelectorAll('#buyerFilters [data-quality]').forEach(pill => {
+  pill.addEventListener('click', () => {
+    buyerQualityFilter = pill.dataset.quality;
+    document.querySelectorAll('#buyerFilters [data-quality]').forEach(p => p.classList.remove('active'));
     pill.classList.add('active');
-    renderBuyers(pill.dataset.filter);
+    renderBuyers();
   });
 });
 
