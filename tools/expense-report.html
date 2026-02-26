@@ -390,6 +390,7 @@ const CATEGORIES = [
   'Hotel', 'Breakfast', 'Lunch', 'Dinner', 'Restaurant (Team)',
   'Telephone', 'Prof. Development', 'Other', 'Paid on behalf'
 ];
+const CURRENCIES = ['USD', 'EUR', 'GBP', 'BRL', 'CAD', 'CHF', 'MXN', 'CLP', 'ZAR', 'KES', 'JPY', 'AUD', 'NZD', 'SEK', 'NOK', 'DKK', 'PLN', 'CZK', 'HUF', 'TRY', 'INR', 'CNY'];
 
 // ==================== STATE ====================
 let uploadedFiles = []; // {file, name, type, size, status, extractedData, dataUrl}
@@ -563,8 +564,6 @@ function renderExpenses() {
     totalConverted += e.usdAmount;
     catTotals[e.category] = (catTotals[e.category] || 0) + e.usdAmount;
 
-    const curClass = e.currency === 'EUR' ? 'cur-eur' : e.currency === 'USD' ? 'cur-usd' : '';
-
     return `<tr>
       <td class="mono">${i + 1}</td>
       <td><input type="date" value="${e.date}" class="form-input" style="padding:4px 6px;font-size:11px;width:130px;"
@@ -577,8 +576,12 @@ function renderExpenses() {
            onchange="updateExpense(${i},'description',this.value)"></td>
       <td class="r"><input type="number" value="${e.amount.toFixed(2)}" step="0.01" class="form-input" style="padding:4px 6px;font-size:11px;width:80px;text-align:right;font-family:var(--mono);"
            onchange="updateExpense(${i},'amount',parseFloat(this.value))"></td>
-      <td><span class="${curClass}" style="font-size:11px;font-weight:600;">${e.currency}</span></td>
-      <td class="r mono">${e.fx.toFixed(4)}</td>
+      <td><select class="form-select" style="padding:4px 6px;font-size:11px;width:68px;"
+           onchange="updateCurrency(${i},this.value)">
+        ${CURRENCIES.map(c => `<option ${c === e.currency ? 'selected' : ''}>${c}</option>`).join('')}
+      </select></td>
+      <td class="r"><input type="number" value="${e.fx.toFixed(4)}" step="0.0001" class="form-input" style="padding:4px 6px;font-size:11px;width:76px;text-align:right;font-family:var(--mono);"
+           onchange="updateExpense(${i},'fx',parseFloat(this.value))"></td>
       <td class="r mono" style="font-weight:600;">${e.usdAmount.toFixed(2)}</td>
       <td><button class="btn btn-sm btn-ghost" onclick="removeExpense(${i})" title="Remove">✕</button></td>
     </tr>`;
@@ -628,6 +631,17 @@ function updateExpense(i, field, value) {
     expenses[i].usdAmount = expenses[i].amount * expenses[i].fx;
   }
   renderExpenses();
+}
+
+async function updateCurrency(i, newCurrency) {
+  const baseCur = document.getElementById('baseCurrency').value;
+  expenses[i].currency = newCurrency;
+  // Auto-fetch new FX rate
+  const fx = await getFxRate(newCurrency, baseCur, expenses[i].date);
+  expenses[i].fx = fx;
+  expenses[i].usdAmount = expenses[i].amount * fx;
+  renderExpenses();
+  toast(`Updated FX: 1 ${newCurrency} = ${fx.toFixed(4)} ${baseCur}`);
 }
 
 function removeExpense(i) {
