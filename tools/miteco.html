@@ -58,10 +58,54 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .seg-progress{background:var(--warning)}
 .seg-pending{background:var(--danger)}
 
+/* ACTION PANEL */
+.action-panel{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px}
+.action-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0;box-shadow:var(--shadow);overflow:hidden}
+.action-card-header{padding:14px 16px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);display:flex;align-items:center;gap:8px}
+.action-card-body{padding:0 16px 16px}
+.action-card.blue{border-left:4px solid #3b82f6}
+.action-card.amber{border-left:4px solid var(--warning)}
+.action-card.green{border-left:4px solid var(--success)}
+.action-item{display:flex;align-items:start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-light);font-size:13px;line-height:1.5}
+.action-item:last-child{border-bottom:none}
+.action-item-icon{font-size:14px;flex-shrink:0;margin-top:2px}
+.action-item-text{flex:1}
+.action-item-text .label{font-weight:600;color:var(--text)}
+.action-item-text .sub{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.action-item a{color:var(--primary);text-decoration:none;font-weight:600;font-size:11px}
+.action-item a:hover{text-decoration:underline}
+.waiting-urgency{font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;white-space:nowrap}
+.urgency-green{background:var(--success-bg);color:var(--success)}
+.urgency-amber{background:var(--warning-bg);color:#b45309}
+.urgency-red{background:var(--danger-bg);color:var(--danger)}
+.ready-check{color:var(--success);font-weight:600;font-size:13px}
+
 /* SECTION */
 .section{margin-bottom:24px}
 .section-title{font-size:15px;font-weight:700;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .section-title span{font-size:16px}
+
+/* RESUBMISSION PACKAGE */
+.resub-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:12px}
+.resub-progress{flex:1;min-width:200px}
+.resub-progress-label{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:6px}
+.resub-progress-bar{height:10px;background:var(--border-light);border-radius:5px;overflow:hidden}
+.resub-progress-fill{height:100%;background:var(--success);border-radius:5px;transition:width .4s}
+.resub-progress-fill.half{background:var(--danger)}
+.resub-zip-btn{padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:.2s}
+.resub-zip-btn.disabled{background:#e2e8f0;color:var(--text-muted);cursor:not-allowed}
+.resub-zip-btn.enabled{background:var(--success);color:#fff;cursor:pointer}
+.resub-zip-btn.enabled:hover{background:#218838}
+.resub-section{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.resub-section.accent-green{border-color:rgba(40,167,69,.3)}
+.resub-section.accent-red{border-color:rgba(220,53,69,.3)}
+
+/* STATUS BADGES (resubmission) */
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap}
+.badge-ready{background:var(--success-bg);color:var(--success)}
+.badge-draft{background:var(--info-bg);color:var(--info)}
+.badge-waiting{background:var(--warning-bg);color:#b45309}
+.badge-missing{background:var(--danger-bg);color:var(--danger)}
 
 /* TABLE */
 .tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow-x:auto}
@@ -70,6 +114,23 @@ th{background:#f8fafc;font-size:11px;font-weight:600;text-transform:uppercase;le
 td{padding:10px 14px;border-bottom:1px solid var(--border-light);font-size:13px;vertical-align:top}
 tr:hover{background:#fafbfd}
 tr.expanded-row{background:#f0f4ff}
+
+/* COLLAPSIBLE */
+.collapsible{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
+.collapsible-header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;transition:background .15s}
+.collapsible-header:hover{background:#f8fafc}
+.collapsible-header h3{font-size:14px;font-weight:700;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
+.collapsible-chevron{font-size:12px;color:var(--text-muted);transition:transform .2s}
+.collapsible.open .collapsible-chevron{transform:rotate(90deg)}
+.collapsible-body{display:none;border-top:1px solid var(--border)}
+.collapsible.open .collapsible-body{display:block}
+.collapsible-body table{margin:0}
+.collapsible-body td{font-size:12px;color:var(--text-secondary)}
+
+/* DOWNLOAD ICON */
+.dl-btn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;transition:.15s;font-size:13px;text-decoration:none;color:var(--primary)}
+.dl-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.dl-btn.disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
 
 /* CHIPS */
 .chip{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap}
@@ -103,9 +164,6 @@ tr.expanded-row{background:#f0f4ff}
 .owner-cmvmc .owner-dot{background:#a855f7}
 .owner-cuatrecasas .owner-dot{background:#6b7280}
 
-/* TWO COLUMNS */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
-
 /* COUNTERPARTY CARD */
 .cp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
 .cp-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:8px}
@@ -129,6 +187,7 @@ tr.expanded-row{background:#f0f4ff}
 .activity-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
 .activity-icon.status_changed{background:var(--info-bg)}
 .activity-icon.task_created{background:var(--success-bg)}
+.activity-icon.task_completed{background:var(--success-bg)}
 .activity-icon.doc_uploaded{background:var(--gold-dim)}
 .activity-icon.doc_status_changed{background:var(--warning-bg)}
 .activity-icon.note_added{background:rgba(0,0,0,.04)}
@@ -159,9 +218,8 @@ select.inline-select:focus{outline:none;border-color:var(--primary)}
 .detail-docs{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .detail-doc{font-size:11px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);display:flex;align-items:center;gap:4px}
 
-/* FILTER BAR */
-.filter-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
-.filter-bar select{padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;background:#fff}
+/* TWO COLUMNS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
 
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;padding:12px 20px;border-radius:8px;color:#fff;font-size:13px;font-weight:600;z-index:1000;transform:translateY(100px);opacity:0;transition:.3s;box-shadow:var(--shadow-lg)}
@@ -170,11 +228,10 @@ select.inline-select:focus{outline:none;border-color:var(--primary)}
 .toast.error{background:var(--danger)}
 
 /* RESPONSIVE */
-@media(max-width:768px){
+@media(max-width:900px){
+  .action-panel{grid-template-columns:1fr}
   .kpi-row{grid-template-columns:1fr 1fr}
   .two-col{grid-template-columns:1fr}
-  .nav-project{display:none}
-  th,td{padding:8px 10px;font-size:12px}
 }
 @media(max-width:480px){
   .kpi-row{grid-template-columns:1fr}
@@ -186,10 +243,10 @@ select.inline-select:focus{outline:none;border-color:var(--primary)}
 
 <nav class="nav">
   <div class="nav-left">
-    <a href="/" class="nav-back">← Dashboard</a>
+    <a href="/" class="nav-back">&larr; Dashboard</a>
     <div>
       <div class="nav-title">MITECO Command Center</div>
-      <div class="nav-project" id="nav-project">CMVMC Amoedo — Pazos de Borbén</div>
+      <div class="nav-project" id="nav-project">CMVMC Amoedo &mdash; Pazos de Borb&eacute;n</div>
     </div>
   </div>
   <div class="nav-right">
@@ -213,7 +270,7 @@ select.inline-select:focus{outline:none;border-color:var(--primary)}
       <div class="progress-bar" id="kpi-tasks-bar"></div>
     </div>
     <div class="kpi docs">
-      <div class="kpi-label">Documents</div>
+      <div class="kpi-label">Resubmission</div>
       <div class="kpi-value" id="kpi-docs">--</div>
       <div class="kpi-sub" id="kpi-docs-sub">--</div>
       <div class="progress-bar" id="kpi-docs-bar"></div>
@@ -225,9 +282,81 @@ select.inline-select:focus{outline:none;border-color:var(--primary)}
     </div>
   </div>
 
+  <!-- ACTION PANEL -->
+  <div class="action-panel">
+    <div class="action-card blue">
+      <div class="action-card-header">Your Actions</div>
+      <div class="action-card-body" id="action-yours"></div>
+    </div>
+    <div class="action-card amber">
+      <div class="action-card-header">Waiting on Spain</div>
+      <div class="action-card-body" id="action-waiting"></div>
+    </div>
+    <div class="action-card green">
+      <div class="action-card-header">Ready to Submit</div>
+      <div class="action-card-body" id="action-ready"></div>
+    </div>
+  </div>
+
+  <!-- RESUBMISSION PACKAGE -->
+  <div class="section">
+    <div class="resub-header">
+      <div class="resub-progress">
+        <div class="resub-progress-label" id="resub-label">Resubmission Progress: -- of 12 items ready</div>
+        <div class="resub-progress-bar"><div class="resub-progress-fill" id="resub-fill" style="width:0"></div></div>
+      </div>
+      <button class="resub-zip-btn disabled" id="resub-zip" title="All items must be READY" disabled>
+        Generate Resubmission ZIP
+      </button>
+    </div>
+    <div class="resub-section" id="resub-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px">Pt</th>
+            <th>OECC Requirement</th>
+            <th>File(s) to Submit</th>
+            <th style="width:90px">Status</th>
+            <th>Blocking</th>
+            <th style="width:50px">DL</th>
+          </tr>
+        </thead>
+        <tbody id="resub-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ORIGINAL SUBMISSION (collapsible) -->
+  <div class="collapsible" id="orig-section">
+    <div class="collapsible-header" onclick="toggleCollapsible('orig-section')">
+      <h3><span>&#128193;</span> Original Submission (September 2025) &mdash; <span id="orig-count">--</span> files</h3>
+      <span class="collapsible-chevron">&#9654;</span>
+    </div>
+    <div class="collapsible-body">
+      <table>
+        <thead><tr><th>Filename</th><th>Category</th><th>Owner</th><th style="width:50px">DL</th></tr></thead>
+        <tbody id="orig-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INTERNAL DOCUMENTS (collapsible) -->
+  <div class="collapsible" id="int-section">
+    <div class="collapsible-header" onclick="toggleCollapsible('int-section')">
+      <h3><span>&#128274;</span> Internal &mdash; Audit, Briefings, Agent Tasks</h3>
+      <span class="collapsible-chevron">&#9654;</span>
+    </div>
+    <div class="collapsible-body">
+      <table>
+        <thead><tr><th>Filename</th><th>Category</th><th>Notes</th><th style="width:50px">DL</th></tr></thead>
+        <tbody id="int-body"></tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- SUBSANACION BOARD -->
   <div class="section">
-    <div class="section-title"><span>📋</span> Subsanación Board — 11 OECC Points</div>
+    <div class="section-title"><span>&#128203;</span> Subsanaci&oacute;n Board &mdash; 11 OECC Points</div>
     <div class="tbl-wrap">
       <table>
         <thead>
@@ -247,36 +376,17 @@ select.inline-select:focus{outline:none;border-color:var(--primary)}
     </div>
   </div>
 
-  <!-- TWO COLUMNS -->
+  <!-- COUNTERPARTIES + ACTIVITY -->
   <div class="two-col">
-    <!-- DOCUMENTS -->
     <div class="section">
-      <div class="section-title"><span>📄</span> Document Registry</div>
-      <div class="filter-bar">
-        <select id="doc-filter-status" onchange="renderDocs()"><option value="">All Status</option><option value="present">Present</option><option value="deficient">Deficient</option><option value="missing">Missing</option><option value="re_issued">Re-issued</option><option value="removed">Removed</option></select>
-        <select id="doc-filter-owner" onchange="renderDocs()"><option value="">All Owners</option><option value="clearsky">ClearSky</option><option value="bosquia">Bosquía</option><option value="silvareira">Silvareira</option><option value="cmvmc">CMVMC</option></select>
-        <select id="doc-filter-cat" onchange="renderDocs()"><option value="">All Categories</option><option value="technical">Technical</option><option value="legal">Legal</option><option value="gis">GIS</option><option value="financial">Financial</option><option value="evidence">Evidence</option><option value="administrative">Admin</option></select>
-      </div>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Pt</th><th>Filename</th><th>Category</th><th>Status</th><th>Owner</th></tr></thead>
-          <tbody id="doc-table"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- COUNTERPARTIES -->
-    <div class="section">
-      <div class="section-title"><span>🤝</span> Counterparty Tracker</div>
+      <div class="section-title"><span>&#129309;</span> Counterparty Tracker</div>
       <div id="cp-list"></div>
     </div>
-  </div>
-
-  <!-- ACTIVITY -->
-  <div class="section">
-    <div class="section-title"><span>📊</span> Activity Feed</div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)">
-      <div id="activity-feed"></div>
+    <div class="section">
+      <div class="section-title"><span>&#128202;</span> Activity Feed</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)">
+        <div id="activity-feed"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -288,7 +398,23 @@ const API = 'https://api-tools.oga.earth/api/miteco';
 const PROJECT_ID = 'amoedo001';
 let dashData = null;
 
-async function api(path, opts = {}) {
+// Resubmission package definition — one row per OECC point + index
+const RESUB_ITEMS = [
+  { pt: 1, req: 'Exclude pistachio + rename', fileIds: ['doc37'], status: 'ready', blocking: '' },
+  { pt: 2, req: 'Calculator Excel (.xlsx)', fileIds: ['doc04'], status: 'ready', blocking: 'Bosqu\u00eda must retransmit via portal' },
+  { pt: 3, req: 'Consolidated shapefile (28 ha)', fileIds: ['doc39'], status: 'waiting', blocking: 'Silvareira: full 28 ha SHP (partial 2.34 ha available)' },
+  { pt: 4, req: 'Pre-fire forest evidence', fileIds: ['doc42'], status: 'waiting', blocking: 'GIS agent analysis pending + Bosqu\u00eda typology decision' },
+  { pt: 5, req: 'Plan de Gesti\u00f3n v2 + chronogram', fileIds: ['doc34'], status: 'draft', blocking: 'Silvareira must validate chronogram' },
+  { pt: 6, req: 'Anexo I \u2014 all signatures', fileIds: ['doc06'], status: 'waiting', blocking: 'CMVMC + ClearSky signatures needed' },
+  { pt: 7, req: 'Property proof (CCDG)', fileIds: ['doc36'], status: 'waiting', blocking: 'CMVMC: Catastro application' },
+  { pt: 8, req: 'Bilateral cession contract', fileIds: ['doc32'], status: 'draft', blocking: 'Signatures pending (CMVMC + ClearSky)' },
+  { pt: 9, req: 'Proyecto de ordenaci\u00f3n', fileIds: ['doc14','doc16'], status: 'ready', blocking: 'Bosqu\u00eda must retransmit via portal' },
+  { pt: 10, req: 'Permanence commitment', fileIds: ['doc32'], status: 'draft', blocking: 'Via Convenio (same as Pt 8)' },
+  { pt: 11, req: 'Public memo for OECC web', fileIds: ['doc33'], status: 'ready', blocking: '' },
+  { pt: '\u2014', req: 'Submission index', fileIds: ['doc40'], status: 'ready', blocking: '' },
+];
+
+async function apiCall(path, opts = {}) {
   const url = `${API}${path}`;
   const headers = {};
   if (opts.body && !(opts.body instanceof FormData)) {
@@ -316,8 +442,8 @@ function chipHtml(val, prefix) {
 }
 
 function ownerHtml(owner) {
-  if (!owner) return '<span style="color:var(--text-muted)">—</span>';
-  const names = { clearsky:'ClearSky', bosquia:'Bosquía', silvareira:'Silvareira', cmvmc:'CMVMC', cuatrecasas:'Cuatrecasas' };
+  if (!owner) return '<span style="color:var(--text-muted)">\u2014</span>';
+  const names = { clearsky:'ClearSky', bosquia:'Bosqu\u00eda', silvareira:'Silvareira', cmvmc:'CMVMC', cuatrecasas:'Cuatrecasas' };
   return `<span class="owner owner-${owner}"><span class="owner-dot"></span>${names[owner] || owner}</span>`;
 }
 
@@ -336,12 +462,19 @@ function relTime(dateStr) {
   return Math.floor(diff/86400) + 'd ago';
 }
 
+function toggleCollapsible(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
 async function loadDashboard() {
   try {
-    dashData = await api(`/dashboard-summary?project_id=${PROJECT_ID}`);
+    dashData = await apiCall(`/dashboard-summary?project_id=${PROJECT_ID}`);
     renderKPIs();
+    renderActionPanel();
+    renderResubmission();
+    renderOriginalDocs();
+    renderInternalDocs();
     renderTaskBoard();
-    renderDocs();
     renderCounterparties();
     renderActivity();
   } catch (e) {
@@ -352,7 +485,6 @@ async function loadDashboard() {
 function renderKPIs() {
   const p = dashData.project;
   const t = dashData.tasks;
-  const d = dashData.documents;
 
   // Credits
   document.getElementById('kpi-credits').textContent = fmt(p.credits_sold) + ' tCO\u2082';
@@ -373,31 +505,181 @@ function renderKPIs() {
   ];
   bar1.innerHTML = pcts.map(s => `<div class="seg ${s.cls}" style="width:${s.val}%"></div>`).join('');
 
-  // Docs
-  const ready = (d.by_status.present || 0) + (d.by_status.re_issued || 0);
-  document.getElementById('kpi-docs').textContent = ready + ' / ' + d.total;
-  document.getElementById('kpi-docs-sub').textContent = (d.by_status.deficient || 0) + ' deficient, ' + (d.by_status.missing || 0) + ' missing';
+  // Resubmission progress
+  const readyCount = RESUB_ITEMS.filter(r => r.status === 'ready').length;
+  document.getElementById('kpi-docs').textContent = readyCount + ' / ' + RESUB_ITEMS.length;
+  document.getElementById('kpi-docs-sub').textContent = readyCount + ' items ready for OECC';
   const bar2 = document.getElementById('kpi-docs-bar');
-  const dp = [
-    { cls: 'seg-submitted', val: (d.by_status.present || 0) / d.total * 100 },
-    { cls: 'seg-ready', val: (d.by_status.re_issued || 0) / d.total * 100 },
-    { cls: 'seg-progress', val: (d.by_status.deficient || 0) / d.total * 100 },
-    { cls: 'seg-pending', val: (d.by_status.missing || 0) / d.total * 100 },
-  ];
-  bar2.innerHTML = dp.map(s => `<div class="seg ${s.cls}" style="width:${s.val}%"></div>`).join('');
+  const rPct = readyCount / RESUB_ITEMS.length * 100;
+  const dPct = RESUB_ITEMS.filter(r => r.status === 'draft').length / RESUB_ITEMS.length * 100;
+  const wPct = RESUB_ITEMS.filter(r => r.status === 'waiting').length / RESUB_ITEMS.length * 100;
+  const mPct = RESUB_ITEMS.filter(r => r.status === 'missing').length / RESUB_ITEMS.length * 100;
+  bar2.innerHTML = `<div class="seg seg-submitted" style="width:${rPct}%"></div><div class="seg seg-ready" style="width:${dPct}%"></div><div class="seg seg-progress" style="width:${wPct}%"></div><div class="seg seg-pending" style="width:${mPct}%"></div>`;
 
   // Deadline
   const days = daysUntil(p.response_deadline);
   document.getElementById('kpi-deadline').textContent = days != null ? days : '--';
-  const dlEl = document.getElementById('kpi-deadline-sub');
-  dlEl.textContent = p.response_deadline ? 'Deadline: ' + p.response_deadline : '';
+  document.getElementById('kpi-deadline-sub').textContent = p.response_deadline ? 'Deadline: ' + p.response_deadline : '';
   const navDl = document.getElementById('nav-deadline');
   if (days != null) {
     navDl.textContent = days + ' day' + (days !== 1 ? 's' : '');
     navDl.className = 'nav-deadline ' + (days > 7 ? 'green' : days >= 3 ? 'amber' : 'red');
   }
-
   document.getElementById('nav-project').textContent = p.name;
+}
+
+function renderActionPanel() {
+  const tasks = dashData.tasks.items || [];
+  const docs = dashData.documents.items || [];
+
+  // Column 1: Your Actions (ClearSky tasks that are ready or in_progress)
+  const yourTasks = tasks.filter(t => t.owner === 'clearsky' && (t.status === 'ready' || t.status === 'in_progress'));
+  const yourEl = document.getElementById('action-yours');
+  const actionItems = [];
+  // Check for signable docs
+  const convenio = docs.find(d => d.id === 'doc32');
+  if (convenio && convenio.r2_key) actionItems.push({ icon: '\u270D\uFE0F', label: 'Sign the Convenio de Cesi\u00f3n (with Miguel)', sub: 'Download, sign, return', docId: 'doc32' });
+  const emails = docs.find(d => d.filename && d.filename.includes('Emails_Tareas'));
+  if (emails && emails.r2_key) actionItems.push({ icon: '\u2709\uFE0F', label: 'Review and send counterparty emails', sub: 'Emails to Bosqu\u00eda, Silvareira, CMVMC', docId: emails.id });
+  const briefing = docs.find(d => d.id === 'doc41');
+  if (briefing && briefing.r2_key) actionItems.push({ icon: '\uD83D\uDCCB', label: 'Send Brian CEO briefing', sub: 'Internal briefing memo', docId: 'doc41' });
+  // Add any remaining ClearSky tasks
+  for (const t of yourTasks) {
+    if (!actionItems.some(a => a.label.includes(t.title.slice(0, 15)))) {
+      actionItems.push({ icon: '\u2611\uFE0F', label: t.title, sub: 'OECC Point ' + (t.oecc_point || '--'), taskId: t.id });
+    }
+  }
+  yourEl.innerHTML = actionItems.length ? actionItems.map(a => `<div class="action-item">
+    <span class="action-item-icon">${a.icon}</span>
+    <div class="action-item-text">
+      <div class="label">${a.label}</div>
+      <div class="sub">${a.sub || ''}</div>
+    </div>
+    ${a.docId ? `<a href="#" onclick="downloadDoc('${a.docId}');return false">\u2B07</a>` : ''}
+  </div>`).join('') : '<div style="color:var(--text-muted);font-size:12px;padding:8px 0">No pending actions</div>';
+
+  // Column 2: Waiting on Spain
+  const waitingTasks = tasks.filter(t => t.owner !== 'clearsky' && (t.status === 'pending' || t.status === 'waiting_counterparty'));
+  const waitEl = document.getElementById('action-waiting');
+  const ownerNames = { bosquia: 'Bosqu\u00eda', silvareira: 'Silvareira', cmvmc: 'CMVMC Miguel', cuatrecasas: 'Cuatrecasas' };
+  waitEl.innerHTML = waitingTasks.length ? waitingTasks.map(t => {
+    const days = daysUntil(t.due_date);
+    let urgClass = 'urgency-green', urgText = '';
+    if (days != null) {
+      urgText = days < 0 ? Math.abs(days) + 'd OVERDUE' : days + 'd left';
+      urgClass = days > 5 ? 'urgency-green' : days >= 3 ? 'urgency-amber' : 'urgency-red';
+    }
+    return `<div class="action-item">
+      <span class="action-item-icon">\u23F3</span>
+      <div class="action-item-text">
+        <div class="label">${ownerNames[t.owner] || t.owner}: ${t.title}</div>
+        <div class="sub">Due ${t.due_date || 'TBD'}</div>
+      </div>
+      ${urgText ? `<span class="waiting-urgency ${urgClass}">${urgText}</span>` : ''}
+    </div>`;
+  }).join('') : '<div style="color:var(--text-muted);font-size:12px;padding:8px 0">Nothing pending</div>';
+
+  // Column 3: Ready to Submit
+  const readyItems = RESUB_ITEMS.filter(r => r.status === 'ready');
+  const readyEl = document.getElementById('action-ready');
+  readyEl.innerHTML = `<div style="font-size:20px;font-weight:800;color:var(--success);margin-bottom:8px">${readyItems.length} of ${RESUB_ITEMS.length}</div>
+    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">resubmission items ready</div>
+    ${readyItems.map(r => `<div class="action-item" style="padding:4px 0;border:none">
+      <span class="ready-check">\u2713</span>
+      <span style="font-size:12px">Pt ${r.pt}: ${r.req}</span>
+    </div>`).join('')}`;
+}
+
+function renderResubmission() {
+  const docs = dashData.documents.items || [];
+  const readyCount = RESUB_ITEMS.filter(r => r.status === 'ready').length;
+  const total = RESUB_ITEMS.length;
+
+  // Progress bar
+  document.getElementById('resub-label').textContent = `Resubmission Progress: ${readyCount} of ${total} items ready`;
+  const fill = document.getElementById('resub-fill');
+  fill.style.width = (readyCount / total * 100) + '%';
+  fill.className = 'resub-progress-fill' + (readyCount / total < 0.5 ? ' half' : '');
+
+  // ZIP button
+  const zipBtn = document.getElementById('resub-zip');
+  if (readyCount === total) {
+    zipBtn.className = 'resub-zip-btn enabled';
+    zipBtn.disabled = false;
+    zipBtn.title = 'Download resubmission package';
+  }
+
+  // Table accent
+  const wrap = document.getElementById('resub-table-wrap');
+  wrap.className = 'resub-section ' + (readyCount / total >= 0.5 ? 'accent-green' : 'accent-red');
+
+  // Rows
+  const statusConfig = {
+    ready:   { icon: '\u2705', label: 'READY', cls: 'badge-ready' },
+    draft:   { icon: '\uD83D\uDCDD', label: 'DRAFT', cls: 'badge-draft' },
+    waiting: { icon: '\u23F3', label: 'WAITING', cls: 'badge-waiting' },
+    missing: { icon: '\uD83D\uDD34', label: 'MISSING', cls: 'badge-missing' },
+  };
+
+  const tbody = document.getElementById('resub-body');
+  tbody.innerHTML = RESUB_ITEMS.map(r => {
+    const st = statusConfig[r.status] || statusConfig.missing;
+    // Find associated docs
+    const rDocs = r.fileIds.map(id => docs.find(d => d.id === id)).filter(Boolean);
+    const fileNames = rDocs.map(d => d.filename).join(', ') || '\u2014';
+    const hasR2 = rDocs.some(d => d.r2_key);
+    const dlDocId = rDocs.find(d => d.r2_key)?.id;
+
+    return `<tr>
+      <td><strong>${r.pt}</strong></td>
+      <td style="font-size:13px">${r.req}</td>
+      <td style="max-width:220px;font-size:12px;word-break:break-all">${fileNames}</td>
+      <td><span class="status-badge ${st.cls}">${st.icon} ${st.label}</span></td>
+      <td style="font-size:12px;color:var(--text-secondary)">${r.blocking || '\u2014'}</td>
+      <td>${hasR2 ? `<a class="dl-btn" href="#" onclick="downloadDoc('${dlDocId}');return false" title="Download">\u2B07</a>` : '<span class="dl-btn disabled">\u2B07</span>'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderOriginalDocs() {
+  const docs = dashData.documents.items || [];
+  const origDocs = docs.filter(d => d.r2_key && d.r2_key.includes('/original/'));
+  document.getElementById('orig-count').textContent = origDocs.length;
+  const tbody = document.getElementById('orig-body');
+  tbody.innerHTML = origDocs.sort((a, b) => (a.filename || '').localeCompare(b.filename || '')).map(d => `<tr>
+    <td style="max-width:350px;word-break:break-all">${d.filename}</td>
+    <td><span style="font-size:11px;color:var(--text-muted)">${d.category || ''}</span></td>
+    <td>${ownerHtml(d.owner)}</td>
+    <td><a class="dl-btn" href="#" onclick="downloadDoc('${d.id}');return false" title="Download">\u2B07</a></td>
+  </tr>`).join('');
+}
+
+function renderInternalDocs() {
+  const docs = dashData.documents.items || [];
+  const intDocs = docs.filter(d => d.r2_key && d.r2_key.includes('/internal/'));
+  const tbody = document.getElementById('int-body');
+  tbody.innerHTML = intDocs.map(d => `<tr>
+    <td style="max-width:300px;word-break:break-all">${d.filename}</td>
+    <td><span style="font-size:11px;color:var(--text-muted)">${d.category || ''}</span></td>
+    <td style="font-size:12px;color:var(--text-secondary);max-width:250px">${d.notes || ''}</td>
+    <td><a class="dl-btn" href="#" onclick="downloadDoc('${d.id}');return false" title="Download">\u2B07</a></td>
+  </tr>`).join('');
+}
+
+async function downloadDoc(docId) {
+  try {
+    const res = await fetch(`${API}/documents/${docId}/download`);
+    if (!res.ok) throw new Error('Download failed');
+    const blob = await res.blob();
+    const cd = res.headers.get('content-disposition') || '';
+    const match = cd.match(/filename="?([^"]+)"?/);
+    const name = match ? match[1] : 'document';
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch (e) { toast('Download error: ' + e.message, 'error'); }
 }
 
 function renderTaskBoard() {
@@ -408,10 +690,10 @@ function renderTaskBoard() {
   for (const t of tasks) {
     const due = daysUntil(t.due_date);
     const dueColor = due != null ? (due < 0 ? 'color:var(--danger);font-weight:700' : due <= 2 ? 'color:var(--warning)' : '') : '';
-    const dueText = t.due_date ? t.due_date.slice(5) : '—';
+    const dueText = t.due_date ? t.due_date.slice(5) : '\u2014';
     const taskDocs = docs.filter(d => d.task_id === t.id);
     html += `<tr onclick="toggleDetail('${t.id}')" style="cursor:pointer">
-      <td><strong>${t.oecc_point || '—'}</strong></td>
+      <td><strong>${t.oecc_point || '\u2014'}</strong></td>
       <td style="max-width:280px">${t.title}</td>
       <td>${chipHtml(t.status)}</td>
       <td>${ownerHtml(t.owner)}</td>
@@ -429,8 +711,8 @@ function renderTaskBoard() {
       </select></td>
     </tr>
     <tr><td colspan="8" style="padding:0"><div class="detail-panel" id="detail-${t.id}">
-      <div class="detail-section"><div class="detail-label">Description</div><div class="detail-text">${t.description || '—'}</div></div>
-      <div class="detail-section"><div class="detail-label">Notes</div><div class="detail-text">${t.notes || '—'}</div></div>
+      <div class="detail-section"><div class="detail-label">Description</div><div class="detail-text">${t.description || '\u2014'}</div></div>
+      <div class="detail-section"><div class="detail-label">Notes</div><div class="detail-text">${t.notes || '\u2014'}</div></div>
       ${taskDocs.length ? `<div class="detail-section"><div class="detail-label">Linked Documents (${taskDocs.length})</div><div class="detail-docs">${taskDocs.map(d => `<span class="detail-doc">${chipHtml(d.status)} ${d.filename.length > 40 ? d.filename.slice(0,37)+'...' : d.filename}</span>`).join('')}</div></div>` : ''}
     </div></td></tr>`;
   }
@@ -445,31 +727,10 @@ function toggleDetail(id) {
 async function updateTaskStatus(id, status) {
   if (!status) return;
   try {
-    await api(`/tasks/${id}`, { method: 'PATCH', body: { status, actor: 'user' } });
+    await apiCall(`/tasks/${id}`, { method: 'PATCH', body: { status, actor: 'user' } });
     toast('Task updated to: ' + status);
     loadDashboard();
   } catch (e) { toast('Error: ' + e.message, 'error'); }
-}
-
-function renderDocs() {
-  const docs = dashData.documents.items || [];
-  const fStatus = document.getElementById('doc-filter-status').value;
-  const fOwner = document.getElementById('doc-filter-owner').value;
-  const fCat = document.getElementById('doc-filter-cat').value;
-  const filtered = docs.filter(d => {
-    if (fStatus && d.status !== fStatus) return false;
-    if (fOwner && d.owner !== fOwner) return false;
-    if (fCat && d.category !== fCat) return false;
-    return true;
-  });
-  const tbody = document.getElementById('doc-table');
-  tbody.innerHTML = filtered.map(d => `<tr>
-    <td>${d.oecc_point || '—'}</td>
-    <td style="max-width:250px;word-break:break-all;font-size:12px" title="${d.notes || ''}">${d.filename}</td>
-    <td><span style="font-size:11px;color:var(--text-muted)">${d.category || ''}</span></td>
-    <td>${chipHtml(d.status)}</td>
-    <td>${ownerHtml(d.owner)}</td>
-  </tr>`).join('');
 }
 
 function renderCounterparties() {
@@ -489,7 +750,7 @@ function renderCounterparties() {
       </div>
       <div class="cp-meta">
         <span class="badge badge-${cp.reliability}">${cp.reliability}</span>
-        <span>Contact: ${cp.contact_name || '—'}</span>
+        <span>Contact: ${cp.contact_name || '\u2014'}</span>
         ${daysSince != null ? `<span style="${daysColor}">${daysSince}d since contact</span>` : ''}
       </div>
       ${cp.notes ? `<div style="font-size:12px;color:var(--text-secondary);margin-top:8px;line-height:1.5">${cp.notes}</div>` : ''}
@@ -502,8 +763,8 @@ function renderCounterparties() {
 
 async function logContact(cpId) {
   try {
-    await api(`/counterparties/${cpId}`, { method: 'PATCH', body: { last_contact_date: new Date().toISOString().split('T')[0] } });
-    await api('/activity', { method: 'POST', body: { project_id: PROJECT_ID, action: 'contact_logged', description: 'Contact logged', actor: 'user' } });
+    await apiCall(`/counterparties/${cpId}`, { method: 'PATCH', body: { last_contact_date: new Date().toISOString().split('T')[0] } });
+    await apiCall('/activity', { method: 'POST', body: { project_id: PROJECT_ID, action: 'contact_logged', description: 'Contact logged', actor: 'user' } });
     toast('Contact logged');
     loadDashboard();
   } catch (e) { toast('Error: ' + e.message, 'error'); }
@@ -512,11 +773,11 @@ async function logContact(cpId) {
 function renderActivity() {
   const items = dashData.recent_activity || [];
   const el = document.getElementById('activity-feed');
-  const icons = { status_changed:'\u{1F504}', task_created:'\u2795', doc_uploaded:'\u{1F4CE}', doc_status_changed:'\u{1F4DD}', note_added:'\u{1F4AC}', contact_logged:'\u{1F4DE}' };
+  const icons = { status_changed:'\uD83D\uDD04', task_created:'\u2795', task_completed:'\u2705', doc_uploaded:'\uD83D\uDCCE', doc_status_changed:'\uD83D\uDCDD', note_added:'\uD83D\uDCAC', contact_logged:'\uD83D\uDCDE' };
   el.innerHTML = items.length ? items.map(a => `<div class="activity-item">
     <div class="activity-icon ${a.action}">${icons[a.action] || '\u2022'}</div>
     <div>
-      <div class="activity-desc"><span class="activity-actor">${a.actor || 'system'}</span> — ${a.description}</div>
+      <div class="activity-desc"><span class="activity-actor">${a.actor || 'system'}</span> \u2014 ${a.description}</div>
       <div class="activity-time">${relTime(a.created_at)}</div>
     </div>
   </div>`).join('') : '<div style="text-align:center;color:var(--text-muted);padding:20px">No activity yet</div>';
