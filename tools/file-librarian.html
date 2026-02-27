@@ -334,8 +334,8 @@ body {
     <input type="file" multiple webkitdirectory id="fileInput" onchange="handleFiles(this.files)">
     <div class="dropzone-icon">📁</div>
     <div class="dropzone-title">Drop a folder or select files</div>
-    <div class="dropzone-sub">Reads filenames only — <strong>no files are uploaded</strong></div>
-    <div class="dropzone-safe">🔒 Zero data leaves your computer</div>
+    <div class="dropzone-sub">Files stay in your browser — <strong>nothing is uploaded to any server</strong></div>
+    <div class="dropzone-safe">🔒 Files processed locally → organized .zip download</div>
   </div>
 
   <!-- also allow flat file selection -->
@@ -361,7 +361,7 @@ body {
       </div>
       <div class="btn-group">
         <button class="btn btn-ghost" onclick="previewRenames()">👁 Preview Renames</button>
-        <button class="btn btn-gold" onclick="generateBat()">⚡ Download Rename Script (.bat)</button>
+        <button class="btn btn-gold" id="btnDownloadZip" onclick="downloadZip()">📦 Download Organized .zip</button>
       </div>
     </div>
   </div>
@@ -485,12 +485,12 @@ Counterparties/
       <button class="btn btn-ghost btn-sm" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
-      <p style="font-size:12px;color:var(--gray);margin-bottom:12px">These renames will be applied when you run the .bat script on your MKS machine.</p>
+      <p style="font-size:12px;color:var(--gray);margin-bottom:12px">Files will be renamed and organized into a downloadable .zip — no scripts needed.</p>
       <div class="rename-preview" id="renamePreview"></div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeModal()">Close</button>
-      <button class="btn btn-gold" onclick="generateBat()">⚡ Download .bat Script</button>
+      <button class="btn btn-gold" onclick="downloadZip()">📦 Download .zip</button>
     </div>
   </div>
 </div>
@@ -723,7 +723,6 @@ function processFiles(files) {
     if (f.size === 0) continue;
 
     // Full relative path from the dropped folder root
-    // e.g. "MyFolder/subfolder/file.pdf" → "subfolder/file.pdf"
     let relPath = raw;
     if (rootPrefix && relPath.startsWith(rootPrefix)) {
       relPath = relPath.substring(rootPrefix.length);
@@ -731,15 +730,19 @@ function processFiles(files) {
 
     const classified = classifyFile(basename);
     classified.id = 'f_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-    classified.relativePath = relPath;       // path inside dropped folder
-    classified.sourcePath = raw;             // full webkitRelativePath
-    classified.originalBasename = basename;  // just the filename
+    classified.relativePath = relPath;
+    classified.sourcePath = raw;
+    classified.originalBasename = basename;
     classified.size = f.size;
+    classified.fileObj = f;  // Store the actual File object for zip generation
     staged.push(classified);
     added++;
   }
+
+  // Show total size
+  const totalMB = staged.reduce((sum, f) => sum + (f.size || 0), 0) / (1024 * 1024);
   renderStaging();
-  toast(`${added} file(s) loaded from ${rootPrefix ? rootPrefix.replace('/', '') : 'selection'}`);
+  toast(`${added} file(s) loaded (${totalMB.toFixed(1)} MB) from ${rootPrefix ? rootPrefix.replace('/', '') : 'selection'}`);
 }
 
 // ============================================================
@@ -752,7 +755,8 @@ function renderStaging() {
   if (staged.length === 0) { card.style.display = 'none'; return; }
   card.style.display = 'block';
 
-  document.getElementById('stagingCount').textContent = `${staged.length} file(s)`;
+  const totalMB = staged.reduce((sum, f) => sum + (f.size || 0), 0) / (1024 * 1024);
+  document.getElementById('stagingCount').textContent = `${staged.length} file(s) · ${totalMB.toFixed(1)} MB`;
 
   const auto = staged.filter(f => f.autoDetected).length;
   document.getElementById('autoDetected').textContent = auto;
@@ -829,106 +833,66 @@ function clearStaging() {
 // ============================================================
 // GENERATE .BAT RENAME SCRIPT
 // ============================================================
-function generateBat() {
-  if (staged.length === 0) { toast('No files to rename'); return; }
+async function downloadZip() {
+  if (staged.length === 0) { toast('No files to organize'); return; }
 
-  // Detect the root folder name from sourcePath
-  let rootFolder = '';
-  const firstSource = staged[0].sourcePath || '';
-  if (firstSource.includes('/')) {
-    rootFolder = firstSource.split('/')[0];
+  const btn = document.getElementById('btnDownloadZip');
+  btn.disabled = true;
+  btn.textContent = '⏳ Building zip…';
+
+  try {
+    const zip = new JSZip();
+    let processed = 0;
+    const total = staged.length;
+
+    for (const f of staged) {
+      if (!f.fileObj) {
+        console.warn('No file object for', f.originalBasename);
+        continue;
+      }
+
+      // Read the file as ArrayBuffer
+      const buffer = await f.fileObj.arrayBuffer();
+
+      // Build the output path: folderPath/newName
+      const outPath = f.folderPath + '/' + f.newName;
+      zip.file(outPath, buffer);
+
+      processed++;
+      btn.textContent = `⏳ ${processed}/${total} files…`;
+    }
+
+    // Generate the zip
+    btn.textContent = '⏳ Compressing…';
+    const blob = await zip.generateAsync(
+      { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 1 } },
+      (meta) => {
+        btn.textContent = `⏳ Compressing ${Math.round(meta.percent)}%…`;
+      }
+    );
+
+    // Trigger download
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ClearSky_Files_${new Date().toISOString().slice(0,10)}.zip`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    // Commit to library catalogue
+    commitToLibrary();
+
+    const sizeMB = (blob.size / (1024 * 1024)).toFixed(1);
+    toast(`Downloaded ${processed} files (${sizeMB} MB zip)`);
+    closeModal();
+
+  } catch (e) {
+    console.error('Zip generation failed:', e);
+    toast('Error generating zip: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '📦 Download Organized .zip';
   }
-
-  const lines = [
-    '@echo off',
-    'chcp 65001 >nul',
-    'echo.',
-    'echo  ══════════════════════════════════════════════',
-    'echo   ClearSky File Librarian — Rename Script',
-    'echo  ══════════════════════════════════════════════',
-    'echo.',
-    rootFolder
-      ? `echo  Drop this .bat INSIDE the "${rootFolder}" folder and run it.`
-      : 'echo  Run this .bat from the folder containing your files.',
-    'echo.',
-    `echo  Files to organize: ${staged.length}`,
-    'echo.',
-    'pause',
-    'echo.',
-    '',
-  ];
-
-  // Collect unique OUTPUT folders to create
-  const outFolders = new Set();
-  staged.forEach(f => {
-    const parts = f.folderPath.split('/');
-    let path = '';
-    parts.forEach(p => {
-      path += (path ? '\\' : '') + p;
-      outFolders.add(path);
-    });
-  });
-
-  lines.push('echo [1/3] Creating folder structure...');
-  lines.push('echo.');
-  [...outFolders].sort().forEach(f => {
-    lines.push(`if not exist "${f}" mkdir "${f}"`);
-  });
-  lines.push('');
-
-  // Move files using their RELATIVE PATH as source
-  lines.push('echo [2/3] Renaming and organizing files...');
-  lines.push('echo.');
-
-  let moveCount = 0;
-  staged.forEach(f => {
-    // Source: the relative path inside the dropped folder (with backslashes for Windows)
-    const source = f.relativePath.replace(/\//g, '\\');
-    // Destination: our organized folder structure
-    const dest = f.folderPath.replace(/\//g, '\\') + '\\' + f.newName;
-
-    lines.push(`if exist "${source}" (`);
-    lines.push(`  move "${source}" "${dest}"`);
-    lines.push(`  echo   [OK] ${f.originalBasename || f.original}`);
-    lines.push(`) else (`);
-    // Also try just the basename in case the file is flat in the root
-    lines.push(`  if exist "${f.originalBasename || f.original}" (`);
-    lines.push(`    move "${f.originalBasename || f.original}" "${dest}"`);
-    lines.push(`    echo   [OK] ${f.originalBasename || f.original}`);
-    lines.push(`  ) else (`);
-    lines.push(`    echo   [SKIP] NOT FOUND: ${source}`);
-    lines.push(`  )`);
-    lines.push(`)`);
-    moveCount++;
-  });
-
-  lines.push('');
-  lines.push('echo.');
-  lines.push('echo [3/3] Cleaning up empty folders...');
-  // Remove empty source subfolders (best effort, ignore errors)
-  lines.push('for /f "delims=" %%d in (\'dir /s /b /ad ^| sort /r\') do rd "%%d" 2>nul');
-  lines.push('');
-  lines.push('echo.');
-  lines.push('echo  ══════════════════════════════════════════════');
-  lines.push(`echo   Done! ${moveCount} file(s) organized.`);
-  lines.push('echo   Upload the "Counterparties" folder to SharePoint.');
-  lines.push('echo  ══════════════════════════════════════════════');
-  lines.push('echo.');
-  lines.push('pause');
-
-  const blob = new Blob([lines.join('\r\n')], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `CSL_Rename_${new Date().toISOString().slice(0,10)}.bat`;
-  a.click();
-  URL.revokeObjectURL(url);
-
-  // Commit to library
-  commitToLibrary();
-
-  toast(`Rename script downloaded — ${moveCount} files`);
-  closeModal();
 }
 
 function commitToLibrary() {
