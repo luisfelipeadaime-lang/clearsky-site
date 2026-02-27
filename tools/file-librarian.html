@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClearSky | File Librarian</title>
+<link rel="icon" href="/assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A1628;
+  --navy-light: #0F1D32;
+  --navy-mid: #142540;
+  --gold: #C8A951;
+  --gold-dim: rgba(200,169,81,0.12);
+  --gold-glow: rgba(200,169,81,0.25);
+  --white: #F0F0F0;
+  --gray: #8899AA;
+  --gray-dark: #4A5568;
+  --green: #48BB78;
+  --green-dim: rgba(72,187,120,0.12);
+  --amber: #ED8936;
+  --amber-dim: rgba(237,137,54,0.12);
+  --red: #FC8181;
+  --red-dim: rgba(252,129,129,0.12);
+  --blue: #63B3ED;
+  --blue-dim: rgba(99,179,237,0.12);
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+}
+
+/* ═══ TOP NAV ═══ */
+.topnav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--navy-light);
+  border-bottom: 1px solid rgba(200,169,81,0.1);
+  position: sticky; top: 0; z-index: 100;
+}
+.topnav-brand { display:flex; align-items:center; gap:12px; text-decoration:none; }
+.topnav-brand img { height:28px; }
+.topnav-brand span { color:var(--gold); font-weight:600; font-size:14px; letter-spacing:0.5px; text-transform:uppercase; }
+.topnav-title { font-size:15px; color:var(--white); font-weight:500; }
+.topnav a.back { color:var(--gray); font-size:13px; text-decoration:none; display:flex; align-items:center; gap:4px; }
+.topnav a.back:hover { color:var(--gold); }
+
+/* ═══ TABS ═══ */
+.tabs {
+  display: flex; gap: 0;
+  background: var(--navy-light);
+  border-bottom: 1px solid rgba(200,169,81,0.1);
+  padding: 0 24px;
+}
+.tab {
+  padding: 11px 20px; font-size: 13px; font-weight: 500;
+  color: var(--gray); cursor: pointer; border-bottom: 2px solid transparent;
+  transition: 0.15s; user-select: none;
+}
+.tab:hover { color: var(--white); }
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.tab .badge {
+  display:inline-block; background:var(--gold-dim); color:var(--gold);
+  font-size:10px; padding:1px 6px; border-radius:8px; margin-left:5px; font-weight:600;
+}
+
+/* ═══ PANELS ═══ */
+.panel { display:none; padding:24px; max-width:1200px; margin:0 auto; }
+.panel.active { display:block; }
+
+/* ═══ DROP ZONE ═══ */
+.dropzone {
+  border: 2px dashed var(--gold-glow);
+  border-radius: var(--radius-lg);
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+  background: rgba(200,169,81,0.03);
+  position: relative;
+}
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+.dropzone-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.7; }
+.dropzone-title { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
+.dropzone-sub { font-size: 13px; color: var(--gray); }
+.dropzone-safe {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px; padding: 6px 14px;
+  background: var(--green-dim); color: var(--green);
+  border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+.dropzone input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer;
+}
+
+/* ═══ STAGING TABLE ═══ */
+.staging-card {
+  background: var(--navy-light);
+  border: 1px solid rgba(200,169,81,0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: 20px;
+}
+.staging-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(200,169,81,0.06);
+}
+.staging-header h3 { font-size:14px; font-weight:600; color:var(--gold); }
+.staging-count { font-size:12px; color:var(--gray); }
+
+.file-row {
+  display: grid;
+  grid-template-columns: 32px 1fr 160px 140px 100px 80px;
+  align-items: center;
+  padding: 10px 18px;
+  border-bottom: 1px solid rgba(200,169,81,0.04);
+  font-size: 13px;
+  transition: 0.1s;
+  gap: 10px;
+}
+.file-row:hover { background: rgba(200,169,81,0.03); }
+
+.file-icon { font-size:18px; text-align:center; }
+.file-original { color:var(--gray); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.file-new {
+  font-weight: 600; color: var(--white);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.file-name-stack { min-width: 0; }
+
+.file-select {
+  background: var(--navy); border: 1px solid rgba(200,169,81,0.15);
+  border-radius: var(--radius); padding: 5px 8px;
+  color: var(--white); font-size: 12px; font-family: inherit;
+  cursor: pointer; width: 100%;
+}
+.file-select:focus { outline:none; border-color:var(--gold); }
+.file-select option { background:var(--navy); }
+
+.file-path {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  color: var(--gray); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.file-status { text-align: center; }
+.dot-ok { color: var(--green); font-size: 18px; }
+.dot-warn { color: var(--amber); font-size: 18px; }
+.dot-edit { color: var(--blue); font-size: 18px; }
+
+.file-actions { display:flex; gap:4px; justify-content:flex-end; }
+
+/* ═══ BUTTONS ═══ */
+.btn {
+  padding: 8px 16px; border-radius: var(--radius); font-size: 12px;
+  font-weight: 600; cursor: pointer; border: none; transition: 0.15s;
+  display: inline-flex; align-items: center; gap: 6px; font-family: inherit;
+}
+.btn-gold { background:var(--gold); color:var(--navy); }
+.btn-gold:hover { background:#D4B85E; transform:translateY(-1px); }
+.btn-ghost { background:transparent; color:var(--gray); border:1px solid rgba(200,169,81,0.12); }
+.btn-ghost:hover { color:var(--gold); border-color:var(--gold-glow); background:var(--gold-dim); }
+.btn-sm { padding:5px 10px; font-size:11px; }
+.btn-danger { background:var(--red-dim); color:var(--red); }
+.btn-danger:hover { background:rgba(252,129,129,0.2); }
+
+.btn-group { display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ═══ ACTION BAR ═══ */
+.action-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px;
+  border-top: 1px solid rgba(200,169,81,0.06);
+  background: var(--navy-mid);
+}
+
+/* ═══ LIBRARY / CATALOGUE ═══ */
+.search-bar {
+  display: flex; gap: 10px; margin-bottom: 20px;
+}
+.search-input {
+  flex: 1; background: var(--navy-light); border: 1px solid rgba(200,169,81,0.12);
+  border-radius: var(--radius); padding: 10px 14px; color: var(--white);
+  font-size: 14px; font-family: inherit;
+}
+.search-input:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 2px var(--gold-dim); }
+.search-input::placeholder { color:var(--gray); }
+
+.catalogue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+}
+.catalogue-card {
+  background: var(--navy-light);
+  border: 1px solid rgba(200,169,81,0.06);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  transition: 0.15s;
+  cursor: default;
+}
+.catalogue-card:hover { border-color: var(--gold-glow); }
+.cat-filename { font-weight:600; font-size:13px; margin-bottom:4px; word-break:break-all; }
+.cat-meta { font-size:11px; color:var(--gray); line-height:1.6; }
+.cat-meta span { display:inline-block; margin-right:12px; }
+.cat-path {
+  font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--gold);
+  margin-top:6px; padding:4px 8px; background:var(--gold-dim);
+  border-radius:4px; word-break:break-all;
+}
+.cat-tag {
+  display:inline-block; padding:2px 8px; border-radius:10px;
+  font-size:10px; font-weight:600; margin-right:4px; margin-top:4px;
+}
+.tag-nda { background:var(--blue-dim); color:var(--blue); }
+.tag-kyc { background:var(--amber-dim); color:var(--amber); }
+.tag-marketing { background:var(--green-dim); color:var(--green); }
+.tag-advisory { background:rgba(183,148,246,0.12); color:#B794F6; }
+.tag-cross-ref { background:var(--red-dim); color:var(--red); }
+.tag-other { background:rgba(200,169,81,0.08); color:var(--gray); }
+.tag-internal { background:rgba(200,169,81,0.12); color:var(--gold); }
+
+/* ═══ STATS ═══ */
+.stats-row { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+.stat-pill {
+  background:var(--navy-light); border:1px solid rgba(200,169,81,0.06);
+  border-radius:var(--radius); padding:10px 16px;
+  display:flex; flex-direction:column; align-items:center; min-width:100px;
+}
+.stat-n { font-size:22px; font-weight:700; color:var(--gold); }
+.stat-l { font-size:10px; color:var(--gray); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+
+/* ═══ TAXONOMY REFERENCE ═══ */
+.taxonomy-table {
+  width:100%; border-collapse:collapse; font-size:13px;
+}
+.taxonomy-table th {
+  text-align:left; padding:8px 12px; font-size:11px; color:var(--gold);
+  text-transform:uppercase; letter-spacing:0.5px;
+  border-bottom:1px solid rgba(200,169,81,0.15); font-weight:600;
+}
+.taxonomy-table td {
+  padding:8px 12px; border-bottom:1px solid rgba(200,169,81,0.04);
+}
+.taxonomy-table code {
+  background:var(--gold-dim); padding:2px 6px; border-radius:3px;
+  font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--gold);
+}
+
+/* ═══ TOAST ═══ */
+.toast {
+  position:fixed; bottom:20px; right:20px; z-index:300;
+  background:var(--navy-mid); border:1px solid var(--gold); color:var(--gold);
+  padding:10px 18px; border-radius:var(--radius); font-size:13px;
+  transform:translateY(80px); opacity:0; transition:0.3s;
+}
+.toast.show { transform:translateY(0); opacity:1; }
+
+/* ═══ EMPTY ═══ */
+.empty { text-align:center; padding:60px 20px; color:var(--gray); }
+.empty p { font-size:14px; margin-bottom:12px; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width:768px) {
+  .file-row { grid-template-columns:32px 1fr 120px 80px; }
+  .file-row .file-path, .file-row .file-actions { display:none; }
+  .catalogue-grid { grid-template-columns:1fr; }
+}
+
+/* ═══ RENAME PREVIEW MODAL ═══ */
+.modal-bg {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65);
+  z-index:200; align-items:center; justify-content:center;
+}
+.modal-bg.open { display:flex; }
+.modal {
+  background:var(--navy-light); border:1px solid var(--gold-glow);
+  border-radius:var(--radius-lg); width:90%; max-width:720px;
+  max-height:85vh; overflow-y:auto; box-shadow:0 8px 40px rgba(0,0,0,0.5);
+}
+.modal-head {
+  padding:18px 22px; border-bottom:1px solid rgba(200,169,81,0.08);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.modal-head h2 { font-size:16px; font-weight:600; color:var(--gold); }
+.modal-body { padding:18px 22px; }
+.modal-foot { padding:14px 22px; border-top:1px solid rgba(200,169,81,0.08); display:flex; gap:8px; justify-content:flex-end; }
+
+.rename-preview {
+  font-family:'JetBrains Mono',monospace; font-size:11px;
+  background:var(--navy); border-radius:var(--radius); padding:14px;
+  max-height:300px; overflow-y:auto; line-height:1.7;
+}
+.rename-old { color:var(--red); text-decoration:line-through; }
+.rename-new { color:var(--green); }
+.rename-arrow { color:var(--gold); margin:0 6px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="topnav">
+  <div style="display:flex;align-items:center;gap:20px">
+    <a class="topnav-brand" href="/"><img src="/assets/logos/logo-gold.png" alt="CS" onerror="this.style.display='none'"><span>ClearSky</span></a>
+    <div class="topnav-title">File Librarian</div>
+  </div>
+  <a class="back" href="/">← Dashboard</a>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" data-tab="organize" onclick="switchTab('organize')">📂 Organize Files</div>
+  <div class="tab" data-tab="library" onclick="switchTab('library')">📚 Library <span class="badge" id="libCount">0</span></div>
+  <div class="tab" data-tab="taxonomy" onclick="switchTab('taxonomy')">📐 Naming Rules</div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- ORGANIZE TAB                                 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="panel active" id="panel-organize">
+
+  <div class="dropzone" id="dropzone">
+    <input type="file" multiple webkitdirectory id="fileInput" onchange="handleFiles(this.files)">
+    <div class="dropzone-icon">📁</div>
+    <div class="dropzone-title">Drop a folder or select files</div>
+    <div class="dropzone-sub">Reads filenames only — <strong>no files are uploaded</strong></div>
+    <div class="dropzone-safe">🔒 Zero data leaves your computer</div>
+  </div>
+
+  <!-- also allow flat file selection -->
+  <div style="text-align:center;margin-top:10px">
+    <label class="btn btn-ghost btn-sm" style="cursor:pointer">
+      📎 Or select individual files
+      <input type="file" multiple style="display:none" onchange="handleFiles(this.files)">
+    </label>
+  </div>
+
+  <div class="staging-card" id="stagingCard" style="display:none">
+    <div class="staging-header">
+      <h3>📋 Staging Area</h3>
+      <div>
+        <span class="staging-count" id="stagingCount"></span>
+        <button class="btn btn-ghost btn-sm" onclick="clearStaging()" style="margin-left:8px">Clear All</button>
+      </div>
+    </div>
+    <div id="stagingBody"></div>
+    <div class="action-bar">
+      <div style="font-size:12px;color:var(--gray)">
+        <span id="autoDetected">0</span> auto-classified · <span id="needsReview">0</span> needs review
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-ghost" onclick="previewRenames()">👁 Preview Renames</button>
+        <button class="btn btn-gold" onclick="generateBat()">⚡ Download Rename Script (.bat)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- LIBRARY TAB                                  -->
+<!-- ════════════════════════════════════════════ -->
+<div class="panel" id="panel-library">
+  <div class="stats-row" id="libStats"></div>
+  <div class="search-bar">
+    <input class="search-input" id="libSearch" placeholder="Search by company, document type, filename…" oninput="renderLibrary()">
+    <select class="file-select" style="width:160px" id="libFilter" onchange="renderLibrary()">
+      <option value="">All Types</option>
+      <option value="nda">NDA</option>
+      <option value="kyc">KYC</option>
+      <option value="marketing">Marketing</option>
+      <option value="advisory">Advisory</option>
+      <option value="cross_referral">Cross-Referral</option>
+      <option value="internal">Internal</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+  <div class="catalogue-grid" id="libGrid"></div>
+  <div class="empty" id="libEmpty" style="display:none">
+    <p>No files in the library yet. Organize some files first.</p>
+    <button class="btn btn-gold" onclick="switchTab('organize')">📂 Go to Organize</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- TAXONOMY TAB                                 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="panel" id="panel-taxonomy">
+  <div style="margin-bottom:24px">
+    <h2 style="font-size:18px;font-weight:600;color:var(--gold);margin-bottom:8px">ClearSky File Naming Convention</h2>
+    <p style="font-size:13px;color:var(--gray);line-height:1.6">
+      All files follow a structured naming pattern for SharePoint compatibility.<br>
+      The Librarian auto-detects and renames files to match these rules.
+    </p>
+  </div>
+
+  <div style="background:var(--navy-light);border:1px solid rgba(200,169,81,0.08);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px">
+    <h3 style="font-size:14px;color:var(--gold);margin-bottom:12px">Folder Structure</h3>
+    <pre style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--white);line-height:1.8;overflow-x:auto">
+Counterparties/
+  └── {Company Name}/
+        ├── 1. NDA/
+        │     └── MNDA_{Company}_{ClearSky_Limited}.pdf
+        ├── 2. KYC/
+        │     ├── KYC_{Company}_(CSL).pdf
+        │     └── KYC_{Company}_(CSL)_Complement.pdf
+        ├── 3. Marketing Agreement/
+        │     └── MA_{Company}_{Project}_{Year}.pdf
+        ├── 4. Advisory/
+        │     └── MSA_{Company}_{Year}.pdf
+        └── 5. Cross-Referral/
+              └── XRef_{Company}_{Year}.pdf
+    </pre>
+  </div>
+
+  <div style="background:var(--navy-light);border:1px solid rgba(200,169,81,0.08);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:20px">
+    <table class="taxonomy-table">
+      <thead>
+        <tr><th>Document Type</th><th>Filename Pattern</th><th>Detection Keywords</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NDA / MNDA</td>
+          <td><code>MNDA_{Company}_ClearSky_Limited.{ext}</code></td>
+          <td>nda, mnda, non-disclosure, confidential</td>
+        </tr>
+        <tr>
+          <td>KYC</td>
+          <td><code>KYC_{Company}_(CSL).{ext}</code></td>
+          <td>kyc, know your customer, client onboarding, cob</td>
+        </tr>
+        <tr>
+          <td>Marketing Agreement</td>
+          <td><code>MA_{Company}_{Project}_{Year}.{ext}</code></td>
+          <td>marketing agreement, marketing services, ma_</td>
+        </tr>
+        <tr>
+          <td>Advisory / MSA</td>
+          <td><code>MSA_{Company}_{Year}.{ext}</code></td>
+          <td>advisory, consultancy, msa, master services</td>
+        </tr>
+        <tr>
+          <td>Cross-Referral</td>
+          <td><code>XRef_{Company}_{Year}.{ext}</code></td>
+          <td>cross-referral, referral, fee sharing, xref</td>
+        </tr>
+        <tr>
+          <td>Internal / Other</td>
+          <td><code>{OriginalName}.{ext}</code></td>
+          <td><em>No match — manual classification</em></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="background:var(--navy-light);border:1px solid rgba(200,169,81,0.08);border-radius:var(--radius-lg);padding:20px">
+    <h3 style="font-size:14px;color:var(--gold);margin-bottom:12px">Rules</h3>
+    <div style="font-size:13px;line-height:1.8;color:var(--white)">
+      1. No spaces in filenames — use underscores<br>
+      2. Company names use CamelCase with underscores for spaces<br>
+      3. All dates in filenames use YYYY format<br>
+      4. Extensions preserved from original (.pdf, .docx, .xlsx)<br>
+      5. Executed/signed versions get <code>_EXECUTED</code> suffix<br>
+      6. Draft versions get <code>_DRAFT</code> suffix<br>
+      7. Redline versions get <code>_REDLINE</code> suffix
+    </div>
+  </div>
+</div>
+
+<!-- RENAME PREVIEW MODAL -->
+<div class="modal-bg" id="previewModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>📋 Rename Preview</h2>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:12px;color:var(--gray);margin-bottom:12px">These renames will be applied when you run the .bat script on your MKS machine.</p>
+      <div class="rename-preview" id="renamePreview"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+      <button class="btn btn-gold" onclick="generateBat()">⚡ Download .bat Script</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const STORAGE_KEY = 'csl_file_library';
+let staged = []; // files currently in staging
+let library = []; // committed catalogue entries
+
+// ============================================================
+// TAXONOMY ENGINE
+// ============================================================
+const DOC_TYPES = [
+  { id: 'nda',       label: 'NDA',            folder: '1. NDA',                keywords: ['nda','mnda','non-disclosure','non_disclosure','confidential','mutual nda'] },
+  { id: 'kyc',       label: 'KYC',            folder: '2. KYC',                keywords: ['kyc','know your customer','client onboarding','cob','due diligence','compliance form'] },
+  { id: 'marketing', label: 'Marketing',      folder: '3. Marketing Agreement', keywords: ['marketing agreement','marketing services','ma_','marketing_agreement'] },
+  { id: 'advisory',  label: 'Advisory',       folder: '4. Advisory',            keywords: ['advisory','consultancy','msa','master services','master advisory','statement of work','sow'] },
+  { id: 'cross_referral', label: 'Cross-Ref', folder: '5. Cross-Referral',      keywords: ['cross-referral','cross referral','referral','fee sharing','xref','cross_referral'] },
+  { id: 'internal',  label: 'Internal',       folder: '6. Internal',            keywords: ['internal','memo','minutes','board','invoice','receipt'] },
+];
+
+// Known counterparties (seeded from onboarding tool data)
+const KNOWN_COMPANIES = [
+  'Bepex','EGE Haina','Charm Industrial','Woodcache','Eco2 International','Offcarbon',
+  'Numerco','Bosquia','Orizon Agriculture','Greenline Climate','CarbonOf','Infinite Solutions',
+  'Tradewater','Salamander Broking','ALMAC Works','RNG Connect','Catapult Environmental',
+  'Boomitra','The Climate Trust','LyonDellBasell','Agrocortex','BrightSpot','Equus',
+  'AtmosClear','Sistema.bio','Yepas','K Animus','Jaguar Corridor','Royal Bank of Canada',
+  'Corsia Credits','Aider','True Manufacturing','Caely','ClearSky','Clear Sky',
+  'TotalEnergies','Caja Rural','NatureBrain','Desarrollo y Agronomia'
+];
+
+// ============================================================
+// AUTO-CLASSIFY
+// ============================================================
+function classifyFile(filename) {
+  const lower = filename.toLowerCase();
+  const nameNoExt = lower.replace(/\.[^.]+$/, '');
+  const ext = filename.split('.').pop();
+
+  // Detect doc type
+  let docType = null;
+  let confidence = 0;
+  for (const dt of DOC_TYPES) {
+    for (const kw of dt.keywords) {
+      if (nameNoExt.includes(kw.replace(/ /g, '_')) || nameNoExt.includes(kw.replace(/ /g, '-')) || nameNoExt.includes(kw.replace(/ /g, ''))) {
+        docType = dt;
+        confidence = 0.9;
+        break;
+      }
+      // Also check with spaces (some filenames have spaces)
+      if (nameNoExt.includes(kw)) {
+        docType = dt;
+        confidence = 0.85;
+        break;
+      }
+    }
+    if (docType) break;
+  }
+
+  // Detect company
+  let company = null;
+  for (const c of KNOWN_COMPANIES) {
+    const variants = [
+      c.toLowerCase(),
+      c.toLowerCase().replace(/ /g, '_'),
+      c.toLowerCase().replace(/ /g, '-'),
+      c.toLowerCase().replace(/ /g, ''),
+    ];
+    for (const v of variants) {
+      if (nameNoExt.includes(v)) {
+        company = c;
+        break;
+      }
+    }
+    if (company) break;
+  }
+
+  // Detect version markers
+  let version = '';
+  if (/executed|signed|final/i.test(nameNoExt)) version = 'EXECUTED';
+  else if (/draft/i.test(nameNoExt)) version = 'DRAFT';
+  else if (/redline|markup|tracked/i.test(nameNoExt)) version = 'REDLINE';
+  else if (/comment/i.test(nameNoExt)) version = 'COMMENTS';
+
+  // Generate new filename
+  const newName = generateFilename(docType, company, version, ext, filename);
+
+  // Generate folder path
+  const folderPath = generateFolderPath(docType, company);
+
+  return {
+    original: filename,
+    docType: docType ? docType.id : 'other',
+    docTypeLabel: docType ? docType.label : 'Other',
+    company: company || '',
+    version,
+    newName,
+    folderPath,
+    ext,
+    confidence,
+    autoDetected: !!docType,
+  };
+}
+
+function sanitize(s) {
+  return s.replace(/[^a-zA-Z0-9_.-]/g, '_').replace(/_+/g, '_');
+}
+
+function generateFilename(docType, company, version, ext, original) {
+  const year = new Date().getFullYear();
+  const compSafe = company ? sanitize(company) : 'Unknown';
+
+  if (!docType) {
+    // Keep original but sanitize
+    return sanitize(original);
+  }
+
+  let base = '';
+  switch (docType.id) {
+    case 'nda':
+      base = `MNDA_${compSafe}_ClearSky_Limited`;
+      break;
+    case 'kyc':
+      base = `KYC_${compSafe}_(CSL)`;
+      break;
+    case 'marketing':
+      base = `MA_${compSafe}_${year}`;
+      break;
+    case 'advisory':
+      base = `MSA_${compSafe}_${year}`;
+      break;
+    case 'cross_referral':
+      base = `XRef_${compSafe}_${year}`;
+      break;
+    case 'internal':
+      base = sanitize(original.replace(/\.[^.]+$/, ''));
+      break;
+    default:
+      base = sanitize(original.replace(/\.[^.]+$/, ''));
+  }
+
+  if (version) base += `_${version}`;
+  return `${base}.${ext}`;
+}
+
+function generateFolderPath(docType, company) {
+  const compFolder = company || 'Unclassified';
+  const typeFolder = docType ? docType.folder : '9. Other';
+  return `Counterparties/${compFolder}/${typeFolder}`;
+}
+
+// ============================================================
+// FILE HANDLING (reads names only — never uploads)
+// ============================================================
+const dropzone = document.getElementById('dropzone');
+
+dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => { dropzone.classList.remove('dragover'); });
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  // Handle both files and directory entries
+  if (e.dataTransfer.items) {
+    const files = [];
+    for (const item of e.dataTransfer.items) {
+      if (item.kind === 'file') {
+        const entry = item.webkitGetAsEntry ? item.webkitGetAsEntry() : null;
+        if (entry && entry.isDirectory) {
+          readDirectory(entry, files).then(() => processFiles(files));
+          return;
+        }
+        files.push(item.getAsFile());
+      }
+    }
+    processFiles(files);
+  }
+});
+
+async function readDirectory(entry, files) {
+  const reader = entry.createReader();
+  return new Promise((resolve) => {
+    reader.readEntries(async (entries) => {
+      for (const e of entries) {
+        if (e.isFile) {
+          const file = await new Promise(r => e.file(f => r(f)));
+          // Preserve relative path
+          file._relativePath = e.fullPath;
+          files.push(file);
+        } else if (e.isDirectory) {
+          await readDirectory(e, files);
+        }
+      }
+      resolve();
+    });
+  });
+}
+
+function handleFiles(fileList) {
+  processFiles(Array.from(fileList));
+}
+
+function processFiles(files) {
+  for (const f of files) {
+    const name = f.webkitRelativePath || f._relativePath || f.name;
+    const basename = name.split('/').pop();
+    // Skip hidden files and OS junk
+    if (basename.startsWith('.') || basename === 'Thumbs.db' || basename === 'desktop.ini') continue;
+
+    const classified = classifyFile(basename);
+    classified.id = 'f_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+    classified.relativePath = name;
+    classified.size = f.size;
+    staged.push(classified);
+  }
+  renderStaging();
+  toast(`${files.length} file(s) loaded`);
+}
+
+// ============================================================
+// RENDER STAGING
+// ============================================================
+function renderStaging() {
+  const card = document.getElementById('stagingCard');
+  const body = document.getElementById('stagingBody');
+
+  if (staged.length === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  document.getElementById('stagingCount').textContent = `${staged.length} file(s)`;
+
+  const auto = staged.filter(f => f.autoDetected).length;
+  document.getElementById('autoDetected').textContent = auto;
+  document.getElementById('needsReview').textContent = staged.length - auto;
+
+  body.innerHTML = staged.map(f => {
+    const icon = getFileIcon(f.ext);
+    const statusDot = f.autoDetected
+      ? '<span class="dot-ok" title="Auto-classified">✓</span>'
+      : '<span class="dot-warn" title="Needs review">?</span>';
+
+    return `
+      <div class="file-row" data-id="${f.id}">
+        <div class="file-icon">${icon}</div>
+        <div class="file-name-stack">
+          <div class="file-new" title="${f.newName}">${f.newName}</div>
+          <div class="file-original" title="${f.original}">← ${f.original}</div>
+        </div>
+        <div>
+          <select class="file-select" onchange="updateDocType('${f.id}', this.value)">
+            ${DOC_TYPES.map(dt => `<option value="${dt.id}" ${f.docType === dt.id ? 'selected' : ''}>${dt.label}</option>`).join('')}
+            <option value="other" ${f.docType === 'other' ? 'selected' : ''}>Other</option>
+          </select>
+        </div>
+        <div>
+          <input class="file-select" style="font-size:11px" value="${f.company}" placeholder="Company…"
+            onchange="updateCompany('${f.id}', this.value)" list="companyList">
+        </div>
+        <div class="file-status">${statusDot}</div>
+        <div class="file-actions">
+          <button class="btn btn-ghost btn-sm" onclick="removeStaged('${f.id}')" title="Remove">✕</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function getFileIcon(ext) {
+  const icons = { pdf: '📄', docx: '📝', doc: '📝', xlsx: '📊', xls: '📊', csv: '📊', pptx: '📊', png: '🖼️', jpg: '🖼️', jpeg: '🖼️', zip: '📦' };
+  return icons[ext?.toLowerCase()] || '📁';
+}
+
+function updateDocType(id, newType) {
+  const f = staged.find(s => s.id === id);
+  if (!f) return;
+  const dt = DOC_TYPES.find(d => d.id === newType);
+  f.docType = newType;
+  f.docTypeLabel = dt ? dt.label : 'Other';
+  f.newName = generateFilename(dt, f.company, f.version, f.ext, f.original);
+  f.folderPath = generateFolderPath(dt, f.company);
+  f.autoDetected = true; // manual override counts as confirmed
+  renderStaging();
+}
+
+function updateCompany(id, company) {
+  const f = staged.find(s => s.id === id);
+  if (!f) return;
+  f.company = company;
+  const dt = DOC_TYPES.find(d => d.id === f.docType);
+  f.newName = generateFilename(dt, f.company, f.version, f.ext, f.original);
+  f.folderPath = generateFolderPath(dt, f.company);
+  renderStaging();
+}
+
+function removeStaged(id) {
+  staged = staged.filter(s => s.id !== id);
+  renderStaging();
+}
+
+function clearStaging() {
+  staged = [];
+  renderStaging();
+}
+
+// ============================================================
+// GENERATE .BAT RENAME SCRIPT
+// ============================================================
+function generateBat() {
+  if (staged.length === 0) { toast('No files to rename'); return; }
+
+  const lines = [
+    '@echo off',
+    'chcp 65001 >nul',
+    'echo ═══════════════════════════════════════════',
+    'echo   ClearSky File Librarian — Rename Script',
+    'echo ═══════════════════════════════════════════',
+    'echo.',
+    'echo This will rename and organize files in the current folder.',
+    'echo Run this .bat from the same folder as your downloaded files.',
+    'echo.',
+    'pause',
+    'echo.',
+    '',
+  ];
+
+  // Collect unique folders to create
+  const folders = new Set();
+  staged.forEach(f => {
+    const parts = f.folderPath.split('/');
+    let path = '';
+    parts.forEach(p => {
+      path += (path ? '\\' : '') + p;
+      folders.add(path);
+    });
+  });
+
+  // Create folders
+  lines.push('echo Creating folder structure...');
+  [...folders].sort().forEach(f => {
+    lines.push(`if not exist "${f}" mkdir "${f}"`);
+  });
+  lines.push('echo.');
+
+  // Rename and move files
+  lines.push('echo Renaming and organizing files...');
+  staged.forEach(f => {
+    const dest = f.folderPath.replace(/\//g, '\\') + '\\' + f.newName;
+    if (f.original !== f.newName || f.folderPath) {
+      lines.push(`if exist "${f.original}" (`);
+      lines.push(`  move "${f.original}" "${dest}"`);
+      lines.push(`  echo   ✓ ${f.original} → ${dest}`);
+      lines.push(`) else (`);
+      lines.push(`  echo   ✗ NOT FOUND: ${f.original}`);
+      lines.push(`)`);
+    }
+  });
+
+  lines.push('');
+  lines.push('echo.');
+  lines.push('echo ═══════════════════════════════════════════');
+  lines.push(`echo   Done! ${staged.length} file(s) organized.`);
+  lines.push('echo   You can now upload this folder to SharePoint.');
+  lines.push('echo ═══════════════════════════════════════════');
+  lines.push('pause');
+
+  const blob = new Blob([lines.join('\r\n')], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `CSL_Rename_${new Date().toISOString().slice(0,10)}.bat`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Also commit to library
+  commitToLibrary();
+
+  toast(`Rename script downloaded — ${staged.length} files`);
+  closeModal();
+}
+
+function commitToLibrary() {
+  const now = new Date().toISOString();
+  staged.forEach(f => {
+    library.push({
+      id: f.id,
+      original: f.original,
+      newName: f.newName,
+      docType: f.docType,
+      docTypeLabel: f.docTypeLabel,
+      company: f.company,
+      version: f.version,
+      folderPath: f.folderPath,
+      ext: f.ext,
+      catalogued_at: now,
+      sharepoint_path: `ClearSkyLtd/Documents/0'. Clear Sky Limited/1. Projects Management/1. Counterparties/${f.company || 'Unclassified'}/${DOC_TYPES.find(d => d.id === f.docType)?.folder || '9. Other'}/${f.newName}`,
+    });
+  });
+
+  saveLibrary();
+  document.getElementById('libCount').textContent = library.length;
+  staged = [];
+  renderStaging();
+}
+
+// ============================================================
+// PREVIEW MODAL
+// ============================================================
+function previewRenames() {
+  if (staged.length === 0) { toast('No files staged'); return; }
+
+  const html = staged.map(f => {
+    const dest = f.folderPath.replace(/\//g, ' / ') + ' / ' + f.newName;
+    const changed = f.original !== f.newName;
+    return `<div style="margin-bottom:6px">
+      <span class="rename-old">${f.original}</span>
+      <span class="rename-arrow">→</span>
+      <span class="rename-new">${dest}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('renamePreview').innerHTML = html;
+  document.getElementById('previewModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('previewModal').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ============================================================
+// LIBRARY
+// ============================================================
+function renderLibrary() {
+  const search = document.getElementById('libSearch').value.toLowerCase();
+  const filter = document.getElementById('libFilter').value;
+
+  let filtered = library;
+  if (filter) filtered = filtered.filter(f => f.docType === filter);
+  if (search) filtered = filtered.filter(f =>
+    f.newName.toLowerCase().includes(search) ||
+    f.original.toLowerCase().includes(search) ||
+    (f.company || '').toLowerCase().includes(search) ||
+    (f.folderPath || '').toLowerCase().includes(search)
+  );
+
+  // Stats
+  const byType = {};
+  library.forEach(f => { byType[f.docTypeLabel] = (byType[f.docTypeLabel] || 0) + 1; });
+  document.getElementById('libStats').innerHTML =
+    `<div class="stat-pill"><div class="stat-n">${library.length}</div><div class="stat-l">Total Files</div></div>` +
+    Object.entries(byType).map(([k,v]) => `<div class="stat-pill"><div class="stat-n">${v}</div><div class="stat-l">${k}</div></div>`).join('');
+
+  // Grid
+  const grid = document.getElementById('libGrid');
+  document.getElementById('libEmpty').style.display = library.length === 0 ? 'block' : 'none';
+
+  if (filtered.length === 0 && library.length > 0) {
+    grid.innerHTML = '<div class="empty"><p>No files match your search.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(f => {
+    const tagClass = {
+      nda: 'tag-nda', kyc: 'tag-kyc', marketing: 'tag-marketing',
+      advisory: 'tag-advisory', cross_referral: 'tag-cross-ref',
+      internal: 'tag-internal', other: 'tag-other'
+    }[f.docType] || 'tag-other';
+
+    return `<div class="catalogue-card">
+      <div class="cat-filename">${getFileIcon(f.ext)} ${f.newName}</div>
+      <div class="cat-meta">
+        <span class="cat-tag ${tagClass}">${f.docTypeLabel}</span>
+        ${f.company ? `<span>🏢 ${f.company}</span>` : ''}
+        ${f.version ? `<span>📌 ${f.version}</span>` : ''}
+        <span>📅 ${new Date(f.catalogued_at).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})}</span>
+      </div>
+      <div class="cat-path" title="${f.sharepoint_path || f.folderPath}">📂 ${f.folderPath}/${f.newName}</div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// PERSISTENCE
+// ============================================================
+function saveLibrary() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(library)); } catch(e) {}
+}
+
+function loadLibrary() {
+  try { library = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { library = []; }
+  document.getElementById('libCount').textContent = library.length;
+  renderLibrary();
+}
+
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
+  if (name === 'library') renderLibrary();
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// DATALIST FOR COMPANY AUTOCOMPLETE
+// ============================================================
+function initCompanyList() {
+  const list = document.createElement('datalist');
+  list.id = 'companyList';
+  KNOWN_COMPANIES.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c;
+    list.appendChild(opt);
+  });
+  document.body.appendChild(list);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+initCompanyList();
+loadLibrary();
+</script>
+</body>
+</html>
