@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ClearSky | MITECO Command Center</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -96,6 +97,15 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .resub-zip-btn.disabled{background:#e2e8f0;color:var(--text-muted);cursor:not-allowed}
 .resub-zip-btn.enabled{background:var(--success);color:#fff;cursor:pointer}
 .resub-zip-btn.enabled:hover{background:#218838}
+.resub-dl-btns{display:flex;gap:8px;flex-wrap:wrap}
+.resub-dl-btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;border:none;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:.2s;white-space:nowrap}
+.resub-dl-btn.primary{background:#1F3864;color:#fff}
+.resub-dl-btn.primary:hover{background:#16294a}
+.resub-dl-btn.secondary{background:#e2e8f0;color:var(--primary)}
+.resub-dl-btn.secondary:hover{background:#d1d8e3}
+.resub-dl-btn:disabled{opacity:.5;cursor:wait}
+.resub-dl-btn .badge{background:rgba(255,255,255,.25);padding:1px 6px;border-radius:10px;font-size:11px;font-weight:600}
+.resub-dl-btn.secondary .badge{background:rgba(27,54,93,.1)}
 .resub-section{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 .resub-section.accent-green{border-color:rgba(40,167,69,.3)}
 .resub-section.accent-red{border-color:rgba(220,53,69,.3)}
@@ -305,9 +315,14 @@ select.inline-select:focus{outline:none;border-color:var(--primary)}
         <div class="resub-progress-label" id="resub-label">Resubmission Progress: -- of 12 items ready</div>
         <div class="resub-progress-bar"><div class="resub-progress-fill" id="resub-fill" style="width:0"></div></div>
       </div>
-      <button class="resub-zip-btn disabled" id="resub-zip" title="All items must be READY" disabled>
-        Generate Resubmission ZIP
-      </button>
+      <div class="resub-dl-btns">
+        <button class="resub-dl-btn primary" id="btn-dl-all" onclick="downloadAllZip()" title="Download all uploaded files">
+          Download Resubmission Package (.zip) <span class="badge" id="badge-all">0</span>
+        </button>
+        <button class="resub-dl-btn secondary" id="btn-dl-ready" onclick="downloadReadyZip()" title="Download only items marked READY">
+          Download Ready Items Only <span class="badge" id="badge-ready">0</span>
+        </button>
+      </div>
     </div>
     <div class="resub-section" id="resub-table-wrap">
       <table>
@@ -399,21 +414,51 @@ const PROJECT_ID = 'amoedo001';
 let dashData = null;
 
 // Resubmission package definition — one row per OECC point + index
-const RESUB_ITEMS = [
-  { pt: 1, req: 'Exclude pistachio + rename', fileIds: ['doc37'], status: 'ready', blocking: '' },
-  { pt: 2, req: 'Calculator Excel (.xlsx)', fileIds: ['doc04'], status: 'ready', blocking: '' },
-  { pt: 3, req: 'Consolidated shapefile (28 ha)', fileIds: ['doc39'], status: 'waiting', blocking: 'Silvareira: full 28 ha SHP (partial 2.34 ha available)' },
-  { pt: 4, req: 'Pre-fire forest evidence', fileIds: ['doc42'], status: 'waiting', blocking: 'GIS agent analysis pending \u2014 ClearSky deciding classification' },
-  { pt: 5, req: 'Plan de Gesti\u00f3n v2 + chronogram', fileIds: ['doc34'], status: 'draft', blocking: 'Silvareira must validate chronogram' },
-  { pt: 6, req: 'Anexo I \u2014 all signatures', fileIds: ['doc06'], status: 'waiting', blocking: 'CMVMC + ClearSky signatures needed' },
-  { pt: 7, req: 'Property proof (CCDG)', fileIds: ['doc36'], status: 'waiting', blocking: 'CMVMC: Catastro application' },
-  { pt: 8, req: 'Bilateral cession contract', fileIds: ['doc32'], status: 'draft', blocking: 'Signatures pending (CMVMC + ClearSky)' },
-  { pt: 9, req: 'Proyecto de ordenaci\u00f3n', fileIds: ['doc14','doc16'], status: 'ready', blocking: '' },
-  { pt: 10, req: 'Permanence commitment', fileIds: ['doc32'], status: 'draft', blocking: 'Via Convenio (same as Pt 8)' },
-  { pt: 11, req: 'Public memo for OECC web', fileIds: ['doc33'], status: 'ready', blocking: '' },
-  { pt: '\u2014', req: 'Cover letter', fileIds: ['doc44'], status: 'ready', blocking: '' },
-  { pt: '\u2014', req: 'Submission index', fileIds: ['doc40'], status: 'ready', blocking: '' },
+// Status is pulled LIVE from D1 task data (matched by oecc_point)
+const RESUB_ITEMS_DEF = [
+  { pt: 1, req: 'Exclude pistachio + rename', fileIds: ['doc37'] },
+  { pt: 2, req: 'Calculator Excel (.xlsx)', fileIds: ['doc04'] },
+  { pt: 3, req: 'Consolidated shapefile (213.66 ha)', fileIds: ['doc46'] },
+  { pt: 4, req: 'Pre-fire forest evidence', fileIds: ['doc45','doc47'] },
+  { pt: 5, req: 'Plan de Gesti\u00f3n v2 + chronogram', fileIds: ['doc34'] },
+  { pt: 6, req: 'Anexo I \u2014 all signatures', fileIds: ['doc48'] },
+  { pt: 7, req: 'Property proof (CCDG)', fileIds: ['doc36'] },
+  { pt: 8, req: 'Bilateral cession contract', fileIds: ['doc32'] },
+  { pt: 9, req: 'Proyecto de ordenaci\u00f3n', fileIds: ['doc14','doc16'] },
+  { pt: 10, req: 'Permanence commitment', fileIds: ['doc32'] },
+  { pt: 11, req: 'Public memo for OECC web', fileIds: ['doc33'] },
+  { pt: '\u2014', req: 'Cover letter', fileIds: ['doc49'] },
+  { pt: '\u2014', req: 'Submission index', fileIds: ['doc40'] },
 ];
+let RESUB_ITEMS = RESUB_ITEMS_DEF.map(r => ({ ...r, status: 'waiting', blocking: '' }));
+
+// Map D1 task status to resubmission display status
+function taskStatusToResub(taskStatus) {
+  if (taskStatus === 'ready' || taskStatus === 'submitted') return 'ready';
+  if (taskStatus === 'in_progress') return 'draft';
+  if (taskStatus === 'waiting_counterparty') return 'waiting';
+  if (taskStatus === 'pending' || taskStatus === 'blocked') return 'waiting';
+  return 'waiting';
+}
+
+function syncResubFromTasks() {
+  if (!dashData || !dashData.tasks || !dashData.tasks.items) return;
+  const tasks = dashData.tasks.items;
+  const taskByPoint = {};
+  for (const t of tasks) {
+    if (t.oecc_point) taskByPoint[t.oecc_point] = t;
+  }
+  RESUB_ITEMS = RESUB_ITEMS_DEF.map(r => {
+    const t = typeof r.pt === 'number' ? taskByPoint[r.pt] : null;
+    if (t) {
+      return { ...r, status: taskStatusToResub(t.status), blocking: t.status === 'ready' || t.status === 'submitted' ? '' : (t.notes || '') };
+    }
+    // Non-OECC items (cover letter, index): check if docs have r2_key
+    const docs = (dashData.documents.items || []);
+    const hasDocs = r.fileIds.some(id => { const d = docs.find(dd => dd.id === id); return d && d.r2_key; });
+    return { ...r, status: hasDocs ? 'ready' : 'waiting', blocking: '' };
+  });
+}
 
 async function apiCall(path, opts = {}) {
   const url = `${API}${path}`;
@@ -470,6 +515,7 @@ function toggleCollapsible(id) {
 async function loadDashboard() {
   try {
     dashData = await apiCall(`/dashboard-summary?project_id=${PROJECT_ID}`);
+    syncResubFromTasks();
     renderKPIs();
     renderActionPanel();
     renderResubmission();
@@ -602,13 +648,11 @@ function renderResubmission() {
   fill.style.width = (readyCount / total * 100) + '%';
   fill.className = 'resub-progress-fill' + (readyCount / total < 0.5 ? ' half' : '');
 
-  // ZIP button
-  const zipBtn = document.getElementById('resub-zip');
-  if (readyCount === total) {
-    zipBtn.className = 'resub-zip-btn enabled';
-    zipBtn.disabled = false;
-    zipBtn.title = 'Download resubmission package';
-  }
+  // Download button badges
+  const allWithFiles = RESUB_ITEMS.filter(r => r.fileIds.some(id => { const d = docs.find(dd => dd.id === id); return d && d.r2_key; })).length;
+  const readyWithFiles = RESUB_ITEMS.filter(r => r.status === 'ready' && r.fileIds.some(id => { const d = docs.find(dd => dd.id === id); return d && d.r2_key; })).length;
+  document.getElementById('badge-all').textContent = allWithFiles;
+  document.getElementById('badge-ready').textContent = readyWithFiles;
 
   // Table accent
   const wrap = document.getElementById('resub-table-wrap');
@@ -674,13 +718,109 @@ async function downloadDoc(docId) {
     const blob = await res.blob();
     const cd = res.headers.get('content-disposition') || '';
     const match = cd.match(/filename="?([^"]+)"?/);
-    const name = match ? match[1] : 'document';
+    // Fallback: look up filename from already-loaded document data
+    let name = match ? match[1] : null;
+    if (!name && dashData && dashData.documents && dashData.documents.items) {
+      const doc = dashData.documents.items.find(d => d.id === docId);
+      if (doc && doc.filename) name = doc.filename;
+    }
+    if (!name) name = docId;
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = name;
     a.click();
     URL.revokeObjectURL(a.href);
   } catch (e) { toast('Download error: ' + e.message, 'error'); }
+}
+
+async function downloadAllZip() {
+  await _buildZip('all');
+}
+async function downloadReadyZip() {
+  await _buildZip('ready');
+}
+
+async function _buildZip(mode) {
+  const btn = document.getElementById(mode === 'all' ? 'btn-dl-all' : 'btn-dl-ready');
+  const origText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = 'Preparing ZIP\u2026';
+
+  try {
+    const docs = dashData.documents.items || [];
+    const tasks = dashData.tasks.items || [];
+    const taskByPoint = {};
+    for (const t of tasks) { if (t.oecc_point) taskByPoint[t.oecc_point] = t; }
+
+    // Collect doc IDs to include
+    const includeIds = new Set();
+    for (const r of RESUB_ITEMS) {
+      if (mode === 'ready') {
+        if (r.status !== 'ready') continue;
+      }
+      for (const fid of r.fileIds) {
+        const d = docs.find(dd => dd.id === fid);
+        if (d && d.r2_key) includeIds.add(fid);
+      }
+    }
+
+    // Also add original + internal docs
+    for (const d of docs) {
+      if (!d.r2_key) continue;
+      if (mode === 'ready') {
+        // Only include resub docs that are ready; always include original/internal
+        if (d.r2_key.includes('/original/') || d.r2_key.includes('/internal/')) includeIds.add(d.id);
+      } else {
+        includeIds.add(d.id);
+      }
+    }
+
+    if (includeIds.size === 0) {
+      toast('No files available to download', 'warning');
+      return;
+    }
+
+    const zip = new JSZip();
+    const folderMap = { technical: 'resubmission/technical', gis: 'resubmission/gis', legal: 'resubmission/legal', administrative: 'resubmission/administrative' };
+    let downloaded = 0;
+
+    for (const docId of includeIds) {
+      const doc = docs.find(d => d.id === docId);
+      if (!doc || !doc.r2_key) continue;
+
+      btn.innerHTML = `Downloading ${++downloaded}/${includeIds.size}\u2026`;
+
+      try {
+        const res = await fetch(`${API}/documents/${docId}/download`);
+        if (!res.ok) continue;
+        const blob = await res.blob();
+        const name = doc.filename || docId;
+
+        // Determine folder
+        let folder = 'resubmission';
+        if (doc.r2_key.includes('/original/')) folder = 'original';
+        else if (doc.r2_key.includes('/internal/')) folder = 'internal';
+        else if (folderMap[doc.category]) folder = folderMap[doc.category];
+
+        zip.file(`${folder}/${name}`, blob);
+      } catch (e) { /* skip failed file */ }
+    }
+
+    btn.innerHTML = 'Compressing\u2026';
+    const content = await zip.generateAsync({ type: 'blob' });
+    const today = new Date().toISOString().slice(0, 10);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(content);
+    a.download = `Amoedo_Subsanacion_OECC_${today}.zip`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast(`ZIP downloaded (${downloaded} files)`, 'success');
+  } catch (e) {
+    toast('ZIP error: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = origText;
+  }
 }
 
 function renderTaskBoard() {
