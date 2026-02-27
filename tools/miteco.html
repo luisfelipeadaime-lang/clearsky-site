@@ -401,16 +401,17 @@ let dashData = null;
 // Resubmission package definition — one row per OECC point + index
 const RESUB_ITEMS = [
   { pt: 1, req: 'Exclude pistachio + rename', fileIds: ['doc37'], status: 'ready', blocking: '' },
-  { pt: 2, req: 'Calculator Excel (.xlsx)', fileIds: ['doc04'], status: 'ready', blocking: 'Bosqu\u00eda must retransmit via portal' },
+  { pt: 2, req: 'Calculator Excel (.xlsx)', fileIds: ['doc04'], status: 'ready', blocking: '' },
   { pt: 3, req: 'Consolidated shapefile (28 ha)', fileIds: ['doc39'], status: 'waiting', blocking: 'Silvareira: full 28 ha SHP (partial 2.34 ha available)' },
-  { pt: 4, req: 'Pre-fire forest evidence', fileIds: ['doc42'], status: 'waiting', blocking: 'GIS agent analysis pending + Bosqu\u00eda typology decision' },
+  { pt: 4, req: 'Pre-fire forest evidence', fileIds: ['doc42'], status: 'waiting', blocking: 'GIS agent analysis pending \u2014 ClearSky deciding classification' },
   { pt: 5, req: 'Plan de Gesti\u00f3n v2 + chronogram', fileIds: ['doc34'], status: 'draft', blocking: 'Silvareira must validate chronogram' },
   { pt: 6, req: 'Anexo I \u2014 all signatures', fileIds: ['doc06'], status: 'waiting', blocking: 'CMVMC + ClearSky signatures needed' },
   { pt: 7, req: 'Property proof (CCDG)', fileIds: ['doc36'], status: 'waiting', blocking: 'CMVMC: Catastro application' },
   { pt: 8, req: 'Bilateral cession contract', fileIds: ['doc32'], status: 'draft', blocking: 'Signatures pending (CMVMC + ClearSky)' },
-  { pt: 9, req: 'Proyecto de ordenaci\u00f3n', fileIds: ['doc14','doc16'], status: 'ready', blocking: 'Bosqu\u00eda must retransmit via portal' },
+  { pt: 9, req: 'Proyecto de ordenaci\u00f3n', fileIds: ['doc14','doc16'], status: 'ready', blocking: '' },
   { pt: 10, req: 'Permanence commitment', fileIds: ['doc32'], status: 'draft', blocking: 'Via Convenio (same as Pt 8)' },
   { pt: 11, req: 'Public memo for OECC web', fileIds: ['doc33'], status: 'ready', blocking: '' },
+  { pt: '\u2014', req: 'Cover letter', fileIds: ['doc44'], status: 'ready', blocking: '' },
   { pt: '\u2014', req: 'Submission index', fileIds: ['doc40'], status: 'ready', blocking: '' },
 ];
 
