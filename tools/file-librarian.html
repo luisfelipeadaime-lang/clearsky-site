@@ -700,20 +700,46 @@ function handleFiles(fileList) {
 }
 
 function processFiles(files) {
+  // Detect the common root folder so we can strip it
+  const paths = [];
   for (const f of files) {
-    const name = f.webkitRelativePath || f._relativePath || f.name;
-    const basename = name.split('/').pop();
+    const raw = f.webkitRelativePath || f._relativePath || f.name;
+    paths.push(raw);
+  }
+  // Find common prefix (the dropped folder name)
+  let rootPrefix = '';
+  if (paths.length > 1 && paths[0].includes('/')) {
+    const first = paths[0].split('/');
+    rootPrefix = first[0] + '/';
+  }
+
+  let added = 0;
+  for (const f of files) {
+    const raw = f.webkitRelativePath || f._relativePath || f.name;
+    const basename = raw.split('/').pop();
     // Skip hidden files and OS junk
     if (basename.startsWith('.') || basename === 'Thumbs.db' || basename === 'desktop.ini') continue;
+    // Skip zero-byte files (often folder placeholders)
+    if (f.size === 0) continue;
+
+    // Full relative path from the dropped folder root
+    // e.g. "MyFolder/subfolder/file.pdf" → "subfolder/file.pdf"
+    let relPath = raw;
+    if (rootPrefix && relPath.startsWith(rootPrefix)) {
+      relPath = relPath.substring(rootPrefix.length);
+    }
 
     const classified = classifyFile(basename);
     classified.id = 'f_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-    classified.relativePath = name;
+    classified.relativePath = relPath;       // path inside dropped folder
+    classified.sourcePath = raw;             // full webkitRelativePath
+    classified.originalBasename = basename;  // just the filename
     classified.size = f.size;
     staged.push(classified);
+    added++;
   }
   renderStaging();
-  toast(`${files.length} file(s) loaded`);
+  toast(`${added} file(s) loaded from ${rootPrefix ? rootPrefix.replace('/', '') : 'selection'}`);
 }
 
 // ============================================================
@@ -743,7 +769,7 @@ function renderStaging() {
         <div class="file-icon">${icon}</div>
         <div class="file-name-stack">
           <div class="file-new" title="${f.newName}">${f.newName}</div>
-          <div class="file-original" title="${f.original}">← ${f.original}</div>
+          <div class="file-original" title="${f.relativePath}">← ${f.relativePath}</div>
         </div>
         <div>
           <select class="file-select" onchange="updateDocType('${f.id}', this.value)">
@@ -806,59 +832,88 @@ function clearStaging() {
 function generateBat() {
   if (staged.length === 0) { toast('No files to rename'); return; }
 
+  // Detect the root folder name from sourcePath
+  let rootFolder = '';
+  const firstSource = staged[0].sourcePath || '';
+  if (firstSource.includes('/')) {
+    rootFolder = firstSource.split('/')[0];
+  }
+
   const lines = [
     '@echo off',
     'chcp 65001 >nul',
-    'echo ═══════════════════════════════════════════',
-    'echo   ClearSky File Librarian — Rename Script',
-    'echo ═══════════════════════════════════════════',
     'echo.',
-    'echo This will rename and organize files in the current folder.',
-    'echo Run this .bat from the same folder as your downloaded files.',
+    'echo  ══════════════════════════════════════════════',
+    'echo   ClearSky File Librarian — Rename Script',
+    'echo  ══════════════════════════════════════════════',
+    'echo.',
+    rootFolder
+      ? `echo  Drop this .bat INSIDE the "${rootFolder}" folder and run it.`
+      : 'echo  Run this .bat from the folder containing your files.',
+    'echo.',
+    `echo  Files to organize: ${staged.length}`,
     'echo.',
     'pause',
     'echo.',
     '',
   ];
 
-  // Collect unique folders to create
-  const folders = new Set();
+  // Collect unique OUTPUT folders to create
+  const outFolders = new Set();
   staged.forEach(f => {
     const parts = f.folderPath.split('/');
     let path = '';
     parts.forEach(p => {
       path += (path ? '\\' : '') + p;
-      folders.add(path);
+      outFolders.add(path);
     });
   });
 
-  // Create folders
-  lines.push('echo Creating folder structure...');
-  [...folders].sort().forEach(f => {
+  lines.push('echo [1/3] Creating folder structure...');
+  lines.push('echo.');
+  [...outFolders].sort().forEach(f => {
     lines.push(`if not exist "${f}" mkdir "${f}"`);
   });
+  lines.push('');
+
+  // Move files using their RELATIVE PATH as source
+  lines.push('echo [2/3] Renaming and organizing files...');
   lines.push('echo.');
 
-  // Rename and move files
-  lines.push('echo Renaming and organizing files...');
+  let moveCount = 0;
   staged.forEach(f => {
+    // Source: the relative path inside the dropped folder (with backslashes for Windows)
+    const source = f.relativePath.replace(/\//g, '\\');
+    // Destination: our organized folder structure
     const dest = f.folderPath.replace(/\//g, '\\') + '\\' + f.newName;
-    if (f.original !== f.newName || f.folderPath) {
-      lines.push(`if exist "${f.original}" (`);
-      lines.push(`  move "${f.original}" "${dest}"`);
-      lines.push(`  echo   ✓ ${f.original} → ${dest}`);
-      lines.push(`) else (`);
-      lines.push(`  echo   ✗ NOT FOUND: ${f.original}`);
-      lines.push(`)`);
-    }
+
+    lines.push(`if exist "${source}" (`);
+    lines.push(`  move "${source}" "${dest}"`);
+    lines.push(`  echo   [OK] ${f.originalBasename || f.original}`);
+    lines.push(`) else (`);
+    // Also try just the basename in case the file is flat in the root
+    lines.push(`  if exist "${f.originalBasename || f.original}" (`);
+    lines.push(`    move "${f.originalBasename || f.original}" "${dest}"`);
+    lines.push(`    echo   [OK] ${f.originalBasename || f.original}`);
+    lines.push(`  ) else (`);
+    lines.push(`    echo   [SKIP] NOT FOUND: ${source}`);
+    lines.push(`  )`);
+    lines.push(`)`);
+    moveCount++;
   });
 
   lines.push('');
   lines.push('echo.');
-  lines.push('echo ═══════════════════════════════════════════');
-  lines.push(`echo   Done! ${staged.length} file(s) organized.`);
-  lines.push('echo   You can now upload this folder to SharePoint.');
-  lines.push('echo ═══════════════════════════════════════════');
+  lines.push('echo [3/3] Cleaning up empty folders...');
+  // Remove empty source subfolders (best effort, ignore errors)
+  lines.push('for /f "delims=" %%d in (\'dir /s /b /ad ^| sort /r\') do rd "%%d" 2>nul');
+  lines.push('');
+  lines.push('echo.');
+  lines.push('echo  ══════════════════════════════════════════════');
+  lines.push(`echo   Done! ${moveCount} file(s) organized.`);
+  lines.push('echo   Upload the "Counterparties" folder to SharePoint.');
+  lines.push('echo  ══════════════════════════════════════════════');
+  lines.push('echo.');
   lines.push('pause');
 
   const blob = new Blob([lines.join('\r\n')], { type: 'text/plain' });
@@ -869,10 +924,10 @@ function generateBat() {
   a.click();
   URL.revokeObjectURL(url);
 
-  // Also commit to library
+  // Commit to library
   commitToLibrary();
 
-  toast(`Rename script downloaded — ${staged.length} files`);
+  toast(`Rename script downloaded — ${moveCount} files`);
   closeModal();
 }
 
@@ -908,9 +963,8 @@ function previewRenames() {
 
   const html = staged.map(f => {
     const dest = f.folderPath.replace(/\//g, ' / ') + ' / ' + f.newName;
-    const changed = f.original !== f.newName;
     return `<div style="margin-bottom:6px">
-      <span class="rename-old">${f.original}</span>
+      <span class="rename-old">${f.relativePath}</span>
       <span class="rename-arrow">→</span>
       <span class="rename-new">${dest}</span>
     </div>`;
