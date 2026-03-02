@@ -614,10 +614,11 @@ async function generateBrief() {
   showPhase('generating');
   setStep(1);
 
-  // 1) Search local KB first
   const genStatus = document.getElementById('gen-status');
+
+  // 1) Search local KB first
   genStatus.textContent = 'Searching project knowledge base...';
-  await sleep(400);
+  await sleep(300);
 
   const projectMatches = findProject(prompt);
   let kbContext = '';
@@ -626,29 +627,32 @@ async function generateBrief() {
       const p = PROJECT_KB[k];
       return `PROJECT: ${p.name}\nCountry: ${p.country}\nType: ${p.creditType}\nVerra: ${p.verraId}\nMethodology: ${p.methodology}\nWCC/yr: ${p.wcc}\nWRC/yr: ${p.wrc}\nTotal CP1: ${p.totalCp1}\nJobs: ${p.jobs}\nPeriod: ${p.period}\nMaterial: ${p.material}\nOutput: ${p.output}\nSDGs: ${p.sdgs}\nOverview: ${p.overview}\nAdditionality: ${p.additionality}\nTraceability: ${p.traceability}\nImpact: ${p.impact}\nCo-benefits: ${p.cobenefits.map(c => c.title + ': ' + c.desc).join('; ')}`;
     }).join('\n\n');
-    genStatus.textContent = `Found ${projectMatches.length} project(s) in knowledge base...`;
-    await sleep(400);
+    genStatus.textContent = `Found ${projectMatches.length} project(s) in knowledge base. Generating brief...`;
+    await sleep(300);
+  } else {
+    genStatus.textContent = 'No local KB match. Calling Claude AI with web search to look up project details...';
+    await sleep(300);
   }
 
-  // 2) Try Claude API for brief generation
-  genStatus.textContent = 'Generating presentation brief...';
-
+  // 2) Call Claude API (direct Anthropic API with web search)
   try {
     const brief = await callClaudeForBrief(prompt, kbContext, selectedType);
     if (brief) {
       populateFields(brief, selectedType);
       currentBrief = brief;
+      showStatus('Brief generated successfully. Review and edit fields below, then download PPTX.', 'success');
     }
   } catch (e) {
-    console.warn('Claude API unavailable, using KB data:', e.message);
-    // Fallback: populate from KB directly
+    console.warn('Claude API call failed:', e.message);
+
+    // Fallback: populate from KB directly if we have matches
     if (projectMatches.length > 0) {
       const p = PROJECT_KB[projectMatches[0]];
       if (selectedType === 'tearsheet') populateTearsheetFromKB(p);
       else if (selectedType === 'deck') populateDeckFromKB(projectMatches);
-      showStatus('Populated from knowledge base. Claude API not available — edit fields as needed.', 'info');
+      showStatus('AI generation failed (' + e.message.substring(0, 80) + '). Populated from local knowledge base — edit fields as needed.', 'info');
     } else {
-      showStatus('No matching projects found and Claude API unavailable. Please fill fields manually.', 'info');
+      showStatus('AI generation failed: ' + e.message.substring(0, 120) + '. Please fill fields manually or try again.', 'error');
     }
   }
 
@@ -658,25 +662,72 @@ async function generateBrief() {
 }
 
 async function callClaudeForBrief(prompt, kbContext, type) {
-  const systemPrompt = `You are a ClearSky presentation content generator. Generate content for a ${type} presentation based on the user's request. Use the project knowledge base data provided. All text fields must respect character limits. Return ONLY valid JSON, no markdown or backticks.
+  const genStatus = document.getElementById('gen-status');
+  genStatus.textContent = 'Calling Claude AI with web search...';
 
-For tearsheet, return: {"projectName","country","creditType","verraId","methodology","wcc","wrc","totalCp1","jobs","period","material","output","vvb","sdgs","overview"(max 500 chars),"additionality"(max 200),"traceability"(max 200),"impact"(max 200),"cobenefits":[{"title","desc"}],"contactName":"Luis Adaime","contactEmail":"trading@clearskyltd.com","counterparty"}
+  const schemaInstructions = type === 'tearsheet'
+    ? `Return a JSON object with these exact keys: {"projectName":"string","country":"string","creditType":"string","verraId":"string","methodology":"string","wcc":"string (annual volume)","wrc":"string (annual volume or N/A)","totalCp1":"string","jobs":"string","period":"string (crediting period)","material":"string","output":"string (end product)","vvb":"string","sdgs":"string (comma-separated numbers)","overview":"string (max 500 chars, project description)","additionality":"string (max 200 chars)","traceability":"string (max 200 chars)","impact":"string (max 200 chars)","cobenefits":[{"title":"string","desc":"string"}] (up to 4),"contactName":"Luis Adaime","contactEmail":"trading@clearskyltd.com","counterparty":"string (from prompt or empty)"}`
+    : type === 'deck'
+    ? `Return a JSON object with these exact keys: {"title":"string","subtitle":"string","summary":"string (max 400 chars, executive summary)","market":"string (max 400 chars, sector/market context)","stats":[{"num":"string","label":"string"}] (up to 4 key statistics),"projects":[{"name":"string","country":"string","type":"string (credit type)","metric":"string (key volume metric)","desc":"string (max 250 chars)"}] (one per project mentioned),"contactName":"Luis Adaime","contactEmail":"trading@clearskyltd.com","counterparty":"string (from prompt or empty)"}`
+    : `Return a JSON object with these exact keys: {"title":"string","subtitle":"string","sections":["string"] (up to 10 section titles)}`;
 
-For deck, return: {"title","subtitle","summary"(max 400),"market"(max 400),"stats":[{"num","label"}],"projects":[{"name","country","type","metric","desc"(max 250)}],"contactName":"Luis Adaime","contactEmail":"trading@clearskyltd.com","counterparty"}
+  const systemPrompt = `You are a ClearSky Limited presentation content generator. ClearSky is an environmental merchant bank that originates, structures, and distributes high-integrity environmental credits (carbon, plastic, biodiversity).
 
-For whitepaper, return: {"title","subtitle","sections":["section name",...]}
+Your task: Generate structured content for a ${type} presentation based on the user's request.
 
-PROJECT KNOWLEDGE BASE:
-${kbContext || 'No matching projects found in KB. Generate reasonable placeholder content based on the prompt.'}`;
+CRITICAL INSTRUCTIONS:
+1. Use web search to look up any Verra VCS project IDs (e.g., VCS4854), Verra PWRS IDs (e.g., PWRP-5466), or methodology references mentioned in the prompt. Search for "[project ID] verra registry" to find project details.
+2. Extract real project data: project name, country, methodology, credit volumes, crediting period, project proponent, etc.
+3. For counterparties mentioned (e.g., TotalEnergies), tailor the framing and subtitle appropriately.
+4. All text fields MUST respect their character limits — this is critical to prevent layout overflow.
+5. Use "[TBD]" for any data you cannot find rather than making it up.
+6. Return ONLY valid JSON. No markdown backticks, no preamble, no explanation. Just the JSON object.
 
-  const resp = await fetch('https://api-tools.oga.earth/api/presentations/generate-brief', {
+${schemaInstructions}
+
+${kbContext ? 'CLEARSKY PROJECT KNOWLEDGE BASE (use this data if matching):\n' + kbContext : ''}
+
+Generate accurate, professional content suitable for institutional buyers.`;
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, systemPrompt, type })
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4000,
+      tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+      system: systemPrompt,
+      messages: [{ role: 'user', content: prompt }]
+    })
   });
 
-  if (!resp.ok) throw new Error(`API returned ${resp.status}`);
-  return await resp.json();
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Anthropic API ${response.status}: ${errText}`);
+  }
+
+  const data = await response.json();
+
+  // Extract text content from response (may have multiple blocks due to tool use)
+  let jsonText = '';
+  for (const block of data.content) {
+    if (block.type === 'text' && block.text) {
+      jsonText += block.text;
+    }
+  }
+
+  // Clean and parse JSON
+  jsonText = jsonText.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+
+  // Try to extract JSON object if there's surrounding text
+  const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    jsonText = jsonMatch[0];
+  }
+
+  genStatus.textContent = 'Parsing AI response...';
+  const brief = JSON.parse(jsonText);
+  return brief;
 }
 
 function populateTearsheetFromKB(p) {
