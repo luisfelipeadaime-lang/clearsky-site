@@ -557,110 +557,45 @@ const T1_ACCOUNTS = [
 // DATA FETCHING
 // ============================================================
 
-// Primary: Try API endpoint (worker route)
-// Fallback: Use embedded seed data from last CSV export
 async function fetchActivityData(dateFrom, dateTo) {
   try {
     const res = await fetch(`${API_BASE}/revenue/activity-stats?from=${dateFrom}&to=${dateTo}`);
-    if (!res.ok) throw new Error(`API ${res.status}`);
+    if (!res.ok) throw new Error(`API returned ${res.status}`);
     const data = await res.json();
-    document.getElementById('statusBadge').className = 'status-badge live';
-    document.getElementById('statusBadge').textContent = 'Live';
+
+    // Update status badge
+    if (data.cached) {
+      document.getElementById('statusBadge').className = 'status-badge';
+      document.getElementById('statusBadge').style.background = 'var(--yellow-bg)';
+      document.getElementById('statusBadge').style.color = 'var(--yellow)';
+      document.getElementById('statusBadge').textContent = 'Cached';
+    } else {
+      document.getElementById('statusBadge').className = 'status-badge live';
+      document.getElementById('statusBadge').textContent = 'Live';
+    }
+
     return data;
   } catch (e) {
-    console.warn('API unavailable, using seed data:', e.message);
-    document.getElementById('statusBadge').className = 'status-badge';
-    document.getElementById('statusBadge').style.background = 'var(--yellow-bg)';
-    document.getElementById('statusBadge').style.color = 'var(--yellow)';
-    document.getElementById('statusBadge').textContent = 'Cached';
-    return getSeedData(dateFrom, dateTo);
+    console.error('API error:', e);
+    showError(`Unable to load HubSpot data: ${e.message}. Check API connection at ${API_BASE}/revenue/activity-stats`);
+    throw e;
   }
 }
 
-// Seed data from HubSpot CSV export (Feb 23 – Mar 4, 2026)
-// This gets replaced by live API data once the worker endpoint is deployed
-function getSeedData(dateFrom, dateTo) {
-  return {
-    period: { from: dateFrom, to: dateTo },
-    summary: {
-      total_activities: 16707,
-      external_companies: 82,
-      external_contacts: 183,
-      total_meetings: 2651,
-      total_emails: 14002,
-      total_calls: 16,
-      total_tasks: 25,
-      total_sms: 9,
-      closed_revenue: 0,
-      pipeline_weighted: 200000,
-      months_without_pnl: 5
-    },
-    team: [
-      { name: 'Ana Avramovic', activities: 5635, role: 'Head of Sales', ext_companies: 27, key_accounts: 'EDF, RBC, SCB, True Mfg' },
-      { name: 'Brian Katz', activities: 4070, role: 'CEO', ext_companies: null, key_accounts: 'ClearBlue, Dentons, MKS' },
-      { name: 'Bobbie Armstrong', activities: 2957, role: 'Origination', ext_companies: null, key_accounts: 'Rewilding, Wild Assets, Great Bear' },
-      { name: 'Carolina Martinez', activities: 1803, role: 'Research', ext_companies: 29, key_accounts: 'Emsurge, VW, Offcarbon, Calyx' },
-      { name: 'Luis Adaime', activities: 1009, role: '24 ext meetings', ext_companies: 8, key_accounts: 'Abatable, Bosquia, CFS, Enersol' },
-      { name: 'Emmanuel Mendoza', activities: 874, role: 'Ops/Structuring', ext_companies: null, key_accounts: 'REDENOR, Bosquia legal' }
-    ],
-    top_companies: [
-      { name: 'Abatable', activities: 704, meetings: 12, type: 'Partnership' },
-      { name: 'Dentons', activities: 510, meetings: 8, type: 'Legal' },
-      { name: 'Rewilding', activities: 288, meetings: 6, type: 'Project Dev' },
-      { name: 'EDF Trading', activities: 120, meetings: 4, type: 'T1 Buyer' },
-      { name: 'Remova.Earth', activities: 96, meetings: 2, type: 'Project Dev' },
-      { name: 'Woodcache', activities: 96, meetings: 3, type: 'Supplier' },
-      { name: 'Invert', activities: 96, meetings: 2, type: 'Tech' },
-      { name: 'Bosquia', activities: 72, meetings: 4, type: 'Project Dev' },
-      { name: 'HighHopes', activities: 72, meetings: 2, type: 'Supplier' },
-      { name: 'Wild Assets', activities: 64, meetings: 2, type: 'Project Dev' },
-      { name: 'The Climate Trust', activities: 54, meetings: 1, type: 'Buyer' },
-      { name: 'NatureBrain', activities: 48, meetings: 2, type: 'Project Dev' },
-      { name: 'SCB Group', activities: 42, meetings: 1, type: 'T1 Buyer' },
-      { name: 'Brightly', activities: 40, meetings: 1, type: 'Buyer' },
-      { name: 'Therm', activities: 36, meetings: 1, type: 'Buyer' },
-      { name: 'Great Bear Carbon', activities: 27, meetings: 1, type: 'Project Dev' },
-      { name: 'Green Carbon Ventures', activities: 24, meetings: 0, type: 'Project Dev' },
-      { name: 'Char Technologies', activities: 24, meetings: 0, type: 'Supplier' },
-      { name: 'Calyx Global', activities: 24, meetings: 1, type: 'Rating' },
-      { name: 'Enersol', activities: 10, meetings: 1, type: 'Project Dev' }
-    ],
-    pipeline: [
-      { deal: 'Woodcache 750 CORCs', counterparty: 'TSB / Serge Bushman', value: 120000, stage: 'In Inventory', probability: 'high', description: '750 CORCs at $160/t. Spot delivery. Target CDR mandate buyers.' },
-      { deal: 'EDF Trading CORSIA', counterparty: 'Jack Harris', value: 75000, stage: 'Pricing', probability: 'medium', description: 'South African grassland + CCP. Must adjust to $6-7/t market.' },
-      { deal: 'Abatable Partnership', counterparty: 'Mercedes Fuentes Velasco', value: 35000, stage: 'Discussion', probability: 'medium', description: 'TSB + biochar to buyer network. 704 activities, meeting pending.' },
-      { deal: 'RBC TSB Onboarding', counterparty: 'Gordon Evens / Brian Hong', value: 45000, stage: 'Onboarding', probability: 'medium', description: 'Tau Carbon + TimberTurn + High Hopes DAC. Intro call done.' },
-      { deal: 'SCB Group CORSIA', counterparty: 'Benjamin Crick', value: 50000, stage: 'Active Conv.', probability: 'medium', description: '100kt CORSIA Dec 2027 + plastic credits.' }
-    ],
-    t1_status: [
-      { name: 'EDF Trading', status: 'Active pricing', level: 'green' },
-      { name: 'RBC', status: 'Onboarding', level: 'green' },
-      { name: 'SCB Group', status: 'Active conversation', level: 'yellow' },
-      { name: 'Volkswagen', status: 'New — meeting set', level: 'yellow' },
-      { name: 'The Coca-Cola Company', status: 'Meeting held', level: 'yellow' },
-      { name: 'BP', status: 'Email only — no meeting', level: 'red' },
-      { name: 'Shell', status: 'Email only — no meeting', level: 'red' },
-      { name: 'BBVA', status: 'Email only — no meeting', level: 'red' },
-      { name: 'Santander', status: 'No activity', level: 'red' },
-      { name: 'Amazon', status: 'No activity', level: 'red' },
-      { name: 'Maersk', status: 'No activity', level: 'red' },
-      { name: 'Woodside Energy', status: 'Light email', level: 'red' },
-      { name: 'Vitol', status: 'Email only', level: 'red' },
-      { name: 'Itochu', status: 'Email only', level: 'red' }
-    ],
-    blockers: [
-      { title: 'CORSIA Pricing Gap', description: 'Market at $6-7/t, offering $8-9. 25-30% premium.', action: 'Brian: pricing authority decision', severity: 'high' },
-      { title: 'Channel Mix Imbalance', description: '14,002 emails vs 16 calls (0.1%). Email ≠ closing.', action: 'All: min 3 external calls/week', severity: 'high' },
-      { title: '75 Unassigned Contacts', description: 'Warm leads with no owner in HubSpot.', action: 'Ana + Carolina: split by Mar 7', severity: 'medium' },
-      { title: 'No Product Sheet', description: 'Woodcache 750 CORCs available but no sell sheet.', action: 'Carolina: 1-pager by Mar 7', severity: 'medium' }
-    ],
-    ai_insights: [
-      'Activity volume is strong (16,707 in 10 days) but channel mix is wrong — 87.5% email, 0.1% calls. Calls close deals.',
-      '6 of 19 T1 accounts have zero meetings. BP, Shell, BBVA, Santander, Amazon, Maersk = largest untapped buyer pool.',
-      'Woodcache 750 CORCs ($120K) is the nearest-to-revenue deal. No external blocker — needs focused sales push.',
-      'Abatable has the highest activity count (704) of any external company — partnership is warming fast.'
-    ]
-  };
+function showError(message) {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = `
+    <div style="max-width:600px;margin:120px auto;text-align:center;color:var(--text-muted)">
+      <div style="font-size:48px;margin-bottom:24px">⚠️</div>
+      <div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:12px">Data Unavailable</div>
+      <div style="line-height:1.6">${message}</div>
+      <button class="btn" style="margin-top:24px" onclick="loadDashboard()">Retry Connection</button>
+    </div>
+  `;
+  document.getElementById('statusBadge').className = 'status-badge';
+  document.getElementById('statusBadge').style.background = 'var(--red-bg)';
+  document.getElementById('statusBadge').style.color = 'var(--red)';
+  document.getElementById('statusBadge').textContent = 'Error';
 }
 
 // ============================================================
@@ -887,20 +822,22 @@ function renderT1Table(data) {
   const body = document.getElementById('t1Body');
   body.innerHTML = data.t1_status.map(t => `
     <tr>
-      <td class="name">${t.name}</td>
-      <td><span class="pill ${t.level}">${t.status}</span></td>
+      <td class="name">${t.account}</td>
+      <td><span class="pill ${t.status}">${t.engagement}</span></td>
     </tr>
   `).join('');
 }
 
 function renderBlockers(data) {
   const container = document.getElementById('blockersContainer');
+  if (!data.blockers || data.blockers.length === 0) {
+    container.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No blockers detected — good execution</div>';
+    return;
+  }
   container.innerHTML = data.blockers.map(b => `
-    <div class="blocker-row ${b.severity === 'medium' ? 'amber' : ''}">
+    <div class="blocker-row">
       <div style="flex:1">
-        <div class="blocker-title">${b.title}</div>
-        <div class="blocker-desc">${b.description}</div>
-        <div class="blocker-action">→ ${b.action}</div>
+        <div class="blocker-desc">${b}</div>
       </div>
     </div>
   `).join('');
