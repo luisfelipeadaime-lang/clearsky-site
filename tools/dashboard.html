@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClearSky — Commercial Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --navy: #0A1628;
+  --navy-light: #111d30;
+  --surface: #111827;
+  --card: #1a2332;
+  --card-hover: #1f2a3c;
+  --border: #1e2d3d;
+  --border-light: #2a3a4e;
+  --gold: #C8A951;
+  --gold-dim: #a08a42;
+  --gold-bg: rgba(200,169,81,0.08);
+  --gold-bg2: rgba(200,169,81,0.15);
+  --green: #34d399;
+  --green-bg: rgba(52,211,153,0.1);
+  --red: #f87171;
+  --red-bg: rgba(248,113,113,0.1);
+  --yellow: #fbbf24;
+  --yellow-bg: rgba(251,191,36,0.1);
+  --blue: #60a5fa;
+  --blue-bg: rgba(96,165,250,0.1);
+  --teal: #2dd4bf;
+  --teal-bg: rgba(45,212,191,0.1);
+  --purple: #a78bfa;
+  --text: #e5e7eb;
+  --text-dim: #9ca3af;
+  --text-muted: #6b7280;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.header {
+  background: var(--navy);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-logo {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.brand-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--border-light);
+}
+.brand-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.status-badge.live {
+  background: var(--green-bg);
+  color: var(--green);
+}
+.status-badge.live::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+.btn-gold {
+  background: var(--gold);
+  color: var(--navy);
+}
+.btn-gold:hover {
+  background: var(--gold-dim);
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-dim);
+}
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* DATE RANGE PICKER */
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.date-range select, .date-range input {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: var(--mono);
+}
+
+/* MAIN CONTENT */
+.main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+/* SECTION TITLES */
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+/* KPI CARDS */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+}
+.kpi-card.gold::before { background: var(--gold); }
+.kpi-card.green::before { background: var(--green); }
+.kpi-card.red::before { background: var(--red); }
+.kpi-card.blue::before { background: var(--blue); }
+.kpi-card.teal::before { background: var(--teal); }
+.kpi-card.yellow::before { background: var(--yellow); }
+.kpi-card.purple::before { background: var(--purple); }
+
+.kpi-value {
+  font-size: 28px;
+  font-weight: 800;
+  font-family: var(--mono);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.kpi-card.gold .kpi-value { color: var(--gold); }
+.kpi-card.green .kpi-value { color: var(--green); }
+.kpi-card.red .kpi-value { color: var(--red); }
+.kpi-card.blue .kpi-value { color: var(--blue); }
+.kpi-card.teal .kpi-value { color: var(--teal); }
+.kpi-card.yellow .kpi-value { color: var(--yellow); }
+.kpi-card.purple .kpi-value { color: var(--purple); }
+
+.kpi-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.kpi-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* TWO COL LAYOUT */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+
+/* PANELS */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-title .icon {
+  font-size: 14px;
+}
+
+/* TABLES */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.data-table th {
+  text-align: left;
+  padding: 8px 10px;
+  font-weight: 600;
+  color: var(--gold);
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.data-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.data-table tr:hover td {
+  background: var(--navy-light);
+}
+.data-table .name {
+  color: var(--text);
+  font-weight: 500;
+}
+.data-table .num {
+  font-family: var(--mono);
+  text-align: right;
+  font-weight: 500;
+}
+
+/* STATUS PILLS */
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+}
+.pill.green { background: var(--green-bg); color: var(--green); }
+.pill.yellow { background: var(--yellow-bg); color: var(--yellow); }
+.pill.red { background: var(--red-bg); color: var(--red); }
+.pill.blue { background: var(--blue-bg); color: var(--blue); }
+.pill.teal { background: var(--teal-bg); color: var(--teal); }
+
+/* FUNNEL */
+.funnel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+.funnel-bar {
+  border-radius: 4px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  transition: all 0.3s;
+}
+.funnel-bar:hover {
+  filter: brightness(1.15);
+}
+.funnel-bar .funnel-num {
+  font-family: var(--mono);
+  font-weight: 700;
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+/* PIPELINE DEALS */
+.deal-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--navy-light);
+  margin-bottom: 6px;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+.deal-row:hover {
+  background: var(--card-hover);
+}
+.deal-row.high { border-left-color: var(--green); }
+.deal-row.medium { border-left-color: var(--yellow); }
+.deal-row.low { border-left-color: var(--red); }
+
+.deal-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  flex: 1;
+}
+.deal-counter {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.deal-value {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--gold);
+  min-width: 80px;
+  text-align: right;
+}
+.deal-stage {
+  font-size: 10px;
+  color: var(--text-muted);
+  min-width: 90px;
+  text-align: right;
+}
+
+/* INSIGHT BOX */
+.insight-box {
+  background: var(--gold-bg);
+  border: 1px solid rgba(200,169,81,0.2);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 12px;
+}
+.insight-box .insight-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.insight-box .insight-text {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* BLOCKER */
+.blocker-row {
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--navy-light);
+  margin-bottom: 6px;
+  border-left: 3px solid var(--red);
+}
+.blocker-row.amber {
+  border-left-color: var(--yellow);
+}
+.blocker-title {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text);
+}
+.blocker-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.blocker-action {
+  font-size: 11px;
+  color: var(--gold);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* LOADING */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: var(--text-muted);
+  font-size: 13px;
+  gap: 8px;
+}
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* FOOTER */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 12px 24px;
+  max-width: 1400px;
+  margin: 40px auto 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* CHART CONTAINER */
+.chart-container {
+  position: relative;
+  height: 280px;
+}
+
+/* SOURCE NOTE */
+.source-note {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-logo">ClearSky</div>
+      <div class="brand-divider"></div>
+      <div class="brand-title">Commercial Dashboard</div>
+    </div>
+    <div class="header-right">
+      <div class="date-range">
+        <select id="rangeSelect" onchange="handleRangeChange()">
+          <option value="7">Last 7 days</option>
+          <option value="14" selected>Last 14 days</option>
+          <option value="30">Last 30 days</option>
+          <option value="custom">Custom range</option>
+        </select>
+        <input type="date" id="dateFrom" style="display:none" onchange="loadDashboard()">
+        <span id="dateRangeSep" style="display:none;color:var(--text-muted);font-size:12px">→</span>
+        <input type="date" id="dateTo" style="display:none" onchange="loadDashboard()">
+      </div>
+      <button class="btn btn-outline" onclick="loadDashboard()">↻ Refresh</button>
+      <div class="status-badge live" id="statusBadge">Live</div>
+      <span class="header-date" id="headerDate"></span>
+    </div>
+  </div>
+</div>
+
+<div class="main" id="mainContent">
+  <div class="loading" id="loadingState">
+    <div class="spinner"></div>
+    Loading HubSpot activity data...
+  </div>
+</div>
+
+<div class="footer">
+  <span>CONFIDENTIAL — INTERNAL USE ONLY</span>
+  <span>Data source: HubSpot CRM API • Last updated: <span id="lastUpdated">—</span></span>
+</div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const API_BASE = 'https://api-tools.oga.earth/api';
+const INTERNAL_COMPANIES = new Set([
+  'clearsky', 'mks pamp', 'driver projects', 'leading carbon',
+  'clearblue markets', 'clearsky limited', 'clearsky carbono',
+  'mks', 'clearblue'
+]);
+const INTERNAL_PEOPLE = new Set([
+  'brian katz', 'ana avramovic', 'carolina martinez',
+  'luis adaime', 'emmanuel mendoza', 'bobbie armstrong',
+  'keith driver', 'rob elbaz', 'bart simmons'
+]);
+
+// T1 buyer accounts
+const T1_ACCOUNTS = [
+  'EDF Trading', 'RBC', 'SCB Group', 'Volkswagen', 'BP', 'Shell',
+  'BBVA', 'Santander', 'Amazon', 'Maersk', 'GSK', 'Rubicon Carbon',
+  'The Coca-Cola Company', 'Woodside Energy', 'Apollo Global Management',
+  'Airbnb', 'TotalEnergies', 'Itochu', 'Vitol'
+];
+
+// ============================================================
+// DATA FETCHING
+// ============================================================
+
+// Primary: Try API endpoint (worker route)
+// Fallback: Use embedded seed data from last CSV export
+async function fetchActivityData(dateFrom, dateTo) {
+  try {
+    const res = await fetch(`${API_BASE}/revenue/activity-stats?from=${dateFrom}&to=${dateTo}`);
+    if (!res.ok) throw new Error(`API ${res.status}`);
+    const data = await res.json();
+    document.getElementById('statusBadge').className = 'status-badge live';
+    document.getElementById('statusBadge').textContent = 'Live';
+    return data;
+  } catch (e) {
+    console.warn('API unavailable, using seed data:', e.message);
+    document.getElementById('statusBadge').className = 'status-badge';
+    document.getElementById('statusBadge').style.background = 'var(--yellow-bg)';
+    document.getElementById('statusBadge').style.color = 'var(--yellow)';
+    document.getElementById('statusBadge').textContent = 'Cached';
+    return getSeedData(dateFrom, dateTo);
+  }
+}
+
+// Seed data from HubSpot CSV export (Feb 23 – Mar 4, 2026)
+// This gets replaced by live API data once the worker endpoint is deployed
+function getSeedData(dateFrom, dateTo) {
+  return {
+    period: { from: dateFrom, to: dateTo },
+    summary: {
+      total_activities: 16707,
+      external_companies: 82,
+      external_contacts: 183,
+      total_meetings: 2651,
+      total_emails: 14002,
+      total_calls: 16,
+      total_tasks: 25,
+      total_sms: 9,
+      closed_revenue: 0,
+      pipeline_weighted: 200000,
+      months_without_pnl: 5
+    },
+    team: [
+      { name: 'Ana Avramovic', activities: 5635, role: 'Head of Sales', ext_companies: 27, key_accounts: 'EDF, RBC, SCB, True Mfg' },
+      { name: 'Brian Katz', activities: 4070, role: 'CEO', ext_companies: null, key_accounts: 'ClearBlue, Dentons, MKS' },
+      { name: 'Bobbie Armstrong', activities: 2957, role: 'Origination', ext_companies: null, key_accounts: 'Rewilding, Wild Assets, Great Bear' },
+      { name: 'Carolina Martinez', activities: 1803, role: 'Research', ext_companies: 29, key_accounts: 'Emsurge, VW, Offcarbon, Calyx' },
+      { name: 'Luis Adaime', activities: 1009, role: '24 ext meetings', ext_companies: 8, key_accounts: 'Abatable, Bosquia, CFS, Enersol' },
+      { name: 'Emmanuel Mendoza', activities: 874, role: 'Ops/Structuring', ext_companies: null, key_accounts: 'REDENOR, Bosquia legal' }
+    ],
+    top_companies: [
+      { name: 'Abatable', activities: 704, meetings: 12, type: 'Partnership' },
+      { name: 'Dentons', activities: 510, meetings: 8, type: 'Legal' },
+      { name: 'Rewilding', activities: 288, meetings: 6, type: 'Project Dev' },
+      { name: 'EDF Trading', activities: 120, meetings: 4, type: 'T1 Buyer' },
+      { name: 'Remova.Earth', activities: 96, meetings: 2, type: 'Project Dev' },
+      { name: 'Woodcache', activities: 96, meetings: 3, type: 'Supplier' },
+      { name: 'Invert', activities: 96, meetings: 2, type: 'Tech' },
+      { name: 'Bosquia', activities: 72, meetings: 4, type: 'Project Dev' },
+      { name: 'HighHopes', activities: 72, meetings: 2, type: 'Supplier' },
+      { name: 'Wild Assets', activities: 64, meetings: 2, type: 'Project Dev' },
+      { name: 'The Climate Trust', activities: 54, meetings: 1, type: 'Buyer' },
+      { name: 'NatureBrain', activities: 48, meetings: 2, type: 'Project Dev' },
+      { name: 'SCB Group', activities: 42, meetings: 1, type: 'T1 Buyer' },
+      { name: 'Brightly', activities: 40, meetings: 1, type: 'Buyer' },
+      { name: 'Therm', activities: 36, meetings: 1, type: 'Buyer' },
+      { name: 'Great Bear Carbon', activities: 27, meetings: 1, type: 'Project Dev' },
+      { name: 'Green Carbon Ventures', activities: 24, meetings: 0, type: 'Project Dev' },
+      { name: 'Char Technologies', activities: 24, meetings: 0, type: 'Supplier' },
+      { name: 'Calyx Global', activities: 24, meetings: 1, type: 'Rating' },
+      { name: 'Enersol', activities: 10, meetings: 1, type: 'Project Dev' }
+    ],
+    pipeline: [
+      { deal: 'Woodcache 750 CORCs', counterparty: 'TSB / Serge Bushman', value: 120000, stage: 'In Inventory', probability: 'high', description: '750 CORCs at $160/t. Spot delivery. Target CDR mandate buyers.' },
+      { deal: 'EDF Trading CORSIA', counterparty: 'Jack Harris', value: 75000, stage: 'Pricing', probability: 'medium', description: 'South African grassland + CCP. Must adjust to $6-7/t market.' },
+      { deal: 'Abatable Partnership', counterparty: 'Mercedes Fuentes Velasco', value: 35000, stage: 'Discussion', probability: 'medium', description: 'TSB + biochar to buyer network. 704 activities, meeting pending.' },
+      { deal: 'RBC TSB Onboarding', counterparty: 'Gordon Evens / Brian Hong', value: 45000, stage: 'Onboarding', probability: 'medium', description: 'Tau Carbon + TimberTurn + High Hopes DAC. Intro call done.' },
+      { deal: 'SCB Group CORSIA', counterparty: 'Benjamin Crick', value: 50000, stage: 'Active Conv.', probability: 'medium', description: '100kt CORSIA Dec 2027 + plastic credits.' }
+    ],
+    t1_status: [
+      { name: 'EDF Trading', status: 'Active pricing', level: 'green' },
+      { name: 'RBC', status: 'Onboarding', level: 'green' },
+      { name: 'SCB Group', status: 'Active conversation', level: 'yellow' },
+      { name: 'Volkswagen', status: 'New — meeting set', level: 'yellow' },
+      { name: 'The Coca-Cola Company', status: 'Meeting held', level: 'yellow' },
+      { name: 'BP', status: 'Email only — no meeting', level: 'red' },
+      { name: 'Shell', status: 'Email only — no meeting', level: 'red' },
+      { name: 'BBVA', status: 'Email only — no meeting', level: 'red' },
+      { name: 'Santander', status: 'No activity', level: 'red' },
+      { name: 'Amazon', status: 'No activity', level: 'red' },
+      { name: 'Maersk', status: 'No activity', level: 'red' },
+      { name: 'Woodside Energy', status: 'Light email', level: 'red' },
+      { name: 'Vitol', status: 'Email only', level: 'red' },
+      { name: 'Itochu', status: 'Email only', level: 'red' }
+    ],
+    blockers: [
+      { title: 'CORSIA Pricing Gap', description: 'Market at $6-7/t, offering $8-9. 25-30% premium.', action: 'Brian: pricing authority decision', severity: 'high' },
+      { title: 'Channel Mix Imbalance', description: '14,002 emails vs 16 calls (0.1%). Email ≠ closing.', action: 'All: min 3 external calls/week', severity: 'high' },
+      { title: '75 Unassigned Contacts', description: 'Warm leads with no owner in HubSpot.', action: 'Ana + Carolina: split by Mar 7', severity: 'medium' },
+      { title: 'No Product Sheet', description: 'Woodcache 750 CORCs available but no sell sheet.', action: 'Carolina: 1-pager by Mar 7', severity: 'medium' }
+    ],
+    ai_insights: [
+      'Activity volume is strong (16,707 in 10 days) but channel mix is wrong — 87.5% email, 0.1% calls. Calls close deals.',
+      '6 of 19 T1 accounts have zero meetings. BP, Shell, BBVA, Santander, Amazon, Maersk = largest untapped buyer pool.',
+      'Woodcache 750 CORCs ($120K) is the nearest-to-revenue deal. No external blocker — needs focused sales push.',
+      'Abatable has the highest activity count (704) of any external company — partnership is warming fast.'
+    ]
+  };
+}
+
+// ============================================================
+// RENDERING
+// ============================================================
+
+function renderDashboard(data) {
+  const main = document.getElementById('mainContent');
+  const s = data.summary;
+  const emailPct = ((s.total_emails / s.total_activities) * 100).toFixed(1);
+  const callPct = ((s.total_calls / s.total_activities) * 100).toFixed(1);
+
+  main.innerHTML = `
+    <!-- KPI ROW 1: HEADLINE METRICS -->
+    <div class="section-label">Headline Metrics</div>
+    <div class="kpi-grid">
+      <div class="kpi-card red">
+        <div class="kpi-value">$0</div>
+        <div class="kpi-label">Closed Revenue</div>
+        <div class="kpi-sub">${s.months_without_pnl} months without PnL</div>
+      </div>
+      <div class="kpi-card gold">
+        <div class="kpi-value">$${(s.pipeline_weighted/1000).toFixed(0)}K+</div>
+        <div class="kpi-label">Weighted Pipeline</div>
+        <div class="kpi-sub">across ${data.pipeline.length} active deals</div>
+      </div>
+      <div class="kpi-card teal">
+        <div class="kpi-value">${s.total_activities.toLocaleString()}</div>
+        <div class="kpi-label">Total Activities</div>
+        <div class="kpi-sub">all team, selected period</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-value">${s.external_companies}</div>
+        <div class="kpi-label">External Companies</div>
+        <div class="kpi-sub">unique counterparties</div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-value">${s.external_contacts}</div>
+        <div class="kpi-label">External Contacts</div>
+        <div class="kpi-sub">unique individuals reached</div>
+      </div>
+      <div class="kpi-card gold">
+        <div class="kpi-value">${s.total_meetings.toLocaleString()}</div>
+        <div class="kpi-label">Meetings</div>
+        <div class="kpi-sub">booked across team</div>
+      </div>
+      <div class="kpi-card yellow">
+        <div class="kpi-value">${s.total_calls}</div>
+        <div class="kpi-label">Calls</div>
+        <div class="kpi-sub">${callPct}% of all activity</div>
+      </div>
+      <div class="kpi-card teal">
+        <div class="kpi-value">${emailPct}%</div>
+        <div class="kpi-label">Email Share</div>
+        <div class="kpi-sub">${s.total_emails.toLocaleString()} emails sent</div>
+      </div>
+    </div>
+
+    <!-- ROW 2: FUNNEL + PIPELINE -->
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title"><span class="icon">📊</span> Sales Funnel</div>
+        <div class="funnel" id="funnelContainer"></div>
+        <div class="source-note">Source: HubSpot CRM activity log, filtered to external contacts only</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><span class="icon">💰</span> Pipeline — Nearest to Revenue</div>
+        <div id="pipelineContainer"></div>
+      </div>
+    </div>
+
+    <!-- ROW 3: TOP COMPANIES CHART + TEAM TABLE -->
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title"><span class="icon">🏢</span> Top External Companies by Activity</div>
+        <div class="chart-container">
+          <canvas id="companiesChart"></canvas>
+        </div>
+        <div class="source-note">Source: HubSpot CRM, excluding ClearSky/MKS/ClearBlue internal entities</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><span class="icon">👥</span> Team Activity Breakdown</div>
+        <table class="data-table" id="teamTable">
+          <thead>
+            <tr><th>Team Member</th><th>Activities</th><th>Role Focus</th><th>Key Accounts</th></tr>
+          </thead>
+          <tbody id="teamBody"></tbody>
+        </table>
+        <div class="source-note">Source: HubSpot CRM activity log, all engagement types</div>
+      </div>
+    </div>
+
+    <!-- ROW 4: T1 ACCOUNTS + BLOCKERS -->
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title"><span class="icon">🎯</span> T1 Account Coverage (${data.t1_status.length} tracked)</div>
+        <table class="data-table">
+          <thead><tr><th>Account</th><th>Status</th></tr></thead>
+          <tbody id="t1Body"></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><span class="icon">⚠️</span> Revenue Blockers</div>
+        <div id="blockersContainer"></div>
+      </div>
+    </div>
+
+    <!-- AI INSIGHTS -->
+    <div class="section-label" style="margin-top:8px">AI-Generated Insights</div>
+    <div class="insight-box">
+      <div class="insight-label">Key Findings</div>
+      <div class="insight-text" id="insightsText"></div>
+    </div>
+  `;
+
+  // Render funnel
+  renderFunnel(data);
+  renderPipeline(data);
+  renderCompaniesChart(data);
+  renderTeamTable(data);
+  renderT1Table(data);
+  renderBlockers(data);
+  renderInsights(data);
+}
+
+function renderFunnel(data) {
+  const s = data.summary;
+  const stages = [
+    { label: 'Emails Sent', value: s.total_emails, color: '#1e3a5f', width: 100 },
+    { label: 'Contacts Engaged', value: s.external_contacts, color: '#1e4a6f', width: 78 },
+    { label: 'Companies Reached', value: s.external_companies, color: '#1e5a7f', width: 60 },
+    { label: 'Meetings Booked', value: s.total_meetings, color: '#0d9488', width: 45 },
+    { label: 'Calls Made', value: s.total_calls, color: '#f59e0b', width: 25 },
+    { label: 'Deals Closed', value: 0, color: '#ef4444', width: 18 }
+  ];
+
+  const container = document.getElementById('funnelContainer');
+  container.innerHTML = stages.map(st =>
+    `<div class="funnel-bar" style="width:${st.width}%;background:${st.color}">
+      <span class="funnel-num">${st.value.toLocaleString()}</span> ${st.label}
+    </div>`
+  ).join('');
+}
+
+function renderPipeline(data) {
+  const container = document.getElementById('pipelineContainer');
+  container.innerHTML = data.pipeline.map(d => {
+    const prob = d.probability;
+    return `<div class="deal-row ${prob}">
+      <div style="flex:1">
+        <div class="deal-name">${d.deal}</div>
+        <div class="deal-counter">${d.counterparty}</div>
+      </div>
+      <div class="deal-value">$${(d.value/1000).toFixed(0)}K</div>
+      <div class="deal-stage">
+        <span class="pill ${prob === 'high' ? 'green' : prob === 'medium' ? 'yellow' : 'red'}">${prob.toUpperCase()}</span>
+        <div style="margin-top:2px;font-size:10px;color:var(--text-muted)">${d.stage}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderCompaniesChart(data) {
+  const top15 = data.top_companies.slice(0, 15);
+  const ctx = document.getElementById('companiesChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: top15.map(c => c.name),
+      datasets: [{
+        data: top15.map(c => c.activities),
+        backgroundColor: top15.map(c => {
+          if (c.type === 'T1 Buyer') return '#34d399';
+          if (c.type === 'Buyer') return '#60a5fa';
+          if (c.type === 'Partnership') return '#C8A951';
+          return '#4b5563';
+        }),
+        borderRadius: 3,
+        barThickness: 14
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const c = top15[ctx.dataIndex];
+              return `${c.activities} activities • ${c.meetings} meetings • ${c.type}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: '#1e2d3d', lineWidth: 0.5 },
+          ticks: { color: '#6b7280', font: { size: 10 } }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: '#e5e7eb', font: { size: 11 } }
+        }
+      }
+    }
+  });
+}
+
+function renderTeamTable(data) {
+  const body = document.getElementById('teamBody');
+  body.innerHTML = data.team.map(t => `
+    <tr>
+      <td class="name">${t.name}</td>
+      <td class="num">${t.activities.toLocaleString()}</td>
+      <td>${t.role}</td>
+      <td style="font-size:11px">${t.key_accounts}</td>
+    </tr>
+  `).join('');
+}
+
+function renderT1Table(data) {
+  const body = document.getElementById('t1Body');
+  body.innerHTML = data.t1_status.map(t => `
+    <tr>
+      <td class="name">${t.name}</td>
+      <td><span class="pill ${t.level}">${t.status}</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderBlockers(data) {
+  const container = document.getElementById('blockersContainer');
+  container.innerHTML = data.blockers.map(b => `
+    <div class="blocker-row ${b.severity === 'medium' ? 'amber' : ''}">
+      <div style="flex:1">
+        <div class="blocker-title">${b.title}</div>
+        <div class="blocker-desc">${b.description}</div>
+        <div class="blocker-action">→ ${b.action}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderInsights(data) {
+  const container = document.getElementById('insightsText');
+  container.innerHTML = data.ai_insights.map((ins, i) =>
+    `<div style="margin-bottom:6px"><strong style="color:var(--gold)">${i+1}.</strong> ${ins}</div>`
+  ).join('');
+}
+
+// ============================================================
+// DATE RANGE HANDLING
+// ============================================================
+
+function handleRangeChange() {
+  const sel = document.getElementById('rangeSelect');
+  const isCustom = sel.value === 'custom';
+  document.getElementById('dateFrom').style.display = isCustom ? 'inline' : 'none';
+  document.getElementById('dateTo').style.display = isCustom ? 'inline' : 'none';
+  document.getElementById('dateRangeSep').style.display = isCustom ? 'inline' : 'none';
+  if (!isCustom) loadDashboard();
+}
+
+function getDateRange() {
+  const sel = document.getElementById('rangeSelect');
+  if (sel.value === 'custom') {
+    return {
+      from: document.getElementById('dateFrom').value,
+      to: document.getElementById('dateTo').value
+    };
+  }
+  const days = parseInt(sel.value);
+  const to = new Date();
+  const from = new Date();
+  from.setDate(from.getDate() - days);
+  return {
+    from: from.toISOString().slice(0, 10),
+    to: to.toISOString().slice(0, 10)
+  };
+}
+
+// ============================================================
+// MAIN LOAD
+// ============================================================
+
+async function loadDashboard() {
+  document.getElementById('loadingState')?.remove();
+  const main = document.getElementById('mainContent');
+  main.innerHTML = `<div class="loading"><div class="spinner"></div>Loading HubSpot activity data...</div>`;
+
+  const range = getDateRange();
+  const data = await fetchActivityData(range.from, range.to);
+
+  renderDashboard(data);
+  document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+}
+
+// Init
+document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-GB', {
+  weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+});
+loadDashboard();
+</script>
+</body>
+</html>
