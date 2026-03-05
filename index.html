@@ -309,7 +309,8 @@
     .footer-left { display: flex; align-items: center; gap: 20px; }
     .footer-logo img { height: 28px; width: auto; opacity: 0.9; }
     .footer-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.15); }
-    .footer-backer { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 400; }
+    .footer-backer { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 400; text-decoration: none; }
+    .footer-backer:hover { opacity: 1 !important; }
     .footer-right { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
     .footer-address { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 400; }
 
@@ -329,9 +330,55 @@
     .reveal-d8 { transition-delay: 0.8s; }
 
     /* ===== RESPONSIVE ===== */
+    /* ===== WHO WE SERVE — LIGHT ===== */
+    .who-we-serve { padding: var(--section-pad) 0; background: var(--frost); }
+    .who-we-serve .container { text-align: center; }
+    .wws-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-top: 56px; text-align: left; }
+    .wws-card {
+      background: var(--white); padding: 36px 32px;
+      border-radius: 2px; border-top: 3px solid var(--steel);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .wws-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(13,27,62,0.08); }
+    .wws-card h3 { font-size: 1.1rem; font-weight: 600; color: var(--navy); margin-bottom: 12px; }
+    .wws-card p { font-size: 0.9rem; line-height: 1.65; color: var(--slate); }
+
+    /* ===== CONTACT FORM ===== */
+    .contact-form { max-width: 520px; margin: 0 auto; text-align: left; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block; font-size: 0.82rem; font-weight: 500;
+      color: rgba(255,255,255,0.9); margin-bottom: 8px;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%; padding: 12px 16px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 2px; color: var(--white);
+      font-family: 'Roboto', sans-serif; font-size: 0.95rem;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none; border-color: var(--gold);
+      background: rgba(255,255,255,0.15);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-submit {
+      display: block; width: 100%; padding: 14px;
+      background: var(--gold); color: var(--hero-dark);
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; border: none; border-radius: 2px;
+      cursor: pointer; transition: background 0.3s;
+    }
+    .form-submit:hover { background: #c49a38; }
+
     @media (max-width: 1024px) {
       .sol-grid { grid-template-columns: repeat(2,1fr); }
       .sol-card { min-height: 300px; }
+      .wws-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
       :root { --section-pad: var(--section-pad-mob); }
@@ -372,6 +419,7 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#about">About</a></li>
         <li><a href="#business-lines">Business Lines</a></li>
+        <li><a href="#who-we-serve">Who We Serve</a></li>
         <li><a href="#solutions">Solutions</a></li>
         <li><a href="#team">Team</a></li>
         <li><a href="#contact" class="nav-cta">Contact</a></li>
@@ -438,12 +486,34 @@
     </div>
   </section>
 
+  <!-- WHO WE SERVE — LIGHT -->
+  <section class="who-we-serve" id="who-we-serve">
+    <div class="container">
+      <div class="section-label reveal">Who We Serve</div>
+      <h2 class="section-title reveal">Built for Buyers, Developers &amp; Investors</h2>
+      <div class="wws-grid">
+        <div class="wws-card reveal reveal-d1">
+          <h3>Corporate Buyers</h3>
+          <p>Fortune 500 companies, airlines, energy firms, and multinationals sourcing high-integrity carbon credits to meet net-zero commitments, regulatory compliance, and stakeholder expectations.</p>
+        </div>
+        <div class="wws-card reveal reveal-d2">
+          <h3>Project Developers</h3>
+          <p>Landowners, technology providers, and carbon project developers seeking offtake agreements, structured financing, and commercial pathways to monetize environmental assets at scale.</p>
+        </div>
+        <div class="wws-card reveal reveal-d3">
+          <h3>Institutional Investors</h3>
+          <p>Private equity, family offices, and asset managers looking to deploy capital into carbon projects with strong fundamentals, verifiable impact, and alignment with fiduciary standards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- SOLUTIONS — DARK (photo cards) -->
   <section class="solutions" id="solutions">
     <div class="container">
       <div class="section-label reveal" style="color:var(--gold);">Our Expertise</div>
       <h2 class="section-title section-title--light reveal">What We Structure and Trade</h2>
-      <div class="sol-grid">
+      <div class="sol-grid" style="grid-template-columns: repeat(5,1fr);">
 
         <!-- NbS — forest -->
         <div class="sol-card reveal reveal-d1">
@@ -451,9 +521,9 @@
           <div class="sol-card-overlay"></div>
           <div class="sol-card-content">
             <div class="sol-icon"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 4C18 4 6 13 6 23c0 6.627 5.373 12 12 12s12-5.373 12-12C30 13 18 4 18 4z"/><path d="M18 34V18"/><path d="M18 26c-3.5-2.5-5.5-5-5.5-5"/><path d="M18 22c3-2 4.5-4.5 4.5-4.5"/></svg></div>
-            <div class="sol-tags">ARR &middot; IFM &middot; REDD+ &middot; Blue Carbon</div>
+            <div class="sol-tags">ARR &middot; IFM &middot; REDD+ &middot; Grasslands &middot; Blue Carbon</div>
             <h3>Nature-Based Solutions</h3>
-            <p>Bridging asset owners and buyers across forest, mangrove, and ecosystem projects that sequester carbon while delivering biodiversity and community co-benefits.</p>
+            <p>Bridging asset owners and buyers across forest, grassland, mangrove, and ecosystem projects that sequester carbon while delivering biodiversity and community co-benefits.</p>
           </div>
         </div>
 
@@ -463,9 +533,9 @@
           <div class="sol-card-overlay"></div>
           <div class="sol-card-content">
             <div class="sol-icon"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="18" r="14"/><path d="M18 4v7m0 14v7" stroke-linecap="round"/><path d="M4 18h7m14 0h7" stroke-linecap="round"/><circle cx="18" cy="18" r="5"/></svg></div>
-            <div class="sol-tags">DSB &middot; Biochar &middot; DAC</div>
+            <div class="sol-tags">DSB &middot; Biochar &middot; DAC &middot; BECCS</div>
             <h3>Permanent Removals</h3>
-            <p>Structuring transactions for 100+ year carbon removal through engineered and natural processes. Puro.Earth and Isometric registered, partnering with technology developers worldwide.</p>
+            <p>Structuring transactions for 100+ year carbon removal through engineered and natural processes including BECCS. Puro.Earth and Isometric registered, partnering with technology developers worldwide.</p>
           </div>
         </div>
 
@@ -481,8 +551,20 @@
           </div>
         </div>
 
-        <!-- Compliance — mangrove -->
+        <!-- RECs — solar panels -->
         <div class="sol-card reveal reveal-d4">
+          <div class="sol-card-bg" style="background-image:url('https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&q=80&fit=crop')"></div>
+          <div class="sol-card-overlay"></div>
+          <div class="sol-card-content">
+            <div class="sol-icon"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="7"/><path d="M18 1v6m0 22v6M35 18h-6M7 18H1m27.78-9.78l-4.24 4.24M11.46 25.54l-4.24 4.24m22.56 0l-4.24-4.24M11.46 10.46L7.22 6.22"/></svg></div>
+            <div class="sol-tags">I-RECs &middot; NAR &middot; EACs</div>
+            <h3>Renewable Energy Certificates</h3>
+            <p>Facilitating renewable energy attribute trading across global markets. Connecting renewable energy generators with corporate buyers seeking credible renewable energy claims and scope 2 emissions reduction.</p>
+          </div>
+        </div>
+
+        <!-- Compliance — mangrove -->
+        <div class="sol-card reveal reveal-d5">
           <div class="sol-card-bg" style="background-image:url('./assets/backgrounds/mangrove-underwater.png')"></div>
           <div class="sol-card-overlay"></div>
           <div class="sol-card-content">
@@ -494,6 +576,17 @@
         </div>
 
       </div>
+    </div>
+  </section>
+
+  <!-- MID-PAGE CTA — DARK -->
+  <section class="cta" style="padding: 80px 0;">
+    <div class="cta-bg"></div>
+    <div class="cta-overlay"></div>
+    <div class="container">
+      <h2 class="section-title section-title--light reveal">Ready to Move Forward?</h2>
+      <p class="cta-body reveal">Whether you're buying, selling, or developing — let's find the right structure.</p>
+      <a href="#contact" class="cta-button reveal">Get in Touch</a>
     </div>
   </section>
 
@@ -599,7 +692,25 @@
     <div class="container">
       <h2 class="section-title section-title--light reveal">Let's Build Something That Endures</h2>
       <p class="cta-body reveal">For offtake, origination partnerships, or structured transactions — get in touch.</p>
-      <a href="mailto:info@clearskyltd.com" class="cta-button reveal">Email Us</a>
+      <form class="contact-form reveal" action="https://formspree.io/f/xwpkzapj" method="POST">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Message</button>
+      </form>
     </div>
   </section>
 
@@ -610,7 +721,13 @@
       <div class="footer-left">
         <a href="#" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
         <div class="footer-divider"></div>
-        <span class="footer-backer">Backed by MKS PAMP</span>
+        <a href="https://www.mkspamp.com/" target="_blank" rel="noopener" class="footer-backer" style="transition: opacity 0.2s; opacity: 0.8;">Backed by MKS PAMP</a>
+        <div class="footer-divider"></div>
+        <a href="https://www.linkedin.com/company/clearskyltd/" target="_blank" rel="noopener" style="opacity: 0.6; transition: opacity 0.2s; display: flex; align-items: center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+        </a>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
         <div class="footer-right">&copy; <span id="yr"></span> ClearSky Limited. All rights reserved.</div>
