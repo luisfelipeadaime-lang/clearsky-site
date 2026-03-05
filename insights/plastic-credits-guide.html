@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Pragmatic Guide to Plastic Credits — ClearSky</title>
+  <link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #0D1B3E;
+      --steel: #5B9BD5;
+      --gold: #D4A843;
+      --midnight: #1B2A4A;
+      --frost: #F5F7FA;
+      --slate: #8A8F9A;
+      --emerald: #1A8A6E;
+      --hero-dark: #0a1628;
+      --hero-teal: #0d3b4f;
+      --white: #FFFFFF;
+      --section-pad: 120px;
+      --section-pad-mob: 64px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      color: var(--navy);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    .article-container { max-width: 800px; margin: 0 auto; padding: 0 40px; }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 20px 0;
+      background: rgba(13,27,62,0.97);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+      backdrop-filter: blur(12px);
+    }
+    .nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo img { height: 36px; width: auto; }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--white); font-size: 0.82rem; font-weight: 400;
+      letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--white); font-size: 0.82rem; font-weight: 400;
+      letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .nav-back:hover { opacity: 1; }
+    .nav-back svg { width: 16px; height: 16px; }
+    .nav-download {
+      color: var(--white) !important;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 24px; border-radius: 2px; opacity: 1 !important;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .nav-download:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding-top: 140px; padding-bottom: 60px;
+      background: var(--navy); text-align: center;
+    }
+    .hero .article-container { max-width: 720px; }
+    .hero-meta {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem,4vw,3rem); font-weight: 700;
+      color: var(--white); line-height: 1.15; margin-bottom: 20px;
+    }
+    .hero-byline {
+      font-size: 1rem; color: rgba(255,255,255,0.6);
+      font-weight: 300; margin-bottom: 24px;
+    }
+
+    /* ===== ARTICLE ===== */
+    .article { padding: var(--section-pad) 0; background: var(--white); }
+    .article p {
+      font-size: 1.05rem; line-height: 1.75; color: var(--navy);
+      margin-bottom: 24px; max-width: none;
+    }
+    .article ul, .article ol {
+      margin: 24px 0; padding-left: 28px;
+    }
+    .article li {
+      font-size: 1.05rem; line-height: 1.75; color: var(--navy);
+      margin-bottom: 12px;
+    }
+
+    .chapter {
+      margin-bottom: 80px;
+    }
+    .chapter-number {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.15em;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    .chapter-title {
+      font-size: clamp(1.8rem,3vw,2.4rem); font-weight: 700;
+      color: var(--navy); margin-bottom: 32px; line-height: 1.2;
+    }
+
+    .pullquote {
+      border-left: 4px solid var(--gold);
+      padding-left: 24px;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--hero-dark);
+      margin: 40px 0;
+      line-height: 1.6;
+    }
+
+    /* ===== STATS BAR ===== */
+    .stats-bar { background: var(--hero-dark); margin: 60px 0; }
+    .stats-bar-inner { display: flex; align-items: stretch; justify-content: center; }
+    .stat-item { flex: 1; text-align: center; padding: 40px 24px; position: relative; }
+    .stat-item:not(:last-child)::after {
+      content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      height: 40px; width: 1px; background: rgba(255,255,255,0.15);
+    }
+    .stat-number {
+      font-family: 'Roboto Mono', monospace; font-size: clamp(1.8rem,3vw,2.4rem);
+      font-weight: 500; color: var(--white); margin-bottom: 6px; line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.72rem; font-weight: 400; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+
+    /* ===== CARDS ===== */
+    .card-grid {
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 24px;
+      margin: 40px 0;
+    }
+    .card {
+      background: var(--frost); padding: 32px;
+      border-radius: 4px; border-left: 3px solid var(--gold);
+    }
+    .card h4 {
+      font-size: 1.15rem; font-weight: 600; color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .card p {
+      font-size: 0.95rem; line-height: 1.65; color: var(--slate);
+      margin: 0;
+    }
+
+    /* ===== PROCESS FLOW ===== */
+    .process-flow {
+      display: flex; align-items: center; gap: 16px;
+      margin: 40px 0;
+    }
+    .process-step {
+      flex: 1; background: var(--frost); padding: 24px;
+      border-radius: 4px; text-align: center;
+      border-top: 3px solid var(--navy);
+    }
+    .process-step-number {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.2rem; font-weight: 600; color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .process-step-label {
+      font-size: 0.85rem; font-weight: 500; color: var(--navy);
+      line-height: 1.4;
+    }
+    .process-arrow {
+      font-size: 1.5rem; color: var(--slate); flex-shrink: 0;
+    }
+
+    /* ===== TABLES ===== */
+    .comparison-table {
+      width: 100%; margin: 40px 0;
+      border-collapse: collapse;
+    }
+    .comparison-table thead {
+      background: var(--navy); color: var(--white);
+    }
+    .comparison-table th {
+      padding: 16px; text-align: left;
+      font-size: 0.9rem; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .comparison-table td {
+      padding: 16px; border-bottom: 1px solid rgba(13,27,62,0.08);
+      font-size: 0.95rem; line-height: 1.6;
+    }
+    .comparison-table tbody tr:hover {
+      background: var(--frost);
+    }
+
+    /* ===== USE CASES ===== */
+    .use-case {
+      background: var(--white); padding: 32px;
+      border-radius: 4px; margin: 24px 0;
+      border-left: 3px solid var(--steel);
+    }
+    .use-case h4 {
+      font-size: 1.15rem; font-weight: 600; color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .use-case p {
+      font-size: 0.95rem; line-height: 1.7; color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .use-case-tag {
+      display: inline-block; padding: 6px 14px;
+      background: var(--frost); border-radius: 2px;
+      font-size: 0.78rem; font-weight: 500; color: var(--navy);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+
+    /* ===== FAQ ===== */
+    .faq-card {
+      background: var(--white); padding: 32px;
+      border-radius: 4px; margin: 20px 0;
+      border-left: 3px solid var(--navy);
+    }
+    .faq-question {
+      font-size: 1.1rem; font-weight: 600; color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .faq-answer {
+      font-size: 0.95rem; line-height: 1.7; color: var(--slate);
+      margin: 0;
+    }
+
+    /* ===== BOXES ===== */
+    .box-grid {
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 24px;
+      margin: 40px 0;
+    }
+    .box {
+      padding: 32px; border-radius: 4px;
+    }
+    .box.green {
+      background: rgba(26,138,110,0.08);
+      border-left: 3px solid var(--emerald);
+    }
+    .box.red {
+      background: rgba(220,53,69,0.08);
+      border-left: 3px solid #dc3545;
+    }
+    .box h4 {
+      font-size: 1rem; font-weight: 600; margin-bottom: 16px;
+      color: var(--navy); letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .box ul {
+      margin: 0; padding-left: 20px;
+    }
+    .box li {
+      font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline {
+      margin: 40px 0;
+    }
+    .timeline-item {
+      display: flex; gap: 24px; margin-bottom: 32px;
+      position: relative;
+    }
+    .timeline-year {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.2rem; font-weight: 600; color: var(--gold);
+      min-width: 80px;
+    }
+    .timeline-content h5 {
+      font-size: 1rem; font-weight: 600; color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .timeline-content p {
+      font-size: 0.9rem; line-height: 1.6; color: var(--slate);
+      margin: 0;
+    }
+
+    /* ===== BIBLIOGRAPHY ===== */
+    .bibliography {
+      background: var(--frost); padding: 60px 0;
+    }
+    .bibliography .article-container h3 {
+      font-size: 1.6rem; font-weight: 700; color: var(--navy);
+      margin-bottom: 32px;
+    }
+    .bibliography ol {
+      margin: 0; padding-left: 28px;
+    }
+    .bibliography li {
+      font-size: 0.85rem; line-height: 1.7; color: var(--slate);
+      margin-bottom: 16px;
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      position: relative; padding: var(--section-pad) 0;
+      text-align: center; overflow: hidden;
+    }
+    .cta-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: url('../assets/backgrounds/mountain-alpine-lakes.jpg') center/cover no-repeat;
+    }
+    .cta-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: rgba(10,22,40,0.78);
+    }
+    .cta .container { position: relative; z-index: 2; }
+    .cta .section-title {
+      font-size: clamp(2rem,3vw,2.8rem); font-weight: 700;
+      color: var(--white); margin-bottom: 20px; line-height: 1.15;
+    }
+    .cta-body {
+      font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,0.75);
+      margin: 0 auto 40px; max-width: 580px; font-weight: 300;
+    }
+    .cta-button {
+      display: inline-block; padding: 16px 48px;
+      background: var(--gold); color: var(--hero-dark);
+      font-size: 0.88rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; border-radius: 2px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .cta-button:hover { background: #c49a38; transform: translateY(-2px); }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--hero-dark); padding: 48px 0 36px;
+      position: relative; overflow: hidden;
+    }
+    .footer-watermark {
+      position: absolute; bottom: -10px; right: 40px;
+      font-size: 6rem; font-weight: 700; color: rgba(255,255,255,0.015);
+      pointer-events: none; user-select: none; line-height: 1;
+    }
+    .footer .container {
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; z-index: 1;
+    }
+    .footer-left { display: flex; align-items: center; gap: 20px; }
+    .footer-logo img { height: 28px; width: auto; opacity: 0.9; }
+    .footer-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.15); }
+    .footer-backer { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 400; text-decoration: none; }
+    .footer-backer:hover { opacity: 1 !important; }
+    .footer-right { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+    .footer-address { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 400; }
+
+    @media (max-width: 768px) {
+      .card-grid { grid-template-columns: 1fr; }
+      .box-grid { grid-template-columns: 1fr; }
+      .process-flow { flex-direction: column; }
+      .process-arrow { transform: rotate(90deg); }
+      .comparison-table { font-size: 0.85rem; }
+      .comparison-table th, .comparison-table td { padding: 12px; }
+      .footer .container { flex-direction: column; gap: 16px; text-align: center; }
+      .footer-left { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../" class="nav-back">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3M6 4L2 8l4 4"/></svg>
+        Back
+      </a>
+      <a href="../assets/papers/ClearSky_Plastic_Credits_White_Paper.pdf" class="nav-download" target="_blank">Download PDF</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="article-container">
+      <div class="hero-meta">White Paper · 23 min read</div>
+      <h1>The Pragmatic Guide to Plastic Credits</h1>
+      <p class="hero-byline">A commercial desk's perspective on what plastic credits are, how they compare to carbon, who's buying them, and how to make defensible claims.</p>
+    </div>
+  </section>
+
+  <!-- ARTICLE -->
+  <article class="article">
+    <div class="article-container">
+
+      <!-- CHAPTER 01: EXECUTIVE SUMMARY -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 01</div>
+        <h2 class="chapter-title">Executive Summary</h2>
+        <p>Plastic waste recovery credits—commonly called "plastic credits"—have emerged as a commercial instrument for corporates to address their plastic footprint while supporting waste collection and recycling infrastructure in regions where it would not otherwise exist. Unlike carbon credits, plastic credits do not offset emissions. They fund tangible, verifiable interventions: waste collection, sorting, and recycling of plastic that would have leaked into nature or been landfilled.</p>
+        <p>The market is small but growing. Verra's Plastic Waste Reduction Program (PWRP) has certified 11 projects across India, Indonesia, and the Philippines, with several more in validation. Corporate buyers range from luxury beauty brands (Caudalie, Clarins) to automotive (Bentley), financial services (Société Générale), and insurance (Howden). Most use credits to demonstrate circular economy commitment, report plastic neutrality, or align with SDG targets—particularly SDG 12 (Responsible Consumption) and SDG 14 (Life Below Water).</p>
+        <p>Plastic credits differ from carbon credits in critical ways. They are not fungible across geographies, do not carry permanence risk, and measure impact in kilograms of waste recovered rather than tonnes of CO₂e avoided. The accounting is simpler: one credit = one kilogram of plastic collected and processed. But the claims landscape is more constrained. You cannot say a plastic credit "offsets" plastic use—it funds recovery elsewhere. The golden rule: describe what you did, not what you neutralized.</p>
+        <p>Despite nascent regulation, early movers face greenwashing risk. The EU's Green Claims Directive and upcoming Ecodesign for Sustainable Products Regulation will scrutinize offset-like claims. Companies that treat plastic credits as license to continue business-as-usual without operational improvements will face backlash. Those that integrate credits into a broader circular economy strategy—waste reduction, design for recyclability, supply chain transparency—will see them as a credible tool.</p>
+
+        <p class="pullquote">ClearSky's view: Plastic credits are not a replacement for reducing virgin plastic use. They are a funding mechanism to scale waste recovery infrastructure in markets where it does not exist. Used responsibly, they accelerate systemic change. Used carelessly, they undermine it.</p>
+      </section>
+
+      <!-- CHAPTER 02: THE PLASTIC WASTE CRISIS -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 02</div>
+        <h2 class="chapter-title">The Plastic Waste Crisis</h2>
+
+        <div class="stats-bar">
+          <div class="stats-bar-inner">
+            <div class="stat-item"><div class="stat-number">460M</div><div class="stat-label">Tonnes/Year</div></div>
+            <div class="stat-item"><div class="stat-number">9%</div><div class="stat-label">Recycled Globally</div></div>
+            <div class="stat-item"><div class="stat-number">3x</div><div class="stat-label">Growth by 2060</div></div>
+            <div class="stat-item"><div class="stat-number">80%</div><div class="stat-label">Ocean Plastics from Land</div></div>
+          </div>
+        </div>
+
+        <p>The world produces 460 million tonnes of plastic waste annually. Of that, only 9% is recycled. The rest is incinerated, landfilled, or leaks into the environment—ending up in rivers, oceans, and soil. By 2060, plastic production is projected to triple, and without systemic intervention, annual ocean plastic leakage will exceed 30 million tonnes.</p>
+        <p>The problem is not lack of technology—it is lack of infrastructure. High-income countries with established waste management systems recycle 20-40% of plastics. Low- and middle-income countries, where 80% of ocean plastics originate, often lack functioning collection systems. In India, Indonesia, and the Philippines—the three largest ocean plastic contributors—formal waste collection infrastructure covers less than 60% of the population. Informal waste pickers collect and sort much of what is recovered, but they operate without safety nets, fair wages, or integration into formal supply chains.</p>
+        <p>This is where plastic credits intervene. By monetizing waste recovery, they create economic incentives to build collection networks, formalize waste picker livelihoods, and channel recovered plastic into recycling. Credits do not solve the upstream problem—virgin plastic production—but they address the downstream reality: billions of kilograms of plastic already in circulation with nowhere to go.</p>
+      </section>
+
+      <!-- CHAPTER 03: WHAT ARE PLASTIC CREDITS -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 03</div>
+        <h2 class="chapter-title">What Are Plastic Credits</h2>
+        <p>A plastic credit represents one kilogram of plastic waste collected, sorted, and processed (recycled, co-processed, or disposed of safely) that would not have been managed without the project. Credits are issued by certification bodies—primarily Verra's Plastic Waste Reduction Program (PWRP), though other standards (e.g., Plastic Bank, rePurpose Global, Zero Plastic Oceans) exist.</p>
+
+        <div class="card-grid">
+          <div class="card">
+            <h4>WCC (Waste Collection Credits)</h4>
+            <p>One WCC = 1 kg of plastic collected from the environment and sent for verified processing. Does not guarantee recycling—only that waste was diverted from leakage.</p>
+          </div>
+          <div class="card">
+            <h4>WRC (Waste Recycling Credits)</h4>
+            <p>One WRC = 1 kg of plastic collected and mechanically or chemically recycled. Higher integrity, but lower supply due to infrastructure constraints in emerging markets.</p>
+          </div>
+        </div>
+
+        <p>Most projects issue WCCs due to limited recycling capacity in target geographies. Some projects co-process plastics (burning them in cement kilns for energy recovery), which qualifies under PWRP but is contentious among environmental groups who argue it perpetuates incineration.</p>
+
+        <h3 style="font-size: 1.3rem; font-weight: 600; margin-top: 48px; margin-bottom: 24px;">Verra Certification Process</h3>
+
+        <div class="process-flow">
+          <div class="process-step">
+            <div class="process-step-number">1</div>
+            <div class="process-step-label">Project Design</div>
+          </div>
+          <div class="process-arrow">→</div>
+          <div class="process-step">
+            <div class="process-step-number">2</div>
+            <div class="process-step-label">Validation</div>
+          </div>
+          <div class="process-arrow">→</div>
+          <div class="process-step">
+            <div class="process-step-number">3</div>
+            <div class="process-step-label">Implementation</div>
+          </div>
+          <div class="process-arrow">→</div>
+          <div class="process-step">
+            <div class="process-step-number">4</div>
+            <div class="process-step-label">Verification</div>
+          </div>
+          <div class="process-arrow">→</div>
+          <div class="process-step">
+            <div class="process-step-number">5</div>
+            <div class="process-step-label">Credit Issuance</div>
+          </div>
+        </div>
+
+        <p>Projects must demonstrate additionality (waste would not have been collected without credit revenue), permanence (waste is processed, not stockpiled), and traceability (chain of custody from collection to processing). Third-party verification bodies audit annually.</p>
+      </section>
+
+      <!-- CHAPTER 04: CARBON VS PLASTIC CREDITS -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 04</div>
+        <h2 class="chapter-title">Carbon vs. Plastic Credits</h2>
+        <p>Plastic credits are often compared to carbon credits because both emerged from market-based mechanisms to fund environmental interventions. But the analogy is imperfect. Carbon credits commoditize an atmospheric outcome (tonnes of CO₂ reduced or removed). Plastic credits commoditize a physical recovery action (kilograms of waste diverted). The differences matter.</p>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Carbon Credits</th>
+              <th>Plastic Credits</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Tangibility</strong></td>
+              <td>Intangible (atmospheric reduction)</td>
+              <td>Tangible (physical waste recovery)</td>
+            </tr>
+            <tr>
+              <td><strong>Accounting</strong></td>
+              <td>Complex (baselines, leakage, permanence)</td>
+              <td>Simpler (1 credit = 1 kg collected)</td>
+            </tr>
+            <tr>
+              <td><strong>Baseline</strong></td>
+              <td>Modeled counterfactual scenario</td>
+              <td>Physical absence of infrastructure</td>
+            </tr>
+            <tr>
+              <td><strong>Additionality</strong></td>
+              <td>Difficult to prove (would it happen anyway?)</td>
+              <td>Easier to demonstrate (no infrastructure = no collection)</td>
+            </tr>
+            <tr>
+              <td><strong>Permanence</strong></td>
+              <td>Risk of reversal (forests burn, soil releases carbon)</td>
+              <td>No permanence risk (waste is processed)</td>
+            </tr>
+            <tr>
+              <td><strong>Traceability</strong></td>
+              <td>Remote sensing + spot checks</td>
+              <td>Physical chain of custody</td>
+            </tr>
+            <tr>
+              <td><strong>Market Maturity</strong></td>
+              <td>20+ years, $2B+ annual volume</td>
+              <td>3 years, <$50M annual volume</td>
+            </tr>
+            <tr>
+              <td><strong>Regulation</strong></td>
+              <td>Compliance markets exist (EU ETS, CA cap-and-trade)</td>
+              <td>No compliance markets (yet)</td>
+            </tr>
+            <tr>
+              <td><strong>Language</strong></td>
+              <td>"Offset," "neutralize," "compensate"</td>
+              <td>"Fund," "support," "recover"</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="pullquote">The tangibility advantage: When you buy a plastic credit, you can photograph the waste being collected, weighed, and processed. You cannot photograph a tonne of carbon staying in a forest. This physical traceability makes plastic credits easier to explain to stakeholders—and harder to greenwash.</p>
+      </section>
+
+      <!-- CHAPTER 05: CORPORATE USE CASES -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 05</div>
+        <h2 class="chapter-title">Corporate Use Cases</h2>
+        <p>Who buys plastic credits, and why? The buyer profile is narrower than carbon credits. Companies purchasing plastic credits tend to have direct plastic footprints (packaging-heavy sectors), circular economy commitments in their sustainability strategies, or exposure to stakeholder pressure on ocean plastics. They are not buying offsets—they are buying participation in waste recovery infrastructure.</p>
+
+        <div class="box-grid">
+          <div class="box green">
+            <h4>✓ What You Can Report</h4>
+            <ul>
+              <li>Funded recovery of X kg of plastic waste</li>
+              <li>Supported waste picker livelihoods</li>
+              <li>Contributed to SDG 12 and SDG 14</li>
+              <li>Demonstrated circular economy action</li>
+              <li>Aligned with Science Based Targets Initiative (informally)</li>
+            </ul>
+          </div>
+          <div class="box red">
+            <h4>✗ What You Cannot Report</h4>
+            <ul>
+              <li>"Plastic neutral" or "net-zero plastic"</li>
+              <li>"Offset" plastic footprint</li>
+              <li>"Compensated for" plastic use</li>
+              <li>"Erased" or "cancelled" plastic impact</li>
+              <li>Imply credits replace operational improvements</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.3rem; font-weight: 600; margin-top: 48px; margin-bottom: 24px;">Five Common Use Cases</h3>
+
+        <div class="use-case">
+          <h4>1. Plastic Footprint Mitigation</h4>
+          <p>Companies with unavoidable plastic packaging (e.g., cosmetics, food) fund recovery equivalent to their annual plastic output. This is not "offsetting"—it is funding systemic infrastructure while working internally to reduce virgin plastic use.</p>
+          <span class="use-case-tag">Reporting Path: Sustainability report, circular economy section</span>
+        </div>
+
+        <div class="use-case">
+          <h4>2. Circular Economy Strategy</h4>
+          <p>Firms with public commitments to circular economy principles (Ellen MacArthur Foundation signatories, for example) use credits to demonstrate action beyond their direct operations. Credits show engagement with downstream waste management.</p>
+          <span class="use-case-tag">Reporting Path: Integrated with EPR compliance narrative</span>
+        </div>
+
+        <div class="use-case">
+          <h4>3. SDG Alignment</h4>
+          <p>Plastic credits directly link to SDG 12 (Responsible Consumption and Production) and SDG 14 (Life Below Water). Companies reporting to UN Global Compact or using SDG frameworks can quantify impact: "Funded recovery of 50,000 kg of ocean-bound plastic."</p>
+          <span class="use-case-tag">Reporting Path: SDG dashboard, impact metrics</span>
+        </div>
+
+        <div class="use-case">
+          <h4>4. Extended Producer Responsibility (EPR) Compliance</h4>
+          <p>Some jurisdictions (e.g., India, Philippines) are piloting plastic credit mechanisms within EPR frameworks. Companies can use certified credits to meet regulatory obligations where physical collection is impractical.</p>
+          <span class="use-case-tag">Reporting Path: Regulatory filing, compliance documentation</span>
+        </div>
+
+        <div class="use-case">
+          <h4>5. Supply Chain Responsibility</h4>
+          <p>Brands sourcing from regions with weak waste infrastructure (Southeast Asia, Latin America) use credits to signal accountability: "We sell here, we clean here." This resonates with investors and NGOs focused on environmental justice.</p>
+          <span class="use-case-tag">Reporting Path: Supply chain section, stakeholder engagement</span>
+        </div>
+      </section>
+
+      <!-- CHAPTER 06: CLAIMS FRAMEWORK -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 06</div>
+        <h2 class="chapter-title">Claims Framework</h2>
+        <p>The language you use around plastic credits determines whether your claim is defensible or greenwashing. Unlike carbon credits, which have developed standardized lexicons ("net-zero," "carbon neutral"), plastic credit terminology is still contested. Some companies use "plastic neutral," which regulators and NGOs are increasingly challenging as misleading.</p>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Defensible</th>
+              <th>Avoid</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"Funded recovery of X kg of ocean-bound plastic"</td>
+              <td>"Plastic neutral"</td>
+            </tr>
+            <tr>
+              <td>"Supported waste collection infrastructure in [region]"</td>
+              <td>"Net-zero plastic"</td>
+            </tr>
+            <tr>
+              <td>"Contributed to circular economy through verified credits"</td>
+              <td>"Offset our plastic footprint"</td>
+            </tr>
+            <tr>
+              <td>"Aligned with SDG 12 and SDG 14 via plastic recovery"</td>
+              <td>"Compensated for plastic use"</td>
+            </tr>
+            <tr>
+              <td>"Partnered with [project] to recover X tonnes of waste"</td>
+              <td>"Erased our plastic impact"</td>
+            </tr>
+            <tr>
+              <td>"Invested in waste management where infrastructure is absent"</td>
+              <td>"Made our product plastic-free via credits"</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="pullquote">The golden rule: Describe what you did (funded recovery), not what you neutralized (plastic impact). If you cannot point to the waste being collected, do not make the claim.</p>
+
+        <p>Emerging regulation will tighten this further. The EU's Green Claims Directive (expected 2024-2025) will require substantiation for all environmental claims, including plastic neutrality. Companies that cannot demonstrate lifecycle reductions in plastic use—only credit purchases—will face enforcement.</p>
+      </section>
+
+      <!-- CHAPTER 07: WHO IS BUYING -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 07</div>
+        <h2 class="chapter-title">Who Is Buying</h2>
+        <p>The plastic credit market is still concentrated among early adopters: luxury goods, financial services, and corporates with strong ESG mandates. Unlike carbon credits, which span all sectors, plastic credits attract companies with direct packaging exposure or stakeholder pressure on ocean plastics.</p>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>Sector</th>
+              <th>Revenue (USD)</th>
+              <th>Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Caudalie</td>
+              <td>Beauty</td>
+              <td>$400M</td>
+              <td>Offset plastic packaging for skincare products</td>
+            </tr>
+            <tr>
+              <td>Clarins</td>
+              <td>Beauty</td>
+              <td>$2B</td>
+              <td>Support circular economy via PWRP credits</td>
+            </tr>
+            <tr>
+              <td>Bentley Motors</td>
+              <td>Automotive</td>
+              <td>$3B</td>
+              <td>Part of broader carbon neutrality strategy</td>
+            </tr>
+            <tr>
+              <td>Société Générale</td>
+              <td>Financial Services</td>
+              <td>$27B</td>
+              <td>Green finance product differentiation</td>
+            </tr>
+            <tr>
+              <td>Howden</td>
+              <td>Insurance</td>
+              <td>$2B</td>
+              <td>Stakeholder engagement on ocean risk</td>
+            </tr>
+            <tr>
+              <td>Heineken</td>
+              <td>Beverage</td>
+              <td>$33B</td>
+              <td>Packaging waste responsibility in emerging markets</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>What unites these buyers? Three patterns emerge:</p>
+        <ul>
+          <li><strong>Packaging-heavy business models:</strong> Beauty, beverage, and consumer goods companies face direct pressure to address plastic waste.</li>
+          <li><strong>ESG leadership positioning:</strong> Financial services and insurance use credits to differentiate in sustainable finance.</li>
+          <li><strong>Geographic footprint in high-leakage markets:</strong> Companies operating in Southeast Asia, India, or Africa where infrastructure gaps are acute.</li>
+        </ul>
+      </section>
+
+      <!-- CHAPTER 08: REGULATORY HORIZON -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 08</div>
+        <h2 class="chapter-title">Regulatory Horizon</h2>
+        <p>Plastic credits exist in a regulatory grey zone. Unlike carbon credits, which have compliance markets (EU ETS, California cap-and-trade), plastic credits are purely voluntary. But that is changing. Several jurisdictions are piloting credit-based EPR mechanisms, and the EU is tightening greenwashing enforcement.</p>
+
+        <h3 style="font-size: 1.3rem; font-weight: 600; margin-top: 48px; margin-bottom: 24px;">Regulatory Timeline</h3>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-year">2019</div>
+            <div class="timeline-content">
+              <h5>Verra Launches PWRP</h5>
+              <p>First global standard for plastic credit certification. Initial projects in India and Indonesia.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2021</div>
+            <div class="timeline-content">
+              <h5>India Pilots EPR Credits</h5>
+              <p>Extended Producer Responsibility rules allow plastic credits as compliance mechanism. Projects must be Verra-certified or equivalent.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2023</div>
+            <div class="timeline-content">
+              <h5>EU Green Claims Directive Proposed</h5>
+              <p>Requires substantiation for all environmental claims, including "plastic neutral." Companies must demonstrate operational improvements, not just credit purchases.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2024</div>
+            <div class="timeline-content">
+              <h5>Philippines EPR Regulations</h5>
+              <p>National Solid Waste Management Commission integrates plastic credits into Extended Producer Responsibility framework for packaging.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2025+</div>
+            <div class="timeline-content">
+              <h5>Global Plastics Treaty</h5>
+              <p>UN negotiations on legally binding instrument to end plastic pollution. Credit mechanisms may be recognized as transition tool.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.3rem; font-weight: 600; margin-top: 48px; margin-bottom: 24px;">Jurisdiction-Specific Frameworks</h3>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Jurisdiction</th>
+              <th>Status</th>
+              <th>Mechanism</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Philippines</td>
+              <td>Active</td>
+              <td>EPR credits accepted under National Solid Waste Management Act</td>
+            </tr>
+            <tr>
+              <td>European Union</td>
+              <td>Proposed</td>
+              <td>Green Claims Directive will restrict "neutral" language; Ecodesign regulation may mandate lifecycle reporting</td>
+            </tr>
+            <tr>
+              <td>United States</td>
+              <td>Voluntary</td>
+              <td>No federal framework; state-level EPR (California, Maine) does not recognize credits</td>
+            </tr>
+            <tr>
+              <td>India</td>
+              <td>Pilot</td>
+              <td>Plastic Waste Management Rules allow credit trading for EPR compliance; certification required</td>
+            </tr>
+            <tr>
+              <td>Global</td>
+              <td>Negotiation</td>
+              <td>UN Plastics Treaty may establish international credit framework by 2025</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- CHAPTER 09: GREENWASHING RISK -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 09</div>
+        <h2 class="chapter-title">Greenwashing Risk</h2>
+        <p>Plastic credits carry higher greenwashing risk than carbon credits because the science is less contested but the claims are more visible. When a company says "carbon neutral," most stakeholders accept it as shorthand for a complex accounting exercise. When a company says "plastic neutral," stakeholders ask: did you actually reduce your plastic use, or just pay someone else to clean up?</p>
+
+        <h3 style="font-size: 1.3rem; font-weight: 600; margin-top: 32px; margin-bottom: 24px;">Frequently Asked Questions</h3>
+
+        <div class="faq-card">
+          <div class="faq-question">Q: Can I call my product "plastic neutral" if I buy credits equal to my packaging weight?</div>
+          <p class="faq-answer">A: Technically, yes—but we advise against it. "Plastic neutral" implies you canceled out your plastic footprint, which is not scientifically accurate. Plastic credits fund recovery elsewhere; they do not erase your plastic use. Instead, say: "We funded recovery of X kg of ocean-bound plastic equivalent to our packaging footprint."</p>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-question">Q: Do plastic credits replace the need for operational improvements?</div>
+          <p class="faq-answer">A: No. Credits should supplement—not substitute—efforts to reduce virgin plastic use, design for recyclability, and source recycled content. Stakeholders (NGOs, investors, regulators) expect to see both: internal reductions and external funding of infrastructure.</p>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-question">Q: Are plastic credits permanent?</div>
+          <p class="faq-answer">A: Yes, in the sense that waste collected and recycled does not un-recycle. Unlike carbon sequestration (forests can burn), plastic recovery is a one-way process. However, credits do not prevent future plastic production—they only address existing waste.</p>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-question">Q: Can I use plastic credits for Scope 3 reporting?</div>
+          <p class="faq-answer">A: It depends. The GHG Protocol does not explicitly cover plastic credits under Scope 3. However, some companies include them in broader circularity metrics or stakeholder engagement sections of sustainability reports. If reporting under SBTi, consult with verifiers—this is evolving.</p>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-question">Q: What is the price range for plastic credits?</div>
+          <p class="faq-answer">A: As of 2024, WCCs trade between $200-600 per tonne ($0.20-0.60 per kg), depending on geography, project type, and co-benefits (waste picker livelihoods, ocean proximity). WRCs trade at a premium, $400-800 per tonne, due to lower supply. Prices are expected to rise as demand outpaces project development.</p>
+        </div>
+      </section>
+
+      <!-- CHAPTER 10: CLEARSKY'S APPROACH -->
+      <section class="chapter">
+        <div class="chapter-number">CHAPTER 10</div>
+        <h2 class="chapter-title">ClearSky's Approach</h2>
+        <p>ClearSky evaluates plastic credit projects through the same rigor we apply to carbon: additionality, traceability, social co-benefits, and commercial viability. We do not finance projects that merely aggregate existing waste streams without demonstrating incremental impact. We prioritize projects with:</p>
+
+        <ul style="margin: 32px 0;">
+          <li><strong>Verified third-party certification:</strong> Verra PWRP or equivalent standard with annual audits.</li>
+          <li><strong>Geographic focus on high-leakage regions:</strong> Southeast Asia, India, West Africa—where 80% of ocean plastics originate.</li>
+          <li><strong>Waste picker integration:</strong> Projects that formalize informal sector livelihoods through fair wages, safety equipment, and social benefits.</li>
+          <li><strong>Transparent chain of custody:</strong> Digital tracking (blockchain, IoT sensors) from collection to processing.</li>
+          <li><strong>Recycling pathway preference:</strong> WRCs over WCCs where infrastructure allows, though we recognize co-processing as transitional solution in markets without recycling capacity.</li>
+        </ul>
+
+        <p>Contact our trading desk for current project availability and pricing.</p>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- BIBLIOGRAPHY -->
+  <section class="bibliography">
+    <div class="article-container">
+      <h3>Bibliography</h3>
+      <ol>
+        <li>Verra. "Plastic Waste Reduction Program." Verra Standard, v1.0, October 2021.</li>
+        <li>OECD. "Global Plastics Outlook: Economic Drivers, Environmental Impacts and Policy Options." OECD Publishing, 2022.</li>
+        <li>Jambeck, Jenna R., et al. "Plastic waste inputs from land into the ocean." Science 347.6223 (2015): 768-771.</li>
+        <li>Ellen MacArthur Foundation. "The New Plastics Economy: Rethinking the future of plastics." 2016.</li>
+        <li>European Commission. "Proposal for a Directive on Green Claims." COM(2023) 166 final, March 2023.</li>
+        <li>UN Environment Programme. "From Pollution to Solution: A global assessment of marine litter and plastic pollution." 2021.</li>
+        <li>World Economic Forum. "The New Plastics Economy: Catalysing action." January 2017.</li>
+        <li>Geyer, Roland, Jambeck, Jenna R., and Law, Kara Lavender. "Production, use, and fate of all plastics ever made." Science Advances 3.7 (2017).</li>
+        <li>Science Based Targets initiative. "Foundations for Science-Based Net-Zero Target Setting in the Corporate Sector." Version 1.0, 2021.</li>
+        <li>Plastic Bank. "Social Plastic Ecosystem Standard." 2022.</li>
+        <li>rePurpose Global. "Plastic Action Platform: Verification Standard." v2.1, 2023.</li>
+        <li>Zero Plastic Oceans. "Ocean Bound Plastic Certification Program." 2020.</li>
+        <li>Indian Ministry of Environment, Forest and Climate Change. "Plastic Waste Management Rules." 2016 (amended 2021).</li>
+        <li>Philippines National Solid Waste Management Commission. "Extended Producer Responsibility Guidelines for Plastic Packaging." 2024.</li>
+        <li>California Department of Resources Recycling and Recovery. "Truth in Environmental Advertising Statute." 2022.</li>
+        <li>UK Competition and Markets Authority. "Green Claims Code." September 2021.</li>
+        <li>ISO. "ISO 14021:2016 Environmental labels and declarations — Self-declared environmental claims." 2016.</li>
+        <li>GHG Protocol. "Corporate Value Chain (Scope 3) Accounting and Reporting Standard." 2011.</li>
+        <li>Borrelle, Stephanie B., et al. "Predicted growth in plastic waste exceeds efforts to mitigate plastic pollution." Science 369.6510 (2020): 1515-1518.</li>
+        <li>Lau, Winnie W., et al. "Evaluating scenarios toward zero plastic pollution." Science 369.6510 (2020): 1455-1461.</li>
+        <li>Eriksen, Marcus, et al. "Plastic Pollution in the World's Oceans: More than 5 Trillion Plastic Pieces Weighing over 250,000 Tons Afloat at Sea." PLoS ONE 9.12 (2014).</li>
+        <li>Greenpeace. "Throwing Away the Future: How companies still have it wrong on plastic pollution solutions." 2020.</li>
+        <li>Ocean Conservancy. "Building a Clean Swell: Year One Impact Report." 2019.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-overlay"></div>
+    <div class="container">
+      <h2 class="section-title">Interested in Plastic Credits?</h2>
+      <p class="cta-body">Connect with our trading desk to explore verified projects, pricing, and claims support.</p>
+      <a href="mailto:trading@clearskyltd.com" class="cta-button">trading@clearskyltd.com</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-watermark">//</div>
+    <div class="container">
+      <div class="footer-left">
+        <a href="../" class="footer-logo"><img src="../assets/logos/logo-white.png" alt="ClearSky"></a>
+        <div class="footer-divider"></div>
+        <a href="https://www.mkspamp.com/" target="_blank" rel="noopener" class="footer-backer" style="transition: opacity 0.2s; opacity: 0.8;">Backed by MKS PAMP</a>
+        <div class="footer-divider"></div>
+        <a href="https://www.linkedin.com/company/clearskyltd/" target="_blank" rel="noopener" style="opacity: 0.6; transition: opacity 0.2s; display: flex; align-items: center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+        </a>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+        <div class="footer-right">&copy; <span id="yr"></span> ClearSky Limited. All rights reserved.</div>
+        <div class="footer-address">ClearSky Limited &middot; 103 Cannon Street &middot; London EC4N 5AG</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

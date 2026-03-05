@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insights — ClearSky</title>
+  <link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #0D1B3E;
+      --steel: #5B9BD5;
+      --gold: #D4A843;
+      --midnight: #1B2A4A;
+      --frost: #F5F7FA;
+      --slate: #8A8F9A;
+      --emerald: #1A8A6E;
+      --hero-dark: #0a1628;
+      --hero-teal: #0d3b4f;
+      --white: #FFFFFF;
+      --section-pad: 120px;
+      --section-pad-mob: 64px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      color: var(--navy);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    p { max-width: 680px; }
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 20px 0;
+      transition: background 0.4s, padding 0.3s, box-shadow 0.3s;
+      background: rgba(13,27,62,0.97);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+      backdrop-filter: blur(12px);
+    }
+    .nav.scrolled {
+      padding: 12px 0;
+    }
+    .nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo img { height: 36px; width: auto; }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--white); font-size: 0.82rem; font-weight: 400;
+      letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-cta {
+      color: var(--white) !important;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 24px; border-radius: 2px; opacity: 1 !important;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .nav-cta:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; min-height: 60vh; padding-top: 120px;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: -5%; z-index: 0; width: 110%; height: 110%;
+      background: url('../assets/backgrounds/mountain-alpine-lakes.jpg') center/cover no-repeat;
+      animation: heroZoom 20s ease-in-out infinite alternate;
+    }
+    @keyframes heroZoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: rgba(10,22,40,0.65);
+    }
+    .hero-gradient {
+      position: absolute; inset: 0; z-index: 2;
+      background: linear-gradient(135deg,
+        rgba(10,22,40,0.5) 0%, rgba(13,59,79,0.3) 25%,
+        rgba(10,22,40,0.4) 50%, rgba(11,45,61,0.3) 75%,
+        rgba(10,22,40,0.5) 100%);
+      background-size: 400% 400%;
+      animation: heroShift 18s ease infinite;
+    }
+    @keyframes heroShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .hero-content { position: relative; z-index: 3; padding: 0 40px; max-width: 900px; }
+    .hero-label {
+      font-size: 0.85rem; font-weight: 300; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem,5vw,4.5rem); font-weight: 700;
+      color: var(--white); line-height: 1.1; margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: clamp(1rem,1.5vw,1.15rem); color: rgba(255,255,255,0.75);
+      font-weight: 300; line-height: 1.7; max-width: 640px; margin: 0 auto 40px;
+    }
+
+    /* ===== FILTERS ===== */
+    .filters { padding: var(--section-pad) 0 60px; background: var(--white); }
+    .filters .container { text-align: center; }
+    .filter-tabs {
+      display: inline-flex; gap: 12px; margin-top: 40px;
+      background: var(--frost); padding: 6px; border-radius: 4px;
+    }
+    .filter-tab {
+      padding: 10px 28px; border-radius: 2px; cursor: pointer;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; transition: all 0.2s;
+      background: transparent; color: var(--slate);
+    }
+    .filter-tab.active {
+      background: var(--white); color: var(--navy);
+      box-shadow: 0 2px 8px rgba(13,27,62,0.08);
+    }
+
+    /* ===== INSIGHTS GRID ===== */
+    .insights-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 32px;
+      padding-bottom: var(--section-pad);
+    }
+    .insight-card {
+      background: var(--white); border-radius: 4px;
+      border: 1px solid rgba(13,27,62,0.08);
+      overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;
+      text-align: left;
+    }
+    .insight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(13,27,62,0.12);
+    }
+    .insight-cover {
+      width: 100%; height: 200px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--midnight) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; color: rgba(255,255,255,0.15);
+    }
+    .insight-body { padding: 28px; }
+    .insight-meta {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+    }
+    .insight-card h3 {
+      font-size: 1.2rem; font-weight: 600; color: var(--navy);
+      margin-bottom: 12px; line-height: 1.3;
+    }
+    .insight-card p {
+      font-size: 0.9rem; line-height: 1.65; color: var(--slate);
+      margin-bottom: 20px;
+    }
+    .insight-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.85rem; font-weight: 600; color: var(--navy);
+      letter-spacing: 0.04em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .insight-link:hover { color: var(--gold); }
+    .insight-link svg { width: 16px; height: 16px; }
+
+    .insight-card.coming-soon { opacity: 0.6; cursor: default; }
+    .insight-card.coming-soon:hover { transform: none; box-shadow: none; }
+    .insight-card.coming-soon .insight-link { color: var(--slate); pointer-events: none; }
+
+    /* ===== NEWSLETTER ===== */
+    .newsletter { padding: var(--section-pad) 0; background: var(--frost); }
+    .newsletter .container { text-align: center; max-width: 680px; }
+    .section-label {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(2rem,3vw,2.8rem); font-weight: 700;
+      color: var(--navy); margin-bottom: 16px; line-height: 1.15;
+    }
+    .newsletter p {
+      font-size: 1.05rem; line-height: 1.7; color: var(--slate);
+      margin: 0 auto 32px;
+    }
+    .newsletter-form {
+      display: flex; gap: 12px; max-width: 520px; margin: 0 auto;
+    }
+    .newsletter-form input {
+      flex: 1; padding: 14px 20px; border-radius: 2px;
+      border: 1px solid rgba(13,27,62,0.15);
+      font-family: 'Roboto', sans-serif; font-size: 0.95rem;
+    }
+    .newsletter-form button {
+      padding: 14px 32px; background: var(--gold); color: var(--hero-dark);
+      border: none; border-radius: 2px; cursor: pointer;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; transition: background 0.3s;
+    }
+    .newsletter-form button:hover { background: #c49a38; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--hero-dark); padding: 48px 0 36px;
+      position: relative; overflow: hidden;
+    }
+    .footer-watermark {
+      position: absolute; bottom: -10px; right: 40px;
+      font-size: 6rem; font-weight: 700; color: rgba(255,255,255,0.015);
+      pointer-events: none; user-select: none; line-height: 1;
+    }
+    .footer .container {
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; z-index: 1;
+    }
+    .footer-left { display: flex; align-items: center; gap: 20px; }
+    .footer-logo img { height: 28px; width: auto; opacity: 0.9; }
+    .footer-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.15); }
+    .footer-backer { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 400; text-decoration: none; }
+    .footer-backer:hover { opacity: 1 !important; }
+    .footer-right { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+    .footer-address { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 400; }
+
+    @media (max-width: 768px) {
+      .insights-grid { grid-template-columns: 1fr; }
+      .newsletter-form { flex-direction: column; }
+      .footer .container { flex-direction: column; gap: 16px; text-align: center; }
+      .footer-left { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <a href="../" class="nav-logo"><img src="../assets/logos/logo-white.png" alt="ClearSky"></a>
+      <ul class="nav-links">
+        <li><a href="../#about">About</a></li>
+        <li><a href="../#business-lines">Business Lines</a></li>
+        <li><a href="../#who-we-serve">Who We Serve</a></li>
+        <li><a href="../#solutions">Solutions</a></li>
+        <li><a href="../#team">Team</a></li>
+        <li><a href="./">Insights</a></li>
+        <li><a href="../#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-gradient"></div>
+    <div class="hero-content">
+      <div class="hero-label">Insights</div>
+      <h1>Research & Market Intelligence</h1>
+      <p class="hero-sub">Deep-dive analysis on emerging environmental credit markets, compliance frameworks, and structuring best practices.</p>
+    </div>
+  </section>
+
+  <!-- FILTERS -->
+  <section class="filters">
+    <div class="container">
+      <div class="filter-tabs">
+        <div class="filter-tab active" data-filter="all">All</div>
+        <div class="filter-tab" data-filter="white-papers">White Papers</div>
+        <div class="filter-tab" data-filter="market-notes">Market Notes</div>
+      </div>
+
+      <!-- INSIGHTS GRID -->
+      <div class="insights-grid">
+
+        <!-- Plastic Credits White Paper -->
+        <div class="insight-card" data-category="white-papers">
+          <div class="insight-cover">📄</div>
+          <div class="insight-body">
+            <div class="insight-meta">White Paper · 23 min read</div>
+            <h3>The Pragmatic Guide to Plastic Credits</h3>
+            <p>A commercial desk's perspective on what plastic credits are, how they compare to carbon, who's buying them, and how to make defensible claims.</p>
+            <a href="./plastic-credits-guide.html" class="insight-link">
+              Read Paper
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Coming Soon: Canadian Compliance -->
+        <div class="insight-card coming-soon" data-category="market-notes">
+          <div class="insight-cover">📊</div>
+          <div class="insight-body">
+            <div class="insight-meta">Market Note · Coming Soon</div>
+            <h3>Canadian Compliance Carbon Markets 2026</h3>
+            <p>BC LCFS, Federal OBPS, and Alberta TIER: regulatory updates, pricing dynamics, and structuring opportunities for obligated parties.</p>
+            <span class="insight-link">Coming Soon</span>
+          </div>
+        </div>
+
+        <!-- Coming Soon: Spain Reforestation -->
+        <div class="insight-card coming-soon" data-category="white-papers">
+          <div class="insight-cover">🌲</div>
+          <div class="insight-body">
+            <div class="insight-meta">White Paper · Coming Soon</div>
+            <h3>Spain Reforestation: ARR at Scale</h3>
+            <p>How ClearSky is structuring the largest afforestation/reforestation pipeline in Europe, leveraging EU subsidies and Verra crediting.</p>
+            <span class="insight-link">Coming Soon</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <div class="container">
+      <div class="section-label">Stay Updated</div>
+      <h2 class="section-title">Get Insights in Your Inbox</h2>
+      <p>We publish new research and market updates quarterly. Subscribe to receive them directly.</p>
+      <form class="newsletter-form" action="https://formspree.io/f/xwpkzapj" method="POST">
+        <input type="email" name="email" placeholder="Your email address" required>
+        <input type="hidden" name="subject" value="Newsletter Subscription">
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-watermark">//</div>
+    <div class="container">
+      <div class="footer-left">
+        <a href="../" class="footer-logo"><img src="../assets/logos/logo-white.png" alt="ClearSky"></a>
+        <div class="footer-divider"></div>
+        <a href="https://www.mkspamp.com/" target="_blank" rel="noopener" class="footer-backer" style="transition: opacity 0.2s; opacity: 0.8;">Backed by MKS PAMP</a>
+        <div class="footer-divider"></div>
+        <a href="https://www.linkedin.com/company/clearskyltd/" target="_blank" rel="noopener" style="opacity: 0.6; transition: opacity 0.2s; display: flex; align-items: center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+        </a>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+        <div class="footer-right">&copy; <span id="yr"></span> ClearSky Limited. All rights reserved.</div>
+        <div class="footer-address">ClearSky Limited &middot; 103 Cannon Street &middot; London EC4N 5AG</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Filter functionality
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const insightCards = document.querySelectorAll('.insight-card');
+
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const filter = tab.dataset.filter;
+
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        insightCards.forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
