@@ -353,6 +353,57 @@
     .wws-card h3 { font-size: 1.1rem; font-weight: 600; color: var(--navy); margin-bottom: 12px; }
     .wws-card p { font-size: 0.9rem; line-height: 1.65; color: var(--slate); }
 
+    /* ===== INSIGHTS PREVIEW ===== */
+    .insights-preview { padding: var(--section-pad) 0; background: var(--white); }
+    .insights-preview .container { text-align: center; }
+    .insights-featured {
+      max-width: 900px; margin: 48px auto 0;
+      background: var(--hero-dark); border-radius: 4px;
+      overflow: hidden; text-align: left;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    }
+    .insights-featured-content {
+      padding: 48px;
+    }
+    .insights-featured-meta {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+    }
+    .insights-featured h3 {
+      font-size: 1.8rem; font-weight: 700; color: var(--white);
+      line-height: 1.2; margin-bottom: 16px;
+    }
+    .insights-featured-desc {
+      font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.75);
+      margin-bottom: 28px;
+    }
+    .insights-featured-links {
+      display: flex; gap: 20px; align-items: center;
+    }
+    .insights-featured-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.85rem; font-weight: 600; color: var(--white);
+      letter-spacing: 0.04em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .insights-featured-link:hover { color: var(--gold); }
+    .insights-featured-link svg { width: 16px; height: 16px; }
+    .insights-featured-sidebar {
+      background: rgba(255,255,255,0.05);
+      display: flex; align-items: center; justify-content: center;
+      padding: 48px;
+    }
+    .insights-cta {
+      display: inline-block; padding: 14px 36px; margin-top: 40px;
+      border: 1px solid rgba(13,27,62,0.2); color: var(--navy);
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; border-radius: 2px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .insights-cta:hover {
+      background: var(--frost); border-color: var(--navy);
+    }
+
     /* ===== CONTACT FORM ===== */
     .contact-form { max-width: 520px; margin: 0 auto; text-align: left; }
     .form-group { margin-bottom: 20px; }
@@ -389,6 +440,8 @@
       .sol-grid { grid-template-columns: repeat(2,1fr); }
       .sol-card { min-height: 300px; }
       .wws-grid { grid-template-columns: 1fr; }
+      .insights-featured { grid-template-columns: 1fr; }
+      .insights-featured-sidebar { display: none; }
     }
     @media (max-width: 768px) {
       :root { --section-pad: var(--section-pad-mob); }
@@ -432,6 +485,7 @@
         <li><a href="#who-we-serve">Who We Serve</a></li>
         <li><a href="#solutions">Solutions</a></li>
         <li><a href="#team">Team</a></li>
+        <li><a href="insights/">Insights</a></li>
         <li><a href="#contact" class="nav-cta">Contact</a></li>
       </ul>
       <button class="nav-toggle" id="navToggle" aria-label="Menu">
@@ -597,6 +651,43 @@
       <h2 class="section-title section-title--light reveal">Ready to Move Forward?</h2>
       <p class="cta-body reveal">Whether you're buying, selling, or developing — let's find the right structure.</p>
       <a href="#contact" class="cta-button reveal">Get in Touch</a>
+    </div>
+  </section>
+
+  <!-- INSIGHTS PREVIEW — LIGHT -->
+  <section class="insights-preview">
+    <div class="container">
+      <div class="section-label reveal">Insights</div>
+      <h2 class="section-title reveal">Research & Market Intelligence</h2>
+
+      <div class="insights-featured reveal">
+        <div class="insights-featured-content">
+          <div class="insights-featured-meta">White Paper · February 2026</div>
+          <h3>Plastic Credits: A Corporate Guide to Verra-Certified Plastic Waste Reduction</h3>
+          <p class="insights-featured-desc">What plastic credits are. Where they fit in corporate sustainability. How to use them without greenwashing risk.</p>
+          <div class="insights-featured-links">
+            <a href="insights/plastic-credits-guide.html" class="insights-featured-link">
+              Read Paper
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+            </a>
+            <a href="assets/papers/ClearSky_Plastic_Credits_White_Paper.pdf" class="insights-featured-link" target="_blank">
+              Download PDF
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v10M4 9l4 4 4-4"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="insights-featured-sidebar">
+          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="8" y1="13" x2="16" y2="13"/>
+            <line x1="8" y1="17" x2="16" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+      </div>
+
+      <a href="insights/" class="insights-cta reveal">View All Insights</a>
     </div>
   </section>
 
