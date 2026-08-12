@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClearSky</title>
+  <title>ClearSky | Environmental Asset Developer and Capital Platform | Spain</title>
+  <meta name="description" content="ClearSky originates, underwrites, finances, executes, and monetizes Spanish MITECO reforestation and CAE energy-efficiency projects.">
   <link rel="icon" type="image/png" href="./assets/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -194,23 +195,6 @@
       font-size: 0.78rem; color: var(--gold); font-style: italic;
       margin-top: -12px; margin-bottom: 24px;
     }
-    .miteco-regime {
-      display: flex; gap: 24px; margin: 40px 0 48px;
-      justify-content: center; flex-wrap: wrap;
-    }
-    .miteco-regime-step {
-      text-align: center; flex: 0 0 auto;
-    }
-    .miteco-regime-step .regime-name {
-      font-family: 'Roboto Mono', monospace;
-      font-size: 1rem; font-weight: 500; color: var(--gold);
-      margin-bottom: 4px;
-    }
-    .miteco-regime-step .regime-desc {
-      font-size: 0.78rem; color: rgba(255,255,255,0.5);
-      text-transform: uppercase; letter-spacing: 0.08em;
-    }
-
     /* Product Ladder */
     .product-ladder {
       display: flex; align-items: center; justify-content: center;
@@ -469,6 +453,7 @@
     }
     .footer-left { display: flex; align-items: center; gap: 20px; }
     .footer-logo img { height: 28px; width: auto; opacity: 0.9; }
+    .footer-focus { font-size: 0.72rem; color: rgba(255,255,255,0.35); font-weight: 300; }
     .footer-right {
       display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
     }
@@ -520,9 +505,11 @@
       .product-ladder { gap: 4px; }
       .product-ladder-step { padding: 10px 12px; font-size: 0.72rem; }
       .product-ladder-arrow { display: none; }
-      .status-ladder { gap: 4px; justify-content: flex-start; overflow-x: auto; padding-bottom: 8px; }
-      .status-ladder-step { padding: 8px 10px; font-size: 0.65rem; }
-      .status-ladder-arrow { display: none; }
+      .status-ladder { flex-direction: column; align-items: center; gap: 0; }
+      .status-ladder-step { padding: 10px 20px; font-size: 0.72rem; width: 200px; text-align: center; border-radius: 0; }
+      .status-ladder-step:first-child { border-radius: 2px 2px 0 0; }
+      .status-ladder-step:last-child { border-radius: 0 0 2px 2px; }
+      .status-ladder-arrow { transform: rotate(90deg); padding: 2px 0; font-size: 0.8rem; }
       .cae-steps { grid-template-columns: 1fr; }
       .project-grid { grid-template-columns: 1fr; }
       .team-grid { grid-template-columns: repeat(2,1fr); gap: 20px; }
@@ -533,7 +520,6 @@
     }
     @media (max-width: 480px) {
       .team-grid { grid-template-columns: 1fr; }
-      .miteco-regime { flex-direction: column; gap: 16px; }
     }
   </style>
 </head>
@@ -580,14 +566,14 @@
           <h3>MITECO Reforestation</h3>
           <p>Developer-backed access to credible Spanish environmental outcomes, from sourced spot supply through named-project and whole-project structures.</p>
           <p class="wwd-subtext">Buyers can start with annual compensation and grow into multi-year supply, a named forest, or whole-project acquisition.</p>
-          <a href="#miteco-section" class="wwd-link">Learn More <span>&rarr;</span></a>
+          <a href="#miteco-section" class="wwd-link" data-contact-interest="MITECO Credits and Compensation">Learn More <span>&rarr;</span></a>
         </div>
 
         <div class="wwd-card reveal reveal-d2">
           <h3>CAE Energy Efficiency</h3>
           <p>Funded, turnkey efficiency interventions: ClearSky coordinates engineering, certification, monetization, and savings participation.</p>
           <p class="wwd-subtext">ClearSky funds up to 100% of approved capex, coordinates engineering and certification, monetizes the CAEs, and shares verified energy savings.</p>
-          <a href="#cae-section" class="wwd-link">Learn More <span>&rarr;</span></a>
+          <a href="#cae-section" class="wwd-link" data-contact-interest="CAE Energy Efficiency">Learn More <span>&rarr;</span></a>
         </div>
 
       </div>
@@ -609,29 +595,6 @@
         <p class="reveal">Registry participation follows a structured progression. Calculo (measure) establishes a baseline. Reduzco (reduce) demonstrates improvement. Compenso (compensate) allows offset of residual emissions. Participation signals maturity, not a purchase mandate.</p>
       </div>
 
-      <div class="miteco-regime reveal">
-        <div class="miteco-regime-step">
-          <div class="regime-name">Calculo</div>
-          <div class="regime-desc">Measure</div>
-        </div>
-        <div class="miteco-regime-step">
-          <div class="regime-name">&rarr;</div>
-          <div class="regime-desc">&nbsp;</div>
-        </div>
-        <div class="miteco-regime-step">
-          <div class="regime-name">Reduzco</div>
-          <div class="regime-desc">Reduce</div>
-        </div>
-        <div class="miteco-regime-step">
-          <div class="regime-name">&rarr;</div>
-          <div class="regime-desc">&nbsp;</div>
-        </div>
-        <div class="miteco-regime-step">
-          <div class="regime-name">Compenso</div>
-          <div class="regime-desc">Compensate</div>
-        </div>
-      </div>
-
       <div class="product-ladder reveal">
         <div class="product-ladder-step">Sourced Spot Supply</div>
         <span class="product-ladder-arrow">&rarr;</span>
@@ -646,7 +609,7 @@
 
       <div style="text-align:center;" class="reveal">
         <p class="section-cta-text">Start with annual compensation. Talk to us.</p>
-        <a href="#contact" class="section-cta-button">Get in Touch</a>
+        <a href="#contact" class="section-cta-button" data-contact-interest="MITECO Credits and Compensation">Get in Touch</a>
       </div>
     </div>
   </section>
@@ -683,7 +646,7 @@
       </div>
 
       <div style="text-align:center;" class="reveal">
-        <a href="#contact" class="section-cta-button--outline">Request an Eligibility Conversation</a>
+        <a href="#contact" class="section-cta-button--outline" data-contact-interest="CAE Energy Efficiency">Request an Eligibility Conversation</a>
       </div>
     </div>
   </section>
@@ -692,8 +655,8 @@
   <section class="track-record" id="projects">
     <div class="container">
       <div class="section-label reveal" style="color:var(--gold);">Projects and Track Record</div>
-      <h2 class="section-title section-title--light reveal">Ambition may be bold. Status must be exact.</h2>
-      <p class="track-record-sub reveal">Every project is described at its exact evidence-based stage, from sourced to monetized.</p>
+      <h2 class="section-title section-title--light reveal">Projects and Track Record</h2>
+      <p class="track-record-sub reveal">Every project at its evidence-based stage.</p>
 
       <div class="status-ladder reveal">
         <div class="status-ladder-step">Sourced</div>
@@ -768,7 +731,7 @@
 
         <div class="team-member reveal reveal-d2">
           <div class="team-initials">LA</div>
-          <h3>Luis Felipe Adaime</h3>
+          <h3>Luis Felipe Adaime, CFA</h3>
           <span class="team-title">Spain and MITECO Lead</span>
         </div>
 
@@ -779,8 +742,8 @@
         </div>
 
         <div class="team-member reveal reveal-d4">
-          <div class="team-initials">ES</div>
-          <h3>Emmanuel Silva</h3>
+          <div class="team-initials">EM</div>
+          <h3>Emmanuel Mendoza</h3>
           <span class="team-title">Operations and Project Control</span>
         </div>
 
@@ -835,8 +798,7 @@
       </form>
 
       <div class="contact-entities reveal">
-        ClearSky Limited (UK) | Clear Sky Carbono S.L. (Spain)<br>
-        SolSky is a ClearSky and Enersol joint venture.
+        ClearSky Limited (UK) | Clear Sky Carbono S.L. (Spain)
       </div>
     </div>
   </section>
@@ -847,6 +809,7 @@
     <div class="container">
       <div class="footer-left">
         <a href="#" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+        <span class="footer-focus">Focused on Spain.</span>
       </div>
       <div class="footer-right">
         <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
@@ -856,6 +819,7 @@
           <a href="#">Disclaimer</a>
         </div>
         <div class="footer-entities">ClearSky Limited (UK) | Clear Sky Carbono S.L. (Spain)</div>
+        <div class="footer-entities">SolSky is a ClearSky and Enersol joint venture.</div>
       </div>
     </div>
   </footer>
@@ -879,12 +843,23 @@
     /* Contact routing tabs */
     const tabs = document.querySelectorAll('.contact-tab');
     const interestField = document.getElementById('interest');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        interestField.value = tab.dataset.interest;
+    function selectTab(interest) {
+      tabs.forEach(t => {
+        if (t.dataset.interest === interest) {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
       });
+      interestField.value = interest;
+    }
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => { selectTab(tab.dataset.interest); });
+    });
+
+    /* CTA links pre-select routing tab */
+    document.querySelectorAll('[data-contact-interest]').forEach(el => {
+      el.addEventListener('click', () => { selectTab(el.dataset.contactInterest); });
     });
   </script>
 
