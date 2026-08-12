@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disclaimer | ClearSky</title>
+  <meta name="description" content="ClearSky Limited disclaimer regarding website content and environmental projects.">
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy: #0D1B3E;
+      --gold: #D4A843;
+      --gold-button: #c9a84c;
+      --frost: #F5F7FA;
+      --slate: #8A8F9A;
+      --hero-dark: #0a1628;
+      --white: #FFFFFF;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      color: var(--navy);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+    /* NAV */
+    .nav {
+      background: rgba(13,27,62,0.97);
+      padding: 12px 0;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+      backdrop-filter: blur(12px);
+    }
+    .nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo img { height: 36px; width: auto; }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--white); font-size: 0.82rem; font-weight: 400;
+      letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-cta {
+      background: var(--gold-button) !important;
+      color: var(--hero-dark) !important;
+      border: none;
+      padding: 8px 24px; border-radius: 2px; opacity: 1 !important;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #d4b55c !important; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--white); margin: 5px 0; transition: transform 0.3s, opacity 0.3s; }
+    .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    /* CONTENT */
+    .legal-content {
+      max-width: 760px; margin: 0 auto;
+      padding: 80px 40px 120px;
+    }
+    .legal-content h1 {
+      font-size: 2.2rem; font-weight: 700; color: var(--navy);
+      margin-bottom: 8px; line-height: 1.15;
+    }
+    .legal-date {
+      font-size: 0.85rem; color: var(--slate); margin-bottom: 48px;
+    }
+    .legal-content h2 {
+      font-size: 1.15rem; font-weight: 600; color: var(--navy);
+      margin-top: 40px; margin-bottom: 12px;
+    }
+    .legal-content p {
+      font-size: 0.95rem; line-height: 1.75; color: var(--navy);
+      opacity: 0.85; margin-bottom: 16px; max-width: none;
+    }
+    .legal-content ul {
+      margin: 8px 0 16px 24px; font-size: 0.95rem;
+      line-height: 1.75; color: var(--navy); opacity: 0.85;
+    }
+    .legal-content li { margin-bottom: 6px; }
+    .legal-content a { color: var(--gold); text-decoration: underline; }
+
+    /* FOOTER */
+    .footer {
+      background: var(--hero-dark); padding: 48px 0 36px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      position: relative; overflow: hidden;
+    }
+    .footer-watermark {
+      position: absolute; bottom: -10px; right: 40px;
+      font-size: 6rem; font-weight: 700; color: rgba(255,255,255,0.015);
+      pointer-events: none; user-select: none; line-height: 1;
+    }
+    .footer .container {
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; z-index: 1;
+    }
+    .footer-left { display: flex; align-items: center; gap: 20px; }
+    .footer-logo img { height: 28px; width: auto; opacity: 0.9; }
+    .footer-right {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+    }
+    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+    .footer-legal { display: flex; gap: 16px; }
+    .footer-legal a {
+      font-size: 0.7rem; color: rgba(255,255,255,0.3);
+      transition: color 0.2s; text-decoration: none;
+    }
+    .footer-legal a:hover { color: rgba(255,255,255,0.6); }
+    .footer-entities { font-size: 0.68rem; color: rgba(255,255,255,0.25); }
+
+    @media (max-width: 768px) {
+      .container { padding: 0 24px; }
+      .nav-links { display: none; }
+      .nav-toggle { display: block; }
+      .nav-links.open {
+        display: flex; flex-direction: column; position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(10,22,40,0.98); justify-content: center;
+        align-items: center; gap: 28px; z-index: 999;
+      }
+      .nav-links.open a { font-size: 1.1rem; opacity: 1; }
+      .legal-content { padding: 60px 24px 80px; }
+      .legal-content h1 { font-size: 1.6rem; }
+      .footer .container { flex-direction: column; gap: 20px; text-align: center; }
+      .footer-left { justify-content: center; }
+      .footer-right { align-items: center !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#miteco-section">MITECO</a></li>
+        <li><a href="index.html#cae-section">CAE</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="index.html#team">Team</a></li>
+        <li><a href="index.html#contact" class="nav-cta">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="legal-content">
+    <h1>Disclaimer</h1>
+    <p class="legal-date">Last updated: August 2026</p>
+
+    <h2>1. General Disclaimer</h2>
+    <p>The content on this website is provided by ClearSky Limited ("ClearSky") for informational purposes only. Nothing on this website constitutes an offer, solicitation, or recommendation to purchase, sell, or enter into any transaction involving environmental credits, carbon offsets, energy efficiency certificates, or any other product or service.</p>
+
+    <h2>2. Forward-Looking Statements</h2>
+    <p>This website may contain statements about ClearSky's pipeline, plans, or future projects. These forward-looking statements are subject to risks, uncertainties, and assumptions that could cause actual results to differ materially from those expressed or implied. Forward-looking statements should not be relied upon as predictions of future outcomes. ClearSky undertakes no obligation to update or revise any forward-looking statements.</p>
+
+    <h2>3. Environmental Credits and Certificates</h2>
+    <p>ClearSky does not guarantee credit issuance, registration, pricing, or delivery timelines for any environmental project. All projects described on this website are subject to regulatory approval, execution risk, third-party verification, and other factors beyond ClearSky's control. Past project outcomes do not guarantee future results. Environmental credit markets are subject to regulatory change, price volatility, and evolving standards.</p>
+
+    <h2>4. No Reliance</h2>
+    <p>Visitors to this website should not rely on any information presented herein as a basis for making business, investment, legal, or other decisions. You should seek independent professional advice before making any decisions based on the content of this website. ClearSky accepts no liability for any loss or damage arising from reliance on the information provided.</p>
+
+    <h2>5. Regulatory Status</h2>
+    <p>ClearSky is not a regulated financial services firm. Carbon credits, MITECO absorption units, and Certificados de Ahorro Energetico (CAEs) are not classified as regulated financial instruments in all jurisdictions. The purchase, sale, or trading of environmental credits may be subject to specific regulations in your jurisdiction. It is your responsibility to determine the applicable regulatory requirements.</p>
+
+    <h2>6. Contact</h2>
+    <p>For questions regarding this disclaimer, contact us at <a href="mailto:info@clearskyltd.com">info@clearskyltd.com</a>.</p>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-watermark">//</div>
+    <div class="container">
+      <div class="footer-left">
+        <a href="index.html" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+      </div>
+      <div class="footer-right">
+        <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+        <div class="footer-entities">ClearSky Limited (UK) | Clear Sky Carbono S.L. (Spain)</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => { toggle.classList.toggle('active'); navLinks.classList.toggle('open'); });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { toggle.classList.remove('active'); navLinks.classList.remove('open'); }));
+  </script>
+
+</body>
+</html>

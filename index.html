@@ -331,23 +331,11 @@
       font-style: italic;
     }
 
-    /* ===== AMBITION STRIP ===== */
-    .ambition {
-      padding: 64px 0; background: var(--gold-button);
-      text-align: center;
-    }
-    .ambition .section-label { color: var(--hero-dark); opacity: 0.6; }
-    .ambition-text {
-      font-size: clamp(1.2rem,2.2vw,1.5rem); font-weight: 500;
-      color: var(--hero-dark); line-height: 1.5; max-width: 700px;
-      margin: 0 auto;
-    }
-
     /* ===== TEAM ===== */
     .team { padding: var(--section-pad) 0; background: var(--frost); }
     .team .container { text-align: center; }
     .team-grid {
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 32px;
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 32px;
       margin-top: 56px; max-width: 960px; margin-left: auto; margin-right: auto;
     }
     .team-member {
@@ -453,7 +441,6 @@
     }
     .footer-left { display: flex; align-items: center; gap: 20px; }
     .footer-logo img { height: 28px; width: auto; opacity: 0.9; }
-    .footer-focus { font-size: 0.72rem; color: rgba(255,255,255,0.35); font-weight: 300; }
     .footer-right {
       display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
     }
@@ -708,14 +695,6 @@
     </div>
   </section>
 
-  <!-- AMBITION -->
-  <section class="ambition">
-    <div class="container">
-      <div class="section-label reveal">Our Ambition</div>
-      <p class="ambition-text reveal">ClearSky's ambition is to become Spain's largest independent MITECO reforestation developer.</p>
-    </div>
-  </section>
-
   <!-- TEAM -->
   <section class="team" id="team">
     <div class="container">
@@ -731,7 +710,7 @@
 
         <div class="team-member reveal reveal-d2">
           <div class="team-initials">LA</div>
-          <h3>Luis Felipe Adaime, CFA</h3>
+          <h3>Luis Felipe Adaime</h3>
           <span class="team-title">Spain and MITECO Lead</span>
         </div>
 
@@ -742,21 +721,9 @@
         </div>
 
         <div class="team-member reveal reveal-d4">
-          <div class="team-initials">EM</div>
-          <h3>Emmanuel Mendoza</h3>
+          <div class="team-initials">ES</div>
+          <h3>Emmanuel Silva</h3>
           <span class="team-title">Operations and Project Control</span>
-        </div>
-
-        <div class="team-member reveal reveal-d5">
-          <div class="team-initials">AS</div>
-          <h3>Adam Sultan</h3>
-          <span class="team-title">Fractional General Counsel</span>
-        </div>
-
-        <div class="team-member reveal reveal-d6">
-          <div class="team-initials">SAX</div>
-          <h3>SAX</h3>
-          <span class="team-title">Fractional CFO</span>
         </div>
 
       </div>
@@ -809,17 +776,15 @@
     <div class="container">
       <div class="footer-left">
         <a href="#" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
-        <span class="footer-focus">Focused on Spain.</span>
       </div>
       <div class="footer-right">
         <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
         <div class="footer-legal">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms</a>
-          <a href="#">Disclaimer</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms</a>
+          <a href="disclaimer.html">Disclaimer</a>
         </div>
         <div class="footer-entities">ClearSky Limited (UK) | Clear Sky Carbono S.L. (Spain)</div>
-        <div class="footer-entities">SolSky is a ClearSky and Enersol joint venture.</div>
       </div>
     </div>
   </footer>
