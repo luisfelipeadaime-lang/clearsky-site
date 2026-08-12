@@ -671,7 +671,7 @@ async function callClaudeForBrief(prompt, kbContext, type) {
     ? `Return a JSON object with these exact keys: {"title":"string","subtitle":"string","summary":"string (max 400 chars, executive summary)","market":"string (max 400 chars, sector/market context)","stats":[{"num":"string","label":"string"}] (up to 4 key statistics),"projects":[{"name":"string","country":"string","type":"string (credit type)","metric":"string (key volume metric)","desc":"string (max 250 chars)"}] (one per project mentioned),"contactName":"Luis Adaime","contactEmail":"trading@clearskyltd.com","counterparty":"string (from prompt or empty)"}`
     : `Return a JSON object with these exact keys: {"title":"string","subtitle":"string","sections":["string"] (up to 10 section titles)}`;
 
-  const systemPrompt = `You are a ClearSky Limited presentation content generator. ClearSky is an environmental merchant bank that originates, structures, and distributes high-integrity environmental credits (carbon, plastic, biodiversity).
+  const systemPrompt = `You are a ClearSky Limited presentation content generator. ClearSky is an environmental asset developer and capital platform that originates, underwrites, finances, executes, and monetizes Spanish MITECO reforestation and CAE energy-efficiency projects.
 
 Your task: Generate structured content for a ${type} presentation based on the user's request.
 
