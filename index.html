@@ -15,6 +15,7 @@
       --navy: #0D1B3E;
       --steel: #5B9BD5;
       --gold: #D4A843;
+      --gold-button: #c9a84c;
       --midnight: #1B2A4A;
       --frost: #F5F7FA;
       --slate: #8A8F9A;
@@ -63,8 +64,8 @@
     }
     .nav-links a:hover { opacity: 1; }
     .nav-cta {
-      background: #c9a84c !important;
-      color: #0a1628 !important;
+      background: var(--gold-button) !important;
+      color: var(--hero-dark) !important;
       border: none;
       padding: 8px 24px; border-radius: 2px; opacity: 1 !important;
       transition: background 0.2s;
@@ -77,7 +78,7 @@
     .nav-toggle.active span:nth-child(2) { opacity: 0; }
     .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 
-    /* ===== HERO — DARK ===== */
+    /* ===== HERO ===== */
     .hero {
       position: relative; min-height: 100vh;
       display: flex; align-items: center; justify-content: center; text-align: center;
@@ -111,15 +112,35 @@
       100% { background-position: 0% 50%; }
     }
     .hero-content { position: relative; z-index: 3; padding: 0 40px; max-width: 900px; }
+    .hero-label {
+      font-size: 0.85rem; font-weight: 300; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem,5vw,4.5rem); font-weight: 700;
+      color: var(--white); line-height: 1.1; margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+    .hero-sub {
+      font-size: clamp(1rem,1.5vw,1.15rem); color: rgba(255,255,255,0.75);
+      font-weight: 300; line-height: 1.7; max-width: 640px; margin: 0 auto 40px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+    .hero-cta {
+      display: inline-block; padding: 14px 40px;
+      border: 1px solid rgba(255,255,255,0.35); color: var(--white);
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; border-radius: 2px; transition: all 0.3s;
+      opacity: 0; animation: fadeUp 0.8s ease 0.9s forwards;
+    }
+    .hero-cta:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.6); }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===== ABOUT — LIGHT ===== */
-    .about { padding: var(--section-pad) 0; background: var(--white); }
-    .about .container { text-align: center; }
-
+    /* ===== SHARED SECTION STYLES ===== */
     .section-label {
       font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em;
       text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
@@ -130,72 +151,265 @@
     }
     .section-title--light { color: var(--white); }
 
-    /* ===== TEAM — LIGHT (text only, law firm style) ===== */
+    /* ===== WHAT WE DO ===== */
+    .what-we-do { padding: var(--section-pad) 0; background: var(--white); }
+    .what-we-do .container { text-align: center; }
+    .wwd-grid {
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 32px;
+      margin-top: 56px; text-align: left;
+    }
+    .wwd-card {
+      background: var(--frost); padding: 44px 36px;
+      border-left: 3px solid var(--gold); border-radius: 2px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .wwd-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(13,27,62,0.08); }
+    .wwd-card h3 {
+      font-size: 1.2rem; font-weight: 600; color: var(--navy); margin-bottom: 16px;
+    }
+    .wwd-card p { font-size: 0.95rem; line-height: 1.7; color: var(--slate); max-width: none; }
+    .wwd-card .wwd-subtext {
+      font-size: 0.88rem; line-height: 1.65; color: var(--slate); margin-top: 16px;
+      padding-top: 16px; border-top: 1px solid rgba(13,27,62,0.08);
+    }
+    .wwd-card .wwd-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 20px; font-size: 0.82rem; font-weight: 600;
+      color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .wwd-card .wwd-link:hover { color: #b8922e; }
+
+    /* ===== MITECO SECTION ===== */
+    .miteco { padding: var(--section-pad) 0; background: var(--hero-dark); }
+    .miteco .container { text-align: center; }
+    .miteco-body {
+      max-width: 760px; margin: 0 auto; text-align: left;
+    }
+    .miteco-body p {
+      font-size: 1rem; line-height: 1.75; color: rgba(255,255,255,0.8);
+      margin-bottom: 20px; max-width: none;
+    }
+    .miteco-body .cite {
+      font-size: 0.78rem; color: var(--gold); font-style: italic;
+      margin-top: -12px; margin-bottom: 24px;
+    }
+    .miteco-regime {
+      display: flex; gap: 24px; margin: 40px 0 48px;
+      justify-content: center; flex-wrap: wrap;
+    }
+    .miteco-regime-step {
+      text-align: center; flex: 0 0 auto;
+    }
+    .miteco-regime-step .regime-name {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1rem; font-weight: 500; color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .miteco-regime-step .regime-desc {
+      font-size: 0.78rem; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+
+    /* Product Ladder */
+    .product-ladder {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; margin: 48px auto 48px; flex-wrap: wrap;
+      max-width: 900px;
+    }
+    .product-ladder-step {
+      padding: 14px 20px; font-size: 0.8rem; font-weight: 500;
+      color: var(--white); letter-spacing: 0.04em;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      white-space: nowrap; transition: background 0.2s;
+    }
+    .product-ladder-step:first-child { border-radius: 2px 0 0 2px; }
+    .product-ladder-step:last-child { border-radius: 0 2px 2px 0; }
+    .product-ladder-step:hover { background: rgba(255,255,255,0.1); }
+    .product-ladder-arrow {
+      color: var(--gold); font-size: 1.1rem; padding: 0 2px;
+      flex-shrink: 0;
+    }
+
+    .section-cta-text {
+      font-size: 1rem; color: rgba(255,255,255,0.7); margin-bottom: 24px;
+      text-align: center;
+    }
+    .section-cta-button {
+      display: inline-block; padding: 14px 40px;
+      background: var(--gold-button); color: var(--hero-dark);
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; border-radius: 2px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .section-cta-button:hover { background: #b8922e; transform: translateY(-2px); }
+
+    /* ===== CAE SECTION ===== */
+    .cae { padding: var(--section-pad) 0; background: var(--white); }
+    .cae .container { text-align: center; }
+    .cae-body {
+      max-width: 760px; margin: 0 auto; text-align: left;
+    }
+    .cae-body p {
+      font-size: 1rem; line-height: 1.75; color: var(--navy);
+      margin-bottom: 20px; max-width: none; opacity: 0.85;
+    }
+    .cae-body .cite {
+      font-size: 0.78rem; color: var(--gold); font-style: italic;
+      margin-top: -12px; margin-bottom: 24px;
+    }
+
+    /* CAE Steps */
+    .cae-steps {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 24px;
+      margin: 48px auto; max-width: 900px;
+    }
+    .cae-step {
+      text-align: center; padding: 28px 20px;
+      background: var(--frost); border-radius: 2px;
+      border-top: 3px solid var(--gold);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .cae-step:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(13,27,62,0.08); }
+    .cae-step-num {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.6rem; font-weight: 500; color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .cae-step p {
+      font-size: 0.88rem; line-height: 1.6; color: var(--slate); max-width: none;
+    }
+
+    .section-cta-button--outline {
+      display: inline-block; padding: 14px 40px;
+      border: 1px solid var(--navy); color: var(--navy);
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; border-radius: 2px; background: transparent;
+      transition: background 0.3s, color 0.3s;
+    }
+    .section-cta-button--outline:hover {
+      background: var(--navy); color: var(--white);
+    }
+
+    /* ===== TRACK RECORD ===== */
+    .track-record { padding: var(--section-pad) 0; background: var(--hero-dark); }
+    .track-record .container { text-align: center; }
+    .track-record-sub {
+      font-size: 1rem; color: rgba(255,255,255,0.6);
+      margin: -16px auto 0; max-width: 600px; font-weight: 300;
+      margin-bottom: 48px;
+    }
+
+    /* Status Ladder */
+    .status-ladder {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; margin: 0 auto 56px; flex-wrap: wrap;
+      max-width: 1100px;
+    }
+    .status-ladder-step {
+      padding: 10px 14px; font-size: 0.7rem; font-weight: 500;
+      color: rgba(255,255,255,0.6); letter-spacing: 0.06em;
+      text-transform: uppercase; white-space: nowrap;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    }
+    .status-ladder-step:first-child { border-radius: 2px 0 0 2px; }
+    .status-ladder-step:last-child { border-radius: 0 2px 2px 0; }
+    .status-ladder-arrow {
+      color: rgba(255,255,255,0.25); font-size: 0.9rem; padding: 0 1px;
+      flex-shrink: 0;
+    }
+
+    /* Project Cards */
+    .project-grid {
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 24px;
+      max-width: 960px; margin: 0 auto; text-align: left;
+    }
+    .project-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 2px; padding: 32px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+    .project-badge {
+      display: inline-block; padding: 4px 12px;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; border-radius: 2px;
+      margin-bottom: 16px;
+    }
+    .project-badge--monetized { background: var(--emerald); color: var(--white); }
+    .project-badge--contracted { background: var(--steel); color: var(--white); }
+    .project-badge--predev { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); }
+    .project-card p {
+      font-size: 0.92rem; line-height: 1.65; color: rgba(255,255,255,0.8); max-width: none;
+    }
+    .project-card .project-date {
+      font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 12px;
+      font-style: italic;
+    }
+
+    /* ===== AMBITION STRIP ===== */
+    .ambition {
+      padding: 64px 0; background: var(--gold-button);
+      text-align: center;
+    }
+    .ambition .section-label { color: var(--hero-dark); opacity: 0.6; }
+    .ambition-text {
+      font-size: clamp(1.2rem,2.2vw,1.5rem); font-weight: 500;
+      color: var(--hero-dark); line-height: 1.5; max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* ===== TEAM ===== */
     .team { padding: var(--section-pad) 0; background: var(--frost); }
     .team .container { text-align: center; }
     .team-grid {
-      display: grid; grid-template-columns: repeat(2,1fr); gap: 0;
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 32px;
       margin-top: 56px; max-width: 960px; margin-left: auto; margin-right: auto;
-      text-align: left;
     }
     .team-member {
-      padding: 32px 36px;
-      border-bottom: 1px solid rgba(13,27,62,0.08);
-      display: flex; flex-direction: column;
+      text-align: center; padding: 20px;
     }
-    .team-member:nth-child(odd) { border-right: 1px solid rgba(13,27,62,0.08); }
-    .team-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
-    .team-member h3 { font-size: 1.05rem; font-weight: 600; color: var(--navy); }
+    .team-initials {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--navy); color: var(--white);
+      font-family: 'Roboto Mono', monospace; font-size: 1.1rem; font-weight: 500;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .team-member h3 {
+      font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 4px;
+    }
     .team-member .team-title {
-      font-size: 0.78rem; font-weight: 500; color: var(--gold); letter-spacing: 0.03em;
+      font-size: 0.78rem; font-weight: 400; color: var(--slate);
+      letter-spacing: 0.02em;
     }
 
-    /* ===== CTA — DARK (photo background) ===== */
-    .cta {
-      position: relative; padding: var(--section-pad) 0;
-      text-align: center; overflow: hidden;
+    /* ===== CONTACT ===== */
+    .contact { padding: var(--section-pad) 0; background: var(--hero-dark); position: relative; overflow: hidden; }
+    .contact .container { text-align: center; position: relative; z-index: 2; }
+    .contact-routing-text {
+      font-size: 1rem; color: rgba(255,255,255,0.6); margin-bottom: 24px; font-weight: 300;
     }
-    .cta-bg {
-      position: absolute; inset: 0; z-index: 0;
-      background: url('./assets/backgrounds/mountain-alpine-lakes.jpg') center/cover no-repeat;
-    }
-    .cta-overlay {
-      position: absolute; inset: 0; z-index: 1;
-      background: rgba(10,22,40,0.78);
-    }
-    .cta .container { position: relative; z-index: 2; }
-    .cta .section-title { color: var(--white); margin-bottom: 20px; }
 
-    /* ===== FOOTER — DARK ===== */
-    .footer {
-      background: var(--hero-dark); padding: 48px 0 36px;
-      position: relative; overflow: hidden;
+    /* Routing Tabs */
+    .contact-tabs {
+      display: flex; justify-content: center; gap: 12px;
+      margin-bottom: 40px; flex-wrap: wrap;
     }
-    .footer-watermark {
-      position: absolute; bottom: -10px; right: 40px;
-      font-size: 6rem; font-weight: 700; color: rgba(255,255,255,0.015);
-      pointer-events: none; user-select: none; line-height: 1;
+    .contact-tab {
+      padding: 10px 24px; font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 2px;
+      background: transparent; color: rgba(255,255,255,0.7);
+      cursor: pointer; transition: all 0.2s;
     }
-    .footer .container {
-      display: flex; align-items: center; justify-content: space-between;
-      position: relative; z-index: 1;
+    .contact-tab:hover { border-color: rgba(255,255,255,0.4); color: var(--white); }
+    .contact-tab.active {
+      background: var(--gold-button); color: var(--hero-dark);
+      border-color: var(--gold-button); font-weight: 600;
     }
-    .footer-left { display: flex; align-items: center; gap: 20px; }
-    .footer-logo img { height: 28px; width: auto; opacity: 0.9; }
-    .footer-right { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
 
-    /* ===== SCROLL REVEAL ===== */
-    .reveal {
-      opacity: 0; transform: translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-d1 { transition-delay: 0.1s; }
-    .reveal-d2 { transition-delay: 0.2s; }
-    .reveal-d3 { transition-delay: 0.3s; }
-    .reveal-d4 { transition-delay: 0.4s; }
-
-    /* ===== CONTACT FORM ===== */
+    /* Contact Form */
     .contact-form { max-width: 520px; margin: 0 auto; text-align: left; }
     .form-group { margin-bottom: 20px; }
     .form-group label {
@@ -222,17 +436,73 @@
       outline: none; border-color: var(--gold);
       background: rgba(255,255,255,0.15);
     }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(255,255,255,0.35); }
     .form-group textarea { resize: vertical; min-height: 120px; }
     .form-submit {
       display: block; width: 100%; padding: 14px;
-      background: var(--gold); color: var(--hero-dark);
+      background: var(--gold-button); color: var(--hero-dark);
       font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
       text-transform: uppercase; border: none; border-radius: 2px;
       cursor: pointer; transition: background 0.3s;
     }
-    .form-submit:hover { background: #c49a38; }
+    .form-submit:hover { background: #b8922e; }
+    .contact-entities {
+      margin-top: 32px; font-size: 0.8rem; color: rgba(255,255,255,0.4);
+      line-height: 1.8;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--hero-dark); padding: 48px 0 36px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      position: relative; overflow: hidden;
+    }
+    .footer-watermark {
+      position: absolute; bottom: -10px; right: 40px;
+      font-size: 6rem; font-weight: 700; color: rgba(255,255,255,0.015);
+      pointer-events: none; user-select: none; line-height: 1;
+    }
+    .footer .container {
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; z-index: 1;
+    }
+    .footer-left { display: flex; align-items: center; gap: 20px; }
+    .footer-logo img { height: 28px; width: auto; opacity: 0.9; }
+    .footer-right {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+    }
+    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+    .footer-legal {
+      display: flex; gap: 16px;
+    }
+    .footer-legal a {
+      font-size: 0.7rem; color: rgba(255,255,255,0.3);
+      transition: color 0.2s;
+    }
+    .footer-legal a:hover { color: rgba(255,255,255,0.6); }
+    .footer-entities {
+      font-size: 0.68rem; color: rgba(255,255,255,0.25);
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+    .reveal-d5 { transition-delay: 0.5s; }
+    .reveal-d6 { transition-delay: 0.6s; }
 
     /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .cae-steps { grid-template-columns: repeat(2,1fr); }
+      .project-grid { grid-template-columns: 1fr; }
+    }
     @media (max-width: 768px) {
       :root { --section-pad: var(--section-pad-mob); }
       .container { padding: 0 24px; }
@@ -246,11 +516,24 @@
       }
       .nav-links.open a { font-size: 1.1rem; opacity: 1; }
       .hero h1 { font-size: clamp(2rem,7vw,3rem); }
-      .team-grid { grid-template-columns: 1fr; }
-      .team-member { border-right: none !important; }
-      .footer .container { flex-direction: column; gap: 16px; text-align: center; }
+      .wwd-grid { grid-template-columns: 1fr; }
+      .product-ladder { gap: 4px; }
+      .product-ladder-step { padding: 10px 12px; font-size: 0.72rem; }
+      .product-ladder-arrow { display: none; }
+      .status-ladder { gap: 4px; justify-content: flex-start; overflow-x: auto; padding-bottom: 8px; }
+      .status-ladder-step { padding: 8px 10px; font-size: 0.65rem; }
+      .status-ladder-arrow { display: none; }
+      .cae-steps { grid-template-columns: 1fr; }
+      .project-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2,1fr); gap: 20px; }
+      .contact-tabs { flex-direction: column; align-items: center; }
+      .footer .container { flex-direction: column; gap: 20px; text-align: center; }
       .footer-left { justify-content: center; }
-      .footer .container > div:last-child { align-items: center !important; }
+      .footer-right { align-items: center !important; }
+    }
+    @media (max-width: 480px) {
+      .team-grid { grid-template-columns: 1fr; }
+      .miteco-regime { flex-direction: column; gap: 16px; }
     }
   </style>
 </head>
@@ -262,6 +545,9 @@
       <a href="#" class="nav-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
       <ul class="nav-links" id="navLinks">
         <li><a href="#about">About</a></li>
+        <li><a href="#miteco-section">MITECO</a></li>
+        <li><a href="#cae-section">CAE</a></li>
+        <li><a href="#projects">Projects</a></li>
         <li><a href="#team">Team</a></li>
         <li><a href="#contact" class="nav-cta">Contact</a></li>
       </ul>
@@ -271,67 +557,264 @@
     </div>
   </nav>
 
-  <!-- HERO — DARK -->
+  <!-- HERO -->
   <section class="hero" id="hero">
     <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
     <div class="hero-gradient"></div>
     <div class="hero-content">
+      <div class="hero-label">Environmental Asset Developer and Capital Platform</div>
+      <h1>We build and finance environmental assets.</h1>
+      <p class="hero-sub">ClearSky originates, underwrites, finances, executes, and monetizes Spanish MITECO reforestation and CAE energy-efficiency projects.</p>
+      <a href="#contact" class="hero-cta">Talk to Us</a>
     </div>
   </section>
 
-  <!-- ABOUT — LIGHT -->
-  <section class="about" id="about">
+  <!-- WHAT WE DO -->
+  <section class="what-we-do" id="about">
     <div class="container">
-    </div>
-  </section>
+      <div class="section-label reveal">What We Do</div>
+      <div class="wwd-grid">
 
-  <!-- TEAM — LIGHT (text only, law firm style) -->
-  <section class="team" id="team">
-    <div class="container">
-      <div class="section-label reveal">Our People</div>
-      <h2 class="section-title reveal">The Team</h2>
-      <div class="team-grid">
-
-        <div class="team-member reveal reveal-d1">
-          <div class="team-header">
-            <h3>Brian Katz</h3>
-            <span class="team-title">Co-Founder &amp; CEO</span>
-          </div>
+        <div class="wwd-card reveal reveal-d1">
+          <h3>MITECO Reforestation</h3>
+          <p>Developer-backed access to credible Spanish environmental outcomes, from sourced spot supply through named-project and whole-project structures.</p>
+          <p class="wwd-subtext">Buyers can start with annual compensation and grow into multi-year supply, a named forest, or whole-project acquisition.</p>
+          <a href="#miteco-section" class="wwd-link">Learn More <span>&rarr;</span></a>
         </div>
 
-        <div class="team-member reveal reveal-d2">
-          <div class="team-header">
-            <h3>Luis Felipe Adaime</h3>
-            <span class="team-title">Head of Business Development, Spain Lead</span>
-          </div>
-        </div>
-
-        <div class="team-member reveal reveal-d3">
-          <div class="team-header">
-            <h3>Carolina Martinez</h3>
-            <span class="team-title">Sales &amp; Trading Associate</span>
-          </div>
-        </div>
-
-        <div class="team-member reveal reveal-d4">
-          <div class="team-header">
-            <h3>Emmanuel Silva</h3>
-            <span class="team-title">Carbon Project &amp; Operations Analyst</span>
-          </div>
+        <div class="wwd-card reveal reveal-d2">
+          <h3>CAE Energy Efficiency</h3>
+          <p>Funded, turnkey efficiency interventions: ClearSky coordinates engineering, certification, monetization, and savings participation.</p>
+          <p class="wwd-subtext">ClearSky funds up to 100% of approved capex, coordinates engineering and certification, monetizes the CAEs, and shares verified energy savings.</p>
+          <a href="#cae-section" class="wwd-link">Learn More <span>&rarr;</span></a>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- CONTACT — DARK (photo background) -->
-  <section class="cta" id="contact">
-    <div class="cta-bg"></div>
-    <div class="cta-overlay"></div>
+  <!-- MITECO SECTION -->
+  <section class="miteco" id="miteco-section">
     <div class="container">
+      <div class="section-label reveal" style="color:var(--gold);">MITECO Reforestation</div>
+      <h2 class="section-title section-title--light reveal">Credible Spanish Environmental Outcomes</h2>
+
+      <div class="miteco-body">
+        <p class="reveal">Registered MITECO supply is fragmented across many project holders, while institutional buyers can struggle to obtain curated, project-backed, multi-year supply from one accountable counterparty.</p>
+        <p class="reveal">ClearSky sources registered Spanish MITECO credits from established developers on a transaction basis.</p>
+        <p class="reveal">At year-end 2025 the MITECO registry held 1,250 absorption projects, approximately 10.65M tonnes of forecast lifetime absorptions, and approximately 171,857 initial available tonnes used for compensation.</p>
+        <p class="cite reveal">Source: Official MITECO 2025 Annual Report.</p>
+
+        <p class="reveal">Registry participation follows a structured progression. Calculo (measure) establishes a baseline. Reduzco (reduce) demonstrates improvement. Compenso (compensate) allows offset of residual emissions. Participation signals maturity, not a purchase mandate.</p>
+      </div>
+
+      <div class="miteco-regime reveal">
+        <div class="miteco-regime-step">
+          <div class="regime-name">Calculo</div>
+          <div class="regime-desc">Measure</div>
+        </div>
+        <div class="miteco-regime-step">
+          <div class="regime-name">&rarr;</div>
+          <div class="regime-desc">&nbsp;</div>
+        </div>
+        <div class="miteco-regime-step">
+          <div class="regime-name">Reduzco</div>
+          <div class="regime-desc">Reduce</div>
+        </div>
+        <div class="miteco-regime-step">
+          <div class="regime-name">&rarr;</div>
+          <div class="regime-desc">&nbsp;</div>
+        </div>
+        <div class="miteco-regime-step">
+          <div class="regime-name">Compenso</div>
+          <div class="regime-desc">Compensate</div>
+        </div>
+      </div>
+
+      <div class="product-ladder reveal">
+        <div class="product-ladder-step">Sourced Spot Supply</div>
+        <span class="product-ladder-arrow">&rarr;</span>
+        <div class="product-ladder-step">Forward Supply</div>
+        <span class="product-ladder-arrow">&rarr;</span>
+        <div class="product-ladder-step">Named Project</div>
+        <span class="product-ladder-arrow">&rarr;</span>
+        <div class="product-ladder-step">Whole Project</div>
+        <span class="product-ladder-arrow">&rarr;</span>
+        <div class="product-ladder-step">Plan Compenso</div>
+      </div>
+
+      <div style="text-align:center;" class="reveal">
+        <p class="section-cta-text">Start with annual compensation. Talk to us.</p>
+        <a href="#contact" class="section-cta-button">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAE SECTION -->
+  <section class="cae" id="cae-section">
+    <div class="container">
+      <div class="section-label reveal">CAE Energy Efficiency</div>
+      <h2 class="section-title reveal">Funded Efficiency Upgrades</h2>
+
+      <div class="cae-body">
+        <p class="reveal">Spain's 2026 energy-savings obligation is approximately 9,325 GWh; up to 92% may be satisfied through CAEs.</p>
+        <p class="cite reveal">Source: 2026 BOE Order.</p>
+        <p class="reveal">ClearSky funds up to 100% of approved capex, coordinates engineering and certification, monetizes the CAEs, and shares verified energy savings.</p>
+      </div>
+
+      <div class="cae-steps">
+        <div class="cae-step reveal reveal-d1">
+          <div class="cae-step-num">1</div>
+          <p>Assess and approve intervention</p>
+        </div>
+        <div class="cae-step reveal reveal-d2">
+          <div class="cae-step-num">2</div>
+          <p>ClearSky funds approved capex</p>
+        </div>
+        <div class="cae-step reveal reveal-d3">
+          <div class="cae-step-num">3</div>
+          <p>Coordinated engineering, execution, certification</p>
+        </div>
+        <div class="cae-step reveal reveal-d4">
+          <div class="cae-step-num">4</div>
+          <p>CAE monetization and verified-savings participation under contract</p>
+        </div>
+      </div>
+
+      <div style="text-align:center;" class="reveal">
+        <a href="#contact" class="section-cta-button--outline">Request an Eligibility Conversation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRACK RECORD -->
+  <section class="track-record" id="projects">
+    <div class="container">
+      <div class="section-label reveal" style="color:var(--gold);">Projects and Track Record</div>
+      <h2 class="section-title section-title--light reveal">Ambition may be bold. Status must be exact.</h2>
+      <p class="track-record-sub reveal">Every project is described at its exact evidence-based stage, from sourced to monetized.</p>
+
+      <div class="status-ladder reveal">
+        <div class="status-ladder-step">Sourced</div>
+        <span class="status-ladder-arrow">&rarr;</span>
+        <div class="status-ladder-step">In Predevelopment</div>
+        <span class="status-ladder-arrow">&rarr;</span>
+        <div class="status-ladder-step">Rights Secured</div>
+        <span class="status-ladder-arrow">&rarr;</span>
+        <div class="status-ladder-step">Contracted</div>
+        <span class="status-ladder-arrow">&rarr;</span>
+        <div class="status-ladder-step">Underwritten</div>
+        <span class="status-ladder-arrow">&rarr;</span>
+        <div class="status-ladder-step">Financed</div>
+        <span class="status-ladder-arrow">&rarr;</span>
+        <div class="status-ladder-step">Executing</div>
+        <span class="status-ladder-arrow">&rarr;</span>
+        <div class="status-ladder-step">Registered</div>
+        <span class="status-ladder-arrow">&rarr;</span>
+        <div class="status-ladder-step">Monetized</div>
+      </div>
+
+      <div class="project-grid">
+
+        <div class="project-card reveal reveal-d1">
+          <span class="project-badge project-badge--monetized">Monetized</span>
+          <p>ClearSky's first MITECO project is complete and fully monetized; every credit was sold.</p>
+          <div class="project-date">As of August 2026</div>
+        </div>
+
+        <div class="project-card reveal reveal-d2">
+          <span class="project-badge project-badge--contracted">Contracted (Services)</span>
+          <p>ClearSky is delivering a contracted reforestation project of approximately 250 hectares under an executed services agreement; the credits register in the client's name.</p>
+          <div class="project-date">As of August 2026</div>
+        </div>
+
+        <div class="project-card reveal reveal-d3">
+          <span class="project-badge project-badge--contracted">Contracted</span>
+          <p>Sierra is commercially supported; financing documentation is under review.</p>
+          <div class="project-date">As of August 2026</div>
+        </div>
+
+        <div class="project-card reveal reveal-d4">
+          <span class="project-badge project-badge--predev">In Predevelopment</span>
+          <p>ClearSky maintains a predevelopment pipeline of Spanish reforestation projects progressing toward rights, contracting, and financing.</p>
+          <div class="project-date">As of August 2026</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- AMBITION -->
+  <section class="ambition">
+    <div class="container">
+      <div class="section-label reveal">Our Ambition</div>
+      <p class="ambition-text reveal">ClearSky's ambition is to become Spain's largest independent MITECO reforestation developer.</p>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="team" id="team">
+    <div class="container">
+      <div class="section-label reveal">Our Team</div>
+      <h2 class="section-title reveal">The Team</h2>
+      <div class="team-grid">
+
+        <div class="team-member reveal reveal-d1">
+          <div class="team-initials">BK</div>
+          <h3>Brian Katz</h3>
+          <span class="team-title">Founder and CEO</span>
+        </div>
+
+        <div class="team-member reveal reveal-d2">
+          <div class="team-initials">LA</div>
+          <h3>Luis Felipe Adaime</h3>
+          <span class="team-title">Spain and MITECO Lead</span>
+        </div>
+
+        <div class="team-member reveal reveal-d3">
+          <div class="team-initials">CM</div>
+          <h3>Carolina Martinez</h3>
+          <span class="team-title">MITECO Commercial Lead</span>
+        </div>
+
+        <div class="team-member reveal reveal-d4">
+          <div class="team-initials">ES</div>
+          <h3>Emmanuel Silva</h3>
+          <span class="team-title">Operations and Project Control</span>
+        </div>
+
+        <div class="team-member reveal reveal-d5">
+          <div class="team-initials">AS</div>
+          <h3>Adam Sultan</h3>
+          <span class="team-title">Fractional General Counsel</span>
+        </div>
+
+        <div class="team-member reveal reveal-d6">
+          <div class="team-initials">SAX</div>
+          <h3>SAX</h3>
+          <span class="team-title">Fractional CFO</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-label reveal" style="color:var(--gold);">Contact</div>
       <h2 class="section-title section-title--light reveal">Get in Touch</h2>
+      <p class="contact-routing-text reveal">Select your area of interest.</p>
+
+      <div class="contact-tabs reveal">
+        <button class="contact-tab active" data-interest="MITECO Credits and Compensation">MITECO Credits and Compensation</button>
+        <button class="contact-tab" data-interest="CAE Energy Efficiency">CAE Energy Efficiency</button>
+        <button class="contact-tab" data-interest="Other, Investors and Press">Other, Investors and Press</button>
+      </div>
+
       <form class="contact-form reveal" action="https://formspree.io/f/xwpkzapj" method="POST">
+        <input type="hidden" id="interest" name="interest" value="MITECO Credits and Compensation">
         <div class="form-group">
           <label for="name">Name</label>
           <input type="text" id="name" name="name" required>
@@ -339,15 +822,6 @@
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-          <label for="role">I am a...</label>
-          <select id="role" name="role" required>
-            <option value="">Select one...</option>
-            <option value="Project Developer">Project Developer</option>
-            <option value="Capital Provider / Investor">Capital Provider / Investor</option>
-            <option value="Other">Other</option>
-          </select>
         </div>
         <div class="form-group">
           <label for="company">Company</label>
@@ -359,33 +833,59 @@
         </div>
         <button type="submit" class="form-submit">Send Message</button>
       </form>
+
+      <div class="contact-entities reveal">
+        ClearSky Limited (UK) | Clear Sky Carbono S.L. (Spain)<br>
+        SolSky is a ClearSky and Enersol joint venture.
+      </div>
     </div>
   </section>
 
-  <!-- FOOTER — DARK -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-watermark">//</div>
     <div class="container">
       <div class="footer-left">
         <a href="#" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
-        <div class="footer-right">&copy; <span id="yr"></span> ClearSky Limited. All rights reserved.</div>
+      <div class="footer-right">
+        <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms</a>
+          <a href="#">Disclaimer</a>
+        </div>
+        <div class="footer-entities">ClearSky Limited (UK) | Clear Sky Carbono S.L. (Spain)</div>
       </div>
     </div>
   </footer>
 
   <script>
-    document.getElementById('yr').textContent = new Date().getFullYear();
+    /* Nav scroll */
     const nav = document.getElementById('nav');
     const hero = document.getElementById('hero');
     new IntersectionObserver(([e]) => nav.classList.toggle('scrolled', !e.isIntersecting), {threshold:.1}).observe(hero);
+
+    /* Mobile toggle */
     const toggle = document.getElementById('navToggle');
-    const links = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => { toggle.classList.toggle('active'); links.classList.toggle('open'); });
-    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { toggle.classList.remove('active'); links.classList.remove('open'); }));
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => { toggle.classList.toggle('active'); navLinks.classList.toggle('open'); });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { toggle.classList.remove('active'); navLinks.classList.remove('open'); }));
+
+    /* Scroll reveal */
     const ro = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.1, rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+    /* Contact routing tabs */
+    const tabs = document.querySelectorAll('.contact-tab');
+    const interestField = document.getElementById('interest');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        interestField.value = tab.dataset.interest;
+      });
+    });
   </script>
 
 </body>
