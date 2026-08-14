@@ -10,6 +10,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script>
+    /* Redirect Spanish visitors to index-es.html */
+    (function() {
+      if (localStorage.getItem('lang') === 'en') return;
+      try {
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        if (tz.indexOf('Madrid') !== -1 || tz.indexOf('Canary') !== -1 || lang === 'es' || lang.indexOf('es-') === 0) {
+          window.location.replace('index-es.html');
+          return;
+        }
+      } catch(e) {}
+    })();
+  </script>
 </head>
 <body>
 
@@ -156,17 +170,6 @@
   </footer>
 
   <script>
-    /* Timezone redirect - index.html only */
-    (function() {
-      if (localStorage.getItem('lang') === 'en') return;
-      try {
-        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-        if (tz.indexOf('Madrid') !== -1 || tz.indexOf('Canary') !== -1) {
-          window.location.replace('index-es.html');
-        }
-      } catch(e) {}
-    })();
-
     /* Nav scroll */
     var nav = document.getElementById('nav');
     var hero = document.getElementById('hero');
