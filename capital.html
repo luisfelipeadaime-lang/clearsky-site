@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capital | ClearSky</title>
+  <meta name="description" content="ClearSky applies the discipline of commodity finance to environmental markets. Proprietary supply, structured plainly.">
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav scrolled" id="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="carbon-credits.html">Carbon Credits</a></li>
+        <li><a href="energy-efficiency.html">Energy Efficiency</a></li>
+        <li><a href="land.html">Land</a></li>
+        <li><a href="capital.html" class="active">Capital</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html" class="nav-cta">Request a Proposal</a></li>
+        <li><a href="capital-es.html" class="lang-toggle">ES</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero hero--inner" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-gradient"></div>
+    <div class="hero-content">
+      <div class="hero-label">Capital</div>
+      <h1>We apply the discipline of commodity finance to environmental markets.</h1>
+      <p class="hero-body">Environmental credits are commodities. What they lack is not demand but the capital and the execution capability to produce them at scale: regulated lenders risk-weight the asset heavily, conventional credit finds it hard to underwrite, and almost nothing gets built unless someone takes principal risk.</p>
+      <p class="hero-body" style="animation-delay:0.9s;">ClearSky takes that risk deliberately and structures against it. The supply is proprietary: we originate it, finance it, own it and sell it.</p>
+    </div>
+  </section>
+
+  <!-- HOW WE STRUCTURE -->
+  <section class="section-white">
+    <div class="container section-centered">
+      <h2 class="section-title reveal">How we structure</h2>
+      <div class="card-grid">
+        <div class="card reveal reveal-d1">
+          <h3>Underwritten before it is priced.</h3>
+          <p>Technical, legal and jurisdictional diligence on every project: title, methodology, regulatory standing.</p>
+        </div>
+        <div class="card reveal reveal-d2">
+          <h3>Sold before capital moves.</h3>
+          <p>We sell forward into contracted demand before planting begins, so price risk is dealt with ahead of deployment rather than managed afterwards.</p>
+        </div>
+        <div class="card reveal reveal-d3">
+          <h3>Structured plainly.</h3>
+          <p>Own capital plus project debt, released in tranches against verified milestones. Secured, with principal repaid first. Equity-like returns in vanilla structures, not equity risk dressed as something safer.</p>
+        </div>
+        <div class="card reveal reveal-d4">
+          <h3>Monetized against a registered asset.</h3>
+          <p>The underlying credits are inscribed on a state register, verified by the ministry directly, and traceable end to end.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-dark">
+    <div class="container cta-section">
+      <p class="cta-text reveal">We do not publish returns, project economics or financing terms. Professional counterparties can request materials under NDA.</p>
+      <a href="contact.html" class="btn-gold reveal">Contact Us</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-watermark">//</div>
+    <div class="container">
+      <div class="footer-left">
+        <a href="index.html" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+        <p class="footer-disc">ClearSky Limited (UK) &middot; Clear Sky Carbono S.L. (Madrid, Spain). Information on this site is provided in good faith and is not an offer, a solicitation or a recommendation. Registry data: MITECO, Registro de huella de carbono, compensacion y proyectos de absorcion de CO2.</p>
+      </div>
+      <div class="footer-right">
+        <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    var toggle = document.getElementById('navToggle');
+    var navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', function() { toggle.classList.toggle('active'); navLinks.classList.toggle('open'); });
+    navLinks.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { toggle.classList.remove('active'); navLinks.classList.remove('open'); }); });
+    var ro = new IntersectionObserver(function(es) { es.forEach(function(e) { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+  </script>
+
+</body>
+</html>

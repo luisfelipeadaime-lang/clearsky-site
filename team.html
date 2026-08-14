@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team | ClearSky</title>
+  <meta name="description" content="The ClearSky team. Environmental asset development and capital, based in the UK and Madrid.">
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav scrolled" id="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="carbon-credits.html">Carbon Credits</a></li>
+        <li><a href="energy-efficiency.html">Energy Efficiency</a></li>
+        <li><a href="land.html">Land</a></li>
+        <li><a href="capital.html">Capital</a></li>
+        <li><a href="team.html" class="active">Team</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html" class="nav-cta">Request a Proposal</a></li>
+        <li><a href="equipo.html" class="lang-toggle">ES</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero hero--inner" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-gradient"></div>
+    <div class="hero-content">
+      <h1>The people you deal with.</h1>
+    </div>
+  </section>
+
+  <!-- PROFILES -->
+  <section class="section-white">
+    <div class="container">
+      <div class="profile-grid">
+
+        <div class="profile-card reveal reveal-d1">
+          <div class="profile-initials">BK</div>
+          <h3>Brian Katz</h3>
+          <span class="profile-title">Founder and Chief Executive</span>
+          <p class="profile-bio">More than a decade in commodity markets across physical trading, derivatives and structured investment. Oversees the firm's strategy and execution. B.B.A. in Finance and Economics, Baruch College, Zicklin School of Business.</p>
+        </div>
+
+        <div class="profile-card reveal reveal-d2">
+          <div class="profile-initials">LA</div>
+          <h3>Luis Felipe Adaime, CFA</h3>
+          <span class="profile-title">Chief Commercial Officer</span>
+          <p class="profile-bio">Founded MOSS.Earth in 2020 and built the MCO2 token, the first carbon-credit-backed digital asset registered with a major standard, alongside a patented digital MRV system.</p>
+        </div>
+
+        <div class="profile-card reveal reveal-d3">
+          <div class="profile-initials">CM</div>
+          <h3>Carolina Martinez</h3>
+          <span class="profile-title">Sales and Trading</span>
+          <p class="profile-bio">Carbon-markets specialist across trading, deal execution and commercial work, focused on transaction integrity and project diligence.</p>
+        </div>
+
+        <div class="profile-card reveal reveal-d4">
+          <div class="profile-initials">EM</div>
+          <h3>Emmanuel Mendoza</h3>
+          <span class="profile-title">Operations and Project Control</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-watermark">//</div>
+    <div class="container">
+      <div class="footer-left">
+        <a href="index.html" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+        <p class="footer-disc">ClearSky Limited (UK) &middot; Clear Sky Carbono S.L. (Madrid, Spain). Information on this site is provided in good faith and is not an offer, a solicitation or a recommendation. Registry data: MITECO, Registro de huella de carbono, compensacion y proyectos de absorcion de CO2.</p>
+      </div>
+      <div class="footer-right">
+        <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    var toggle = document.getElementById('navToggle');
+    var navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', function() { toggle.classList.toggle('active'); navLinks.classList.toggle('open'); });
+    navLinks.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { toggle.classList.remove('active'); navLinks.classList.remove('open'); }); });
+    var ro = new IntersectionObserver(function(es) { es.forEach(function(e) { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+  </script>
+
+</body>
+</html>
