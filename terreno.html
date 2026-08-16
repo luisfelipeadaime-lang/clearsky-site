@@ -3,53 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terreno | ClearSky</title>
-  <meta name="description" content="ClearSky arrienda o compra su terreno, paga la plantación y gestiona el bosque. El propietario no asume ningún coste.">
-  <link rel="icon" type="image/png" href="./assets/favicon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>Terreno para reforestaci&oacute;n | ClearSky</title>
+  <meta name="description" content="Arrendamos o compramos terreno r&uacute;stico en Espa&ntilde;a, financiamos la plantaci&oacute;n y gestionamos el monte. El propietario no asume ning&uacute;n coste y participa en la renta.">
+  <link rel="icon" href="./assets/logos/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav class="nav scrolled" id="nav">
-    <div class="container">
-      <a href="index-es.html" class="nav-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="creditos-de-carbono.html">Créditos de carbono</a></li>
-        <li><a href="eficiencia-energetica.html">Eficiencia energética</a></li>
-        <li><a href="terreno.html" class="active">Terreno</a></li>
-        <li><a href="capital-es.html">Capital</a></li>
-        <li><a href="equipo.html">Equipo</a></li>
-        <li><a href="contacto.html">Contacto</a></li>
-        <li><a href="contacto.html" class="nav-cta">Solicitar una propuesta</a></li>
-        <li><a href="land.html" class="lang-toggle">EN</a></li>
-      </ul>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+<nav class="nav scrolled" id="nav">
+  <div class="container">
+    <a href="index-es.html" class="nav-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="creditos-de-carbono.html">Cr&eacute;ditos de carbono</a></li>
+      <li><a href="eficiencia-energetica.html">Eficiencia energ&eacute;tica</a></li>
+      <li><a href="terreno.html" class="active">Terreno</a></li>
+      <li><a href="capital-es.html">Capital</a></li>
+      <li><a href="equipo.html">Equipo</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="contacto.html" class="nav-cta">Solicitar una propuesta</a></li>
+      <li><a href="land.html" class="lang-toggle" onclick="localStorage.setItem('clearsky-lang','en')">EN</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero hero--inner" id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-gradient"></div>
-    <div class="hero-content">
-      <div class="hero-label">Terreno</div>
-      <h1>Arrendamos o compramos su terreno, pagamos la plantación y gestionamos el bosque.</h1>
-      <p class="hero-body">El propietario no asume ningún coste. Financiamos la plantación, el mantenimiento, el seguimiento y el trabajo registral, y gestionamos el bosque durante toda la vida del proyecto.</p>
-      <a href="contacto.html" class="hero-btn hero-btn--gold">Háblenos de su terreno</a>
-    </div>
-  </section>
+<section class="hero hero--inner">
+  <div class="container">
+    <p class="eyebrow reveal">Terreno</p>
+    <h1 class="reveal">Arrendamos o compramos terreno r&uacute;stico, financiamos la plantaci&oacute;n y gestionamos el monte.</h1>
+    <p class="hero-body reveal">El propietario no asume ning&uacute;n coste y participa en la renta. Financiamos plantaci&oacute;n, mantenimiento, seguimiento y tramitaci&oacute;n registral, y gestionamos el monte durante toda la vida del proyecto.</p>
+    <a href="contacto.html" class="btn btn-gold reveal">Proponer una finca</a>
+  </div>
+</section>
 
-  <!-- BEFORE AND AFTER TABLE -->
-  <section class="section-white">
-    <div class="container section-centered">
-      <table class="clean-table reveal">
+<section class="section-white">
+  <div class="container">
+    <div class="table-wrapper reveal">
+      <table class="clean-table">
         <thead>
           <tr>
             <th></th>
@@ -59,102 +50,100 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Ingresos anuales</strong></td>
-            <td>Ninguno</td>
-            <td></td>
+            <td>Renta anual</td>
+            <td>Ninguna</td>
+            <td>Una participaci&oacute;n en la renta por contrato</td>
           </tr>
           <tr>
-            <td><strong>Riesgo de incendio</strong></td>
+            <td>Riesgo de incendio</td>
             <td>Responsabilidad del propietario</td>
             <td>Gestionado bajo el plan del proyecto</td>
           </tr>
           <tr>
-            <td><strong>El terreno</strong></td>
+            <td>El terreno</td>
             <td>Un coste</td>
-            <td>Un activo gestionado que genera ingresos</td>
+            <td>Un activo gestionado que renta</td>
           </tr>
           <tr>
-            <td><strong>Madera</strong></td>
+            <td>Madera</td>
             <td>Ninguna</td>
             <td>Monetizable a la madurez del proyecto</td>
           </tr>
         </tbody>
       </table>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- HOW WE CONTRACT -->
-  <section class="section-frost">
-    <div class="container section-centered">
-      <h2 class="section-title reveal">Cómo contratamos</h2>
-      <div class="section-body section-body--light reveal">
-        <p>Contratamos directamente con el propietario o la asociación forestal: sin intermediario, sin comisión de comercialización. Plantación de especies mixtas adecuada al terreno, no un monocultivo. Permanencia mínima de treinta años, con seguimiento al menos cada cinco años.</p>
-        <p>Trabajamos en Galicia, Asturias y Castilla y León, con un pipeline en Andalucía.</p>
+<section class="section-dark">
+  <div class="container">
+    <h2 class="section-title section-title--light reveal">C&oacute;mo contratamos</h2>
+    <div class="section-body section-body--dark">
+      <p class="reveal">Contratamos directamente con el propietario o con la comunidad de montes: sin intermediarios y sin comisiones de comercializaci&oacute;n. Plantaci&oacute;n de especies mixtas adecuadas a cada terreno, no monocultivo. Permanencia m&iacute;nima de treinta a&ntilde;os, con seguimiento al menos cada cinco a&ntilde;os.</p>
+      <p class="reveal">Trabajamos en Galicia, Asturias y Castilla y Le&oacute;n, con cartera en Andaluc&iacute;a.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-white">
+  <div class="container">
+    <h2 class="section-title reveal">El proceso</h2>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <span class="step-number">1</span>
+        <p>El propietario env&iacute;a la ubicaci&oacute;n y la superficie aproximada de la finca.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-number">2</span>
+        <p>Estudiamos el terreno, sin coste para el propietario.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-number">3</span>
+        <p>Sigue una oferta por escrito: arrendamiento o compra.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-number">4</span>
+        <p>Plantamos, inscribimos y gestionamos. El propietario cobra cada a&ntilde;o.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- PROCESS -->
-  <section class="section-white">
-    <div class="container section-centered">
-      <h2 class="section-title reveal">Qué pasa cuando nos contacta</h2>
-      <div class="steps-grid">
-        <div class="step-card reveal reveal-d1">
-          <div class="step-num">1</div>
-          <p>Envíenos la ubicación y el tamaño aproximado de la parcela.</p>
-        </div>
-        <div class="step-card reveal reveal-d2">
-          <div class="step-num">2</div>
-          <p>Analizamos el terreno, sin coste para usted.</p>
-        </div>
-        <div class="step-card reveal reveal-d3">
-          <div class="step-num">3</div>
-          <p>Recibe una oferta por escrito: arrendamiento o compra.</p>
-        </div>
-        <div class="step-card reveal reveal-d4">
-          <div class="step-num">4</div>
-          <p>Plantamos, registramos y gestionamos. Usted recibe un pago anual.</p>
-        </div>
+<section class="section-dark">
+  <div class="container">
+    <div class="cta-section reveal">
+      <a href="contacto.html" class="btn btn-gold">Proponer una finca</a>
+      <p class="btn-small-text">Respondemos en dos d&iacute;as h&aacute;biles.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-watermark">//</div>
+  <div class="container">
+    <div class="footer-left">
+      <a href="index-es.html" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+      <p class="footer-disc">ClearSky Limited (Reino Unido) &middot; Clear Sky Carbono S.L. (Madrid, Espa&ntilde;a). La informaci&oacute;n contenida en este sitio se facilita de buena fe y con car&aacute;cter meramente informativo; no constituye una oferta, ni una invitaci&oacute;n o solicitud de compra o venta, ni una recomendaci&oacute;n de ning&uacute;n tipo. Datos registrales: MITECO, Registro de huella de carbono, compensaci&oacute;n y proyectos de absorci&oacute;n de CO<sub>2</sub>.</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
+      <div class="footer-legal">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="disclaimer.html">Disclaimer</a>
       </div>
     </div>
-  </section>
+  </div>
+</footer>
 
-  <!-- CTA -->
-  <section class="section-dark">
-    <div class="container cta-section">
-      <a href="contacto.html" class="btn-gold reveal">Háblenos de su terreno</a>
-      <span class="btn-small-text reveal">Respondemos en dos días laborables.</span>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-watermark">//</div>
-    <div class="container">
-      <div class="footer-left">
-        <a href="index-es.html" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
-        <p class="footer-disc">ClearSky Limited (Reino Unido) &middot; Clear Sky Carbono S.L. (Madrid, Espa&ntilde;a). La información contenida en este sitio se facilita de buena fe y con carácter meramente informativo; no constituye una oferta, ni una invitación o solicitud de compra o venta, ni una recomendación de ningún tipo. Datos registrales: MITECO, Registro de huella de carbono, compensación y proyectos de absorción de CO2.</p>
-      </div>
-      <div class="footer-right">
-        <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
-        <div class="footer-legal">
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms</a>
-          <a href="disclaimer.html">Disclaimer</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    var toggle = document.getElementById('navToggle');
-    var navLinks = document.getElementById('navLinks');
-    toggle.addEventListener('click', function() { toggle.classList.toggle('active'); navLinks.classList.toggle('open'); });
-    navLinks.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { toggle.classList.remove('active'); navLinks.classList.remove('open'); }); });
-    var ro = new IntersectionObserver(function(es) { es.forEach(function(e) { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
-    document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
-    document.querySelector('.lang-toggle').addEventListener('click', function(e) { localStorage.setItem('lang','en'); });
-  </script>
+<script>
+  var toggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  toggle.addEventListener('click', function() { toggle.classList.toggle('active'); navLinks.classList.toggle('open'); });
+  navLinks.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { toggle.classList.remove('active'); navLinks.classList.remove('open'); }); });
+  var ro = new IntersectionObserver(function(es) { es.forEach(function(e) { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+</script>
 
 </body>
 </html>

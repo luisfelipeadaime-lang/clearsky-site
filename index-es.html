@@ -3,29 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClearSky | Merchant Medioambiental | España</title>
-  <meta name="description" content="ClearSky identifica, desarrolla y gestiona activos medioambientales, con foco en España. Créditos de carbono y eficiencia energética.">
+  <title>ClearSky | Activos medioambientales en Espa&ntilde;a: cr&eacute;ditos MITECO y CAE</title>
+  <meta name="description" content="ClearSky identifica, desarrolla y gestiona activos medioambientales, con foco en Espa&ntilde;a: cr&eacute;ditos de carbono inscritos en MITECO y Certificados de Ahorro Energ&eacute;tico, desarrollados con capital propio y vendidos desde nuestro inventario.">
   <link rel="icon" type="image/png" href="./assets/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script>
+    (function() {
+      if (localStorage.getItem('clearsky-lang') === 'es') return;
+      try {
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        if (tz.indexOf('Madrid') === -1 && tz.indexOf('Canary') === -1 && lang !== 'es' && lang.indexOf('es-') !== 0) {
+          window.location.replace('index.html');
+        }
+      } catch(e) {}
+    })();
+  </script>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav class="nav" id="nav">
     <div class="container">
       <a href="index-es.html" class="nav-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="creditos-de-carbono.html">Créditos de carbono</a></li>
-        <li><a href="eficiencia-energetica.html">Eficiencia energética</a></li>
+        <li><a href="creditos-de-carbono.html">Cr&eacute;ditos de carbono</a></li>
+        <li><a href="eficiencia-energetica.html">Eficiencia energ&eacute;tica</a></li>
         <li><a href="terreno.html">Terreno</a></li>
         <li><a href="capital-es.html">Capital</a></li>
         <li><a href="equipo.html">Equipo</a></li>
         <li><a href="contacto.html">Contacto</a></li>
         <li><a href="contacto.html" class="nav-cta">Solicitar una propuesta</a></li>
-        <li><a href="index.html" class="lang-toggle">EN</a></li>
+        <li><a href="index.html" class="lang-toggle" onclick="localStorage.setItem('clearsky-lang','en')">EN</a></li>
       </ul>
       <button class="nav-toggle" id="navToggle" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -33,116 +44,108 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <section class="hero" id="hero">
     <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
     <div class="hero-gradient"></div>
     <div class="hero-content">
-      <div class="hero-label">Merchant Medioambiental</div>
-      <h1>ClearSky identifica, desarrolla y gestiona activos medioambientales, con foco en España.</h1>
+      <div class="hero-label">Environmental Merchant</div>
+      <h1>ClearSky identifica, desarrolla y gestiona activos medioambientales, con foco en Espa&ntilde;a.</h1>
       <div class="hero-buttons">
-        <a href="creditos-de-carbono.html" class="hero-btn">Créditos de carbono</a>
-        <a href="eficiencia-energetica.html" class="hero-btn">Eficiencia energética</a>
+        <a href="creditos-de-carbono.html" class="hero-btn">Cr&eacute;ditos de carbono</a>
+        <a href="eficiencia-energetica.html" class="hero-btn">Eficiencia energ&eacute;tica</a>
       </div>
       <a href="contacto.html" class="hero-link">Solicitar una propuesta, respuesta en 48 horas</a>
     </div>
   </section>
 
-  <!-- WHO WE ARE -->
   <section class="section-white">
     <div class="container section-centered">
-      <p class="one-liner reveal">ClearSky es un merchant medioambiental. Identificamos activos infrautilizados y los desarrollamos hasta que generan flujos de caja.</p>
+      <p class="one-liner reveal">ClearSky opera por cuenta propia en los mercados medioambientales. Identificamos patrimonio infrautilizado y lo desarrollamos hasta convertirlo en activos que generan caja.</p>
     </div>
   </section>
 
-  <!-- WHAT WE DO -->
-  <section class="section-frost">
+  <section class="section-dark">
     <div class="container section-centered">
       <div class="section-label reveal">Lo que hacemos</div>
       <div class="card-grid">
-        <div class="card reveal reveal-d1">
-          <h3>Créditos de carbono &middot; MITECO</h3>
-          <p>Proyectos de reforestación en toda España que producen créditos de carbono inscritos en el registro estatal. Vendemos los créditos de nuestros propios proyectos e inventario y gestionamos la inscripción de la compensación de principio a fin.</p>
-          <a href="creditos-de-carbono.html" class="card-link">Créditos de carbono <span>&rarr;</span></a>
-        </div>
-        <div class="card reveal reveal-d2">
-          <h3>Eficiencia energética &middot; CAE</h3>
-          <p>Financiamos mejoras de eficiencia que califican y monetizamos los Certificados de Ahorro Energético que generan. El ahorro verificado se comparte con el titular de la instalación bajo contrato.</p>
-          <a href="eficiencia-energetica.html" class="card-link">Eficiencia energética <span>&rarr;</span></a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW WE WORK -->
-  <section class="section-dark">
-    <div class="container section-centered">
-      <h2 class="section-title section-title--light reveal">Cómo trabajamos</h2>
-      <div class="card-grid card-grid--3">
         <div class="card card--dark reveal reveal-d1">
-          <h3>Identificar.</h3>
-          <p>Buscamos activos que generan coste en lugar de ingresos: terreno rural sin uso, equipos que desperdician energía. Cada uno se analiza antes de dar cualquier otro paso.</p>
+          <h3>Cr&eacute;ditos de carbono &middot; MITECO</h3>
+          <p>Proyectos de reforestaci&oacute;n por toda Espa&ntilde;a que producen cr&eacute;ditos de carbono inscritos en el registro estatal. Vendemos los cr&eacute;ditos de nuestros propios proyectos y de nuestro inventario, y gestionamos la inscripci&oacute;n de la compensaci&oacute;n de principio a fin.</p>
+          <a href="creditos-de-carbono.html" class="card-link">Cr&eacute;ditos de carbono <span>&rarr;</span></a>
         </div>
         <div class="card card--dark reveal reveal-d2">
-          <h3>Desarrollar.</h3>
-          <p>Financiamos el trabajo con capital propio y llevamos cada proyecto a través del registro estatal de España hasta que produce un activo registrado y comercializable.</p>
-        </div>
-        <div class="card card--dark reveal reveal-d3">
-          <h3>Gestionar.</h3>
-          <p>Son proyectos de largo plazo. Los gestionamos durante toda su vida útil, y seguimos siendo la contraparte en todo momento.</p>
+          <h3>Eficiencia energ&eacute;tica &middot; CAE</h3>
+          <p>Financiamos actuaciones de eficiencia elegibles y monetizamos los Certificados de Ahorro Energ&eacute;tico que generan. El ahorro verificado se comparte con la instalaci&oacute;n por contrato.</p>
+          <a href="eficiencia-energetica.html" class="card-link">Eficiencia energ&eacute;tica <span>&rarr;</span></a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- WHO WE WORK WITH -->
   <section class="section-white">
     <div class="container section-centered">
-      <h2 class="section-title reveal">Con quién trabajamos</h2>
+      <h2 class="section-title reveal">C&oacute;mo trabajamos</h2>
       <div class="card-grid card-grid--3">
         <div class="card reveal reveal-d1">
-          <h3>Compradores.</h3>
-          <p>Las empresas que compensan una huella registrada compran créditos directamente a nosotros. Las partes obligadas contratan volumen de certificados contra su obligación anual. Propuestas en 48 horas.</p>
-          <a href="creditos-de-carbono.html" class="card-link">Créditos de carbono <span>&rarr;</span></a>
-          <a href="eficiencia-energetica.html" class="card-link">Eficiencia energética <span>&rarr;</span></a>
+          <h3>Identificar.</h3>
+          <p>Buscamos patrimonio que genera coste en lugar de renta: terreno r&uacute;stico sin uso, equipos que desperdician energ&iacute;a. Cada operaci&oacute;n pasa por due diligence antes de que nada m&aacute;s se mueva.</p>
         </div>
         <div class="card reveal reveal-d2">
-          <h3>Propietarios de terreno.</h3>
-          <p>Arrendamos o compramos terreno rural, pagamos la plantación y gestionamos el bosque. El propietario no asume ningún coste.</p>
-          <a href="terreno.html" class="card-link">Terreno <span>&rarr;</span></a>
+          <h3>Desarrollar.</h3>
+          <p>Financiamos la actuaci&oacute;n con capital propio y llevamos cada proyecto por el registro estatal espa&ntilde;ol hasta que produce un activo inscrito y vendible.</p>
         </div>
         <div class="card reveal reveal-d3">
+          <h3>Gestionar.</h3>
+          <p>Son proyectos largos. Los gestionamos durante toda su vida y seguimos siendo la contraparte de principio a fin.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-dark">
+    <div class="container section-centered">
+      <h2 class="section-title section-title--light reveal">Con qui&eacute;n trabajamos</h2>
+      <div class="card-grid card-grid--3">
+        <div class="card card--dark reveal reveal-d1">
+          <h3>Compradores.</h3>
+          <p>Las empresas que compensan una huella inscrita nos compran los cr&eacute;ditos directamente. Los sujetos obligados contratan volumen de certificados contra su obligaci&oacute;n anual. Propuestas en 48 horas.</p>
+          <a href="creditos-de-carbono.html" class="card-link">Cr&eacute;ditos de carbono <span>&rarr;</span></a>
+          <a href="eficiencia-energetica.html" class="card-link">Eficiencia energ&eacute;tica <span>&rarr;</span></a>
+        </div>
+        <div class="card card--dark reveal reveal-d2">
+          <h3>Propietarios de terreno.</h3>
+          <p>Arrendamos o compramos terreno r&uacute;stico, financiamos la plantaci&oacute;n y gestionamos el monte. El propietario no asume ning&uacute;n coste y participa en la renta.</p>
+          <a href="terreno.html" class="card-link">Terreno <span>&rarr;</span></a>
+        </div>
+        <div class="card card--dark reveal reveal-d3">
           <h3>Inversores y proveedores de capital.</h3>
-          <p>Asumimos el riesgo principal y estructuramos contra él. Los materiales están disponibles para contrapartes profesionales bajo acuerdo de confidencialidad.</p>
+          <p>Asumimos riesgo de principal y estructuramos en consecuencia. Documentaci&oacute;n para contrapartes profesionales, con acuerdo de confidencialidad.</p>
           <a href="capital-es.html" class="card-link">Capital <span>&rarr;</span></a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ENTITIES -->
   <section class="section-frost">
     <div class="container section-centered">
-      <p class="entities-line reveal">ClearSky Limited es una empresa británica. Su filial en Madrid, Clear Sky Carbono S.L., opera en España desde 2024. <a href="equipo.html">Equipo</a></p>
+      <p class="entities-line reveal">ClearSky Limited es una firma brit&aacute;nica. Su filial madrile&ntilde;a, Clear Sky Carbono S.L., opera en Espa&ntilde;a desde 2024. <a href="equipo.html">Equipo</a></p>
     </div>
   </section>
 
-  <!-- CLOSING CTA -->
   <section class="section-dark">
     <div class="container cta-section">
-      <p class="cta-text reveal">Díganos qué le aplica. Las propuestas de créditos se devuelven en 48 horas; todo lo demás en dos días laborables.</p>
-      <a href="contacto.html" class="btn-gold reveal">Contáctenos</a>
+      <p class="cta-text reveal">Contacto. Las propuestas de cr&eacute;ditos se env&iacute;an en 48 horas; todo lo dem&aacute;s, en dos d&iacute;as h&aacute;biles.</p>
+      <a href="contacto.html" class="btn-gold reveal">Contactar</a>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-watermark">//</div>
     <div class="container">
       <div class="footer-left">
         <a href="index-es.html" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
-        <p class="footer-disc">ClearSky Limited (Reino Unido) &middot; Clear Sky Carbono S.L. (Madrid, España). La información contenida en este sitio se facilita de buena fe y con carácter meramente informativo; no constituye una oferta, ni una invitación o solicitud de compra o venta, ni una recomendación de ningún tipo. Datos registrales: MITECO, Registro de huella de carbono, compensación y proyectos de absorción de CO2.</p>
+        <p class="footer-disc">ClearSky Limited (Reino Unido) &middot; Clear Sky Carbono S.L. (Madrid, Espa&ntilde;a). La informaci&oacute;n contenida en este sitio se facilita de buena fe y con car&aacute;cter meramente informativo; no constituye una oferta, ni una invitaci&oacute;n o solicitud de compra o venta, ni una recomendaci&oacute;n de ning&uacute;n tipo. Datos registrales: MITECO, Registro de huella de carbono, compensaci&oacute;n y proyectos de absorci&oacute;n de CO<sub>2</sub>.</p>
       </div>
       <div class="footer-right">
         <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
@@ -156,7 +159,6 @@
   </footer>
 
   <script>
-    /* Nav scroll */
     var nav = document.getElementById('nav');
     var hero = document.getElementById('hero');
     if (hero) {
@@ -164,19 +166,12 @@
         nav.classList.toggle('scrolled', !entries[0].isIntersecting);
       }, {threshold:0.1}).observe(hero);
     }
-
-    /* Mobile toggle */
     var toggle = document.getElementById('navToggle');
     var navLinks = document.getElementById('navLinks');
     toggle.addEventListener('click', function() { toggle.classList.toggle('active'); navLinks.classList.toggle('open'); });
     navLinks.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { toggle.classList.remove('active'); navLinks.classList.remove('open'); }); });
-
-    /* Scroll reveal */
     var ro = new IntersectionObserver(function(es) { es.forEach(function(e) { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
-
-    /* Lang toggle - set localStorage before navigating to EN */
-    document.querySelector('.lang-toggle').addEventListener('click', function(e) { localStorage.setItem('lang','en'); });
   </script>
 
 </body>

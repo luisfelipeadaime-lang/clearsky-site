@@ -3,129 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eficiencia energética | ClearSky</title>
-  <meta name="description" content="ClearSky financia mejoras de eficiencia que califican y monetiza Certificados de Ahorro Energético (CAE). El titular no paga nada por adelantado.">
-  <link rel="icon" type="image/png" href="./assets/favicon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>Certificados de Ahorro Energ&eacute;tico (CAE) | ClearSky</title>
+  <meta name="description" content="ClearSky desarrolla proyectos de eficiencia energ&eacute;tica de principio a fin: an&aacute;lisis de medidas elegibles, ingenier&iacute;a, ejecuci&oacute;n y certificaci&oacute;n. La instalaci&oacute;n comparte el ahorro verificado por contrato.">
+  <link rel="icon" href="./assets/logos/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav class="nav scrolled" id="nav">
-    <div class="container">
-      <a href="index-es.html" class="nav-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="creditos-de-carbono.html">Créditos de carbono</a></li>
-        <li><a href="eficiencia-energetica.html" class="active">Eficiencia energética</a></li>
-        <li><a href="terreno.html">Terreno</a></li>
-        <li><a href="capital-es.html">Capital</a></li>
-        <li><a href="equipo.html">Equipo</a></li>
-        <li><a href="contacto.html">Contacto</a></li>
-        <li><a href="contacto.html" class="nav-cta">Solicitar una propuesta</a></li>
-        <li><a href="energy-efficiency.html" class="lang-toggle">EN</a></li>
-      </ul>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+<nav class="nav scrolled" id="nav">
+  <div class="container">
+    <a href="index-es.html" class="nav-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="creditos-de-carbono.html">Cr&eacute;ditos de carbono</a></li>
+      <li><a href="eficiencia-energetica.html" class="active">Eficiencia energ&eacute;tica</a></li>
+      <li><a href="terreno.html">Terreno</a></li>
+      <li><a href="capital-es.html">Capital</a></li>
+      <li><a href="equipo.html">Equipo</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="contacto.html" class="nav-cta">Solicitar una propuesta</a></li>
+      <li><a href="energy-efficiency.html" class="lang-toggle" onclick="localStorage.setItem('clearsky-lang','en')">EN</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero hero--inner" id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-gradient"></div>
-    <div class="hero-content">
-      <div class="hero-label">Eficiencia energética &middot; CAE</div>
-      <h1>Nosotros pagamos la mejora. Usted se queda con parte del ahorro.</h1>
-      <p class="hero-body">La obligación de ahorro energético de España para 2026 es de aproximadamente 9.325 GWh, y hasta el 92% puede satisfacerse mediante CAEs. Las empresas obligadas compran certificados en lugar de pagar la penalización.</p>
-      <p class="hero-body" style="animation-delay:0.9s;">Esa demanda financia el trabajo. ClearSky cubre hasta el 100% del capex aprobado en proyectos de eficiencia que califican. El titular no paga nada por adelantado, conserva una parte de cada euro ahorrado y no interviene en el proceso de certificación.</p>
-      <p class="cite" style="text-align:center; opacity:0; animation: fadeUp 0.8s ease 1s forwards;">Fuente: Orden BOE 2026.</p>
-    </div>
-  </section>
+<section class="hero hero--inner">
+  <div class="container">
+    <p class="eyebrow reveal">Certificados de Ahorro Energ&eacute;tico &middot; CAE</p>
+    <h1 class="reveal">Desarrollamos proyectos de eficiencia energ&eacute;tica.</h1>
+    <p class="hero-body reveal">ClearSky desarrolla el proyecto de principio a fin: an&aacute;lisis de las medidas elegibles, ingenier&iacute;a, ejecuci&oacute;n y certificaci&oacute;n. La instalaci&oacute;n comparte el ahorro verificado por contrato, sin desembolsar capital propio.</p>
+    <a href="contacto.html" class="btn btn-gold reveal">Solicitar un an&aacute;lisis de elegibilidad</a>
+  </div>
+</section>
 
-  <!-- HOW IT WORKS -->
-  <section class="section-white">
-    <div class="container section-centered">
-      <h2 class="section-title reveal">Cómo funciona</h2>
-      <div class="steps-grid">
-        <div class="step-card reveal reveal-d1">
-          <div class="step-num">1</div>
-          <p>Evaluar y aprobar la intervención</p>
-        </div>
-        <div class="step-card reveal reveal-d2">
-          <div class="step-num">2</div>
-          <p>ClearSky financia el capex aprobado</p>
-        </div>
-        <div class="step-card reveal reveal-d3">
-          <div class="step-num">3</div>
-          <p>Ingeniería, ejecución y certificación, coordinadas</p>
-        </div>
-        <div class="step-card reveal reveal-d4">
-          <div class="step-num">4</div>
-          <p>Certificados monetizados, ahorro verificado compartido bajo contrato</p>
-        </div>
-      </div>
-      <div class="section-body reveal" style="text-align:center;">
-        <p style="margin:0 auto;">Las medidas que califican incluyen bombas y motores, iluminación y controles, y recuperación de calor.</p>
-      </div>
-    </div>
-  </section>
+<section class="section-white">
+  <div class="container">
+    <p class="section-body reveal">Conforme a la normativa, los certificados los solicitan los sujetos obligados y los sujetos delegados acreditados. ClearSky estructura y financia las actuaciones; la emisi&oacute;n se tramita a trav&eacute;s de sujetos delegados acreditados, y estamos cerrando dichos acuerdos de delegaci&oacute;n de cara a la primera emisi&oacute;n.</p>
+  </div>
+</section>
 
-  <!-- WHERE THIS STANDS -->
-  <section class="section-frost">
-    <div class="container section-centered">
-      <h2 class="section-title reveal">Situación actual</h2>
-      <div class="section-body section-body--light reveal">
-        <p>Entramos en el mercado de eficiencia en 2026, aprovechando las relaciones de originación y ejecución que nuestro negocio de reforestación ya gestiona en la España rural e industrial. Estamos trabajando en nuestro primer proyecto ancla y en negociación con compradores obligados. Esperamos generar nuestros primeros certificados en 2027.</p>
-      </div>
+<section class="section-dark">
+  <div class="container">
+    <h2 class="section-title section-title--light reveal">La obligaci&oacute;n detr&aacute;s de la demanda</h2>
+    <div class="section-body section-body--dark">
+      <p class="reveal">La obligaci&oacute;n anual espa&ntilde;ola de ahorro energ&eacute;tico est&aacute; vigente hasta 2030 en el marco de la Directiva europea de eficiencia energ&eacute;tica. El objetivo nacional para 2026 es de 9.325 GWh, de los cuales hasta un 92% puede cubrirse con Certificados de Ahorro Energ&eacute;tico. La penalizaci&oacute;n por d&eacute;ficit est&aacute; fijada en 198 EUR por MWh; los certificados se negocian por debajo. Esa diferencia es la raz&oacute;n de que la demanda sea estructural, no discrecional.</p>
+      <p class="reveal">Los certificados se emiten contra un cat&aacute;logo de actuaciones estandarizadas, con dictamen favorable de un verificador acreditado por ENAC y presentaci&oacute;n del expediente ante el &oacute;rgano competente de la comunidad aut&oacute;noma.</p>
+      <cite class="reveal">Fuentes: BOE, Orden TED/133/2026; RD 36/2023; Directiva (UE) 2023/1791.</cite>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CTA -->
-  <section class="section-dark">
-    <div class="container cta-section">
-      <a href="contacto.html" class="btn-gold reveal">Solicitar una revisión de elegibilidad</a>
-      <span class="btn-small-text reveal">Respondemos en dos días laborables.</span>
+<section class="section-white">
+  <div class="container">
+    <h2 class="section-title reveal">Para la instalaci&oacute;n</h2>
+    <div class="section-body">
+      <p class="reveal">Analizamos la instalaci&oacute;n y confirmamos qu&eacute; medidas son elegibles. Coordinamos ingenier&iacute;a, ejecuci&oacute;n y certificaci&oacute;n. El certificado se monetiza y la instalaci&oacute;n comparte el ahorro verificado por contrato.</p>
+      <p class="reveal">La instalaci&oacute;n conserva una parte de cada euro ahorrado y no interviene en la tramitaci&oacute;n del certificado. Entre las medidas elegibles figuran bombas y motores, iluminaci&oacute;n y control, y recuperaci&oacute;n de calor.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-watermark">//</div>
-    <div class="container">
-      <div class="footer-left">
-        <a href="index-es.html" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
-        <p class="footer-disc">ClearSky Limited (Reino Unido) &middot; Clear Sky Carbono S.L. (Madrid, España). La información contenida en este sitio se facilita de buena fe y con carácter meramente informativo; no constituye una oferta, ni una invitación o solicitud de compra o venta, ni una recomendación de ningún tipo. Datos registrales: MITECO, Registro de huella de carbono, compensación y proyectos de absorción de CO2.</p>
-      </div>
-      <div class="footer-right">
-        <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
-        <div class="footer-legal">
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms</a>
-          <a href="disclaimer.html">Disclaimer</a>
-        </div>
+<section class="section-dark">
+  <div class="container">
+    <h2 class="section-title section-title--light reveal">Para sujetos obligados</h2>
+    <p class="section-body section-body--dark reveal">Certificados procedentes de proyectos que desarrollamos y ejecutamos nosotros mismos, con volumen y entrega programados contra la obligaci&oacute;n anual del comprador, no comprados de forma oportunista.</p>
+  </div>
+</section>
+
+<section class="section-dark" style="padding-top:0">
+  <div class="container">
+    <div class="cta-section reveal">
+      <a href="contacto.html" class="btn btn-gold">Solicitar un an&aacute;lisis de elegibilidad</a>
+      <p class="btn-small-text">Respondemos en dos d&iacute;as h&aacute;biles.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-watermark">//</div>
+  <div class="container">
+    <div class="footer-left">
+      <a href="index-es.html" class="footer-logo"><img src="./assets/logos/logo-white.png" alt="ClearSky"></a>
+      <p class="footer-disc">ClearSky Limited (Reino Unido) &middot; Clear Sky Carbono S.L. (Madrid, Espa&ntilde;a). La informaci&oacute;n contenida en este sitio se facilita de buena fe y con car&aacute;cter meramente informativo; no constituye una oferta, ni una invitaci&oacute;n o solicitud de compra o venta, ni una recomendaci&oacute;n de ning&uacute;n tipo. Datos registrales: MITECO, Registro de huella de carbono, compensaci&oacute;n y proyectos de absorci&oacute;n de CO<sub>2</sub>.</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-copy">&copy; 2026 ClearSky Limited. All rights reserved.</div>
+      <div class="footer-legal">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="disclaimer.html">Disclaimer</a>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
 
-  <script>
-    /* Mobile toggle */
-    var toggle = document.getElementById('navToggle');
-    var navLinks = document.getElementById('navLinks');
-    toggle.addEventListener('click', function() { toggle.classList.toggle('active'); navLinks.classList.toggle('open'); });
-    navLinks.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { toggle.classList.remove('active'); navLinks.classList.remove('open'); }); });
-
-    /* Scroll reveal */
-    var ro = new IntersectionObserver(function(es) { es.forEach(function(e) { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
-    document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
-
-    /* Lang toggle - set localStorage before navigating to EN */
-    document.querySelector('.lang-toggle').addEventListener('click', function(e) { localStorage.setItem('lang','en'); });
-  </script>
+<script>
+  var toggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  toggle.addEventListener('click', function() { toggle.classList.toggle('active'); navLinks.classList.toggle('open'); });
+  navLinks.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { toggle.classList.remove('active'); navLinks.classList.remove('open'); }); });
+  var ro = new IntersectionObserver(function(es) { es.forEach(function(e) { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+</script>
 
 </body>
 </html>
